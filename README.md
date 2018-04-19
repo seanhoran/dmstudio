@@ -15,7 +15,7 @@ The module is made up of the following packages:
 * ``file`` a package specifically for reading and writing the .dm file format and in the future possible other formats
 
 License
-~~~~~~~
+-------
 
 Copyright (c) 2018 Sean D. Horan
 
@@ -23,8 +23,8 @@ See LICENSE.txt for `MIT <https://github.com/seanhoran/dmstudio/LICENSE.txt>` Li
 
 
 Usage
-~~~~~
-
+-----
+::
     >>> import dmstudio
     >>> dm = dmstudio.studio(version='StudioRM')
     >>> dm.copy(in_='fake_model', out='fake_model_copy', retrieval='AU>2.0')
