@@ -19,7 +19,7 @@ License
 
 Copyright (c) 2018 Sean D. Horan
 
-See LICENSE.txt for `MIT <https://github.com/seanhoran/dmstudio/LICENSE.txt>`_:: License
+See LICENSE.txt for `MIT <https://github.com/seanhoran/dmstudio/blob/master/LICENSE.txt>` license
 
 
 Usage
