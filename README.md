@@ -24,7 +24,7 @@ See LICENSE.txt for `MIT <https://github.com/seanhoran/dmstudio/LICENSE.txt>` Li
 
 Usage
 -----
-::
+
     >>> import dmstudio
     >>> dm = dmstudio.studio(version='StudioRM')
     >>> dm.copy(in_='fake_model', out='fake_model_copy', retrieval='AU>2.0')
