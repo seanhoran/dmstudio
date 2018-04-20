@@ -21,10 +21,25 @@ Copyright (c) 2018 Sean D. Horan
 
 See LICENSE.txt for MIT <https://github.com/seanhoran/dmstudio/blob/master/LICENSE.txt> license.
 
+Datamine Commands
+-----------------
+
+An exhaustive set of Datamine Studio command is available in the dmstudio.dmcommands package. The variables consist of four parts:
+
+* Input files
+* Output files 
+* Fields
+* Parameters
+
+The python input variables are identical to the variable names used by Datamine with the following exceptions:
+
+* All variables are lowercase
+* Variables which are used bu datamine bit are reserved variables in python have a trailing underscore, e.g. in=in_, print=print_
+* Multiple field selection is entered as a list instead of multiple variables for some commands e.g f1, f2, f3 => fields=[f1, f2, f3]
 
 Usage
 -----
 
-    >>> import dmstudio
-    >>> dm = dmstudio.studio(version='StudioRM')
+    >>> import dmstudio.dmcommands as dmc
+    >>> dm = dmc.studio(version='StudioRM')
     >>> dm.copy(in_='fake_model', out='fake_model_copy', retrieval='AU>2.0')
