@@ -51,6 +51,8 @@ The python input variables are identical to the variable names used by Datamine 
 
 The ``dmstudio.dmfiles`` module is for commands such as ``INPFIL`` which requires an output file and a string of arguments. The purpose of the ``dmstudio.special`` module is to simplify the usage of some processes such as ``dmstudio.dmfiles.inpfil``. This module is currently a work in progress.
 
+Default values are used when they were specified by the StudioRM.chm help file. In order to provide guidance as to required versus optional inputs, outputs fields and parameters, python variables without a default specified but which are required are given a default string ``"required"`` while those which are optional are given the default ``"optional"``. This particularly useful when using IDEs which have code completion.
+
 Usage
 -----
 
