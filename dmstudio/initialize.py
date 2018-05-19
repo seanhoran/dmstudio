@@ -69,13 +69,37 @@ def studio(version):
     return oScript;
 
 def _make_dmdir():
+    
+    '''
+    _make_dmdir
+    -----------
+    
+    Internal function which creates a local ``_init_.py`` and python file ``dmdir.py`` which contains a list of dm files in the local 
+    Datamine project directory passed to variables with name of file without dm file extension and leading and trailing underscores. 
+    
+    The purpose of the local python file is to facilitate importing the filenames as variables which can be referenced directly in the
+    scripts. 
+    
+    Usage:
+    ------
+    
+    >>>import dmdir as f
+    >>>print f._someDmFile_
+    someDmFile
+    
+    The imported variables can be used as inputs in scripts:
+    
+    >>>from dmstudio import dmcommands
+    >>> dmc = dmcommands.init()
+    >>> dmc.copy(in_i=f._someDmFile_, out_o='someDmFile2')
+    
+    '''
 
     dmdir_init = open('__init__.py', 'w')
     dmdir_init.write("'''\n")
     dmdir_init.write("Initialization file to enable importing of dmdir.py\n")
     dmdir_init.write("'''\n")
     dmdir_init.close()
-
 
     dmdir_f = open('dmdir.py', 'w')
     dmdir_f.write("'''\n")
