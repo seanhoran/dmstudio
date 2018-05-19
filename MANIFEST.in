@@ -1,3 +1,3 @@
 include README.md
 include LICENCES.txt
-include tests/dmstudio_test.rmproj
+#include tests/dmstudio_test.rmproj
