@@ -36,7 +36,7 @@ See LICENSE.txt for [MIT](https://github.com/seanhoran/dmstudio/blob/master/LICE
 Datamine Commands
 -----------------
 
-An exhaustive set of Datamine Studio command is available in the ``dmstudio.dmcommands`` and the ``dmstudio.dmfiles`` modules. The variables consist of four parts:
+An exhaustive set of Datamine Studio commands is available in the ``dmstudio.dmcommands`` and the ``dmstudio.dmfiles`` modules. The variables consist of four parts:
 
 * Input files
 * Output files 
@@ -73,3 +73,10 @@ Initialization
 --------------
 
 The COM object is intialized using ``win32client`` package and is passed to a variable ``oScript`` which is consistent with traditional Datamine Studio javascripts or ``vbscript``. Each module is required to be initialized seperatly although in reality they are redundantly initializing the same COM object. There is only a minor impact on processing time which is noticeable only when running scripts on small data sets.
+
+Installation
+------------
+
+For those starting out in python, the easiest option for windows is downloading [Anaconda](https://www.anaconda.com/download/) for python 2.7. This has all the basic packages that will be required.
+
+A pip install version of dmstudio will be available shortly. For the time being a pre-release version is available on github.
