@@ -1,6 +1,18 @@
 '''
-Future addition:
-For reading and writing datamine files, converting between files etc...
+dmstudio.dmfiles
+================
+
+All datamine commands which do not use input files. The commands are mainly for generating datamine files such as ``inpfil``, ``protom`` etc.
+
+To do:
+------
+
+* Replace multiple field/file inputs with input lists e.g. *f1, *f2... -> fields_f=['f1', 'f2']
+* Exhaustive testing and debugging
+* Use the same field parsing as ``dmcommands``
+* Fix argument parsing (currently only working for inpfil)
+* Add retrieval criteria where appropriate
+
 '''
 
 
@@ -10,7 +22,8 @@ import struct
 import os
 import initialize
 
-# constant to avoid redundant COM connections which slow down processing
+# constant to avoid redundant COM connections which slows down processing
+
 OSCRIPTCON = None
 
 class init(object):
@@ -62,7 +75,7 @@ class init(object):
         parse_infields_list
         -------------------
 
-        Intenal function for parsing a list of *fields to a string for use in studio commands e.g. *F1, *F2, etc..
+        Intenal function for parsing a list of ``*fields`` to a string for use in studio commands e.g. *F1, *F2, etc..
 
         Parameters
         ----------
