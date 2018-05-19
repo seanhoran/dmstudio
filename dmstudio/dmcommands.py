@@ -8,7 +8,7 @@ class init(object):
 
     def __init__(self, version=None):
 
-        '''
+        """
         commands.__init__
         ------------------
 
@@ -23,14 +23,15 @@ class init(object):
             optional datamine studio versions ('Studio3', 'StudioRM', 'StudioEM') If no version given, the initializtion
             will try different versions starting with StudioRM then Studio3 and finally StudioEM.
 
-        '''
+        """
         self.oScript = OSCRIPTCON
         self.version = version
         if self.oScript is None:
             self.oScript = initialize.studio(self.version)
 
     def run_command(self, command):
-        '''
+
+        """
         run_command
         -----------
 
@@ -40,16 +41,23 @@ class init(object):
         -----------
 
         command: str
-            datamine command string to be parsed
-        '''
+            Datamine command string to be parsed
+        """
 
-        try:
-            self.oScript.Parsecommand(command)
-        except:
-            print("Unexpected error:")
+        self.oScript.Parsecommand(command)
 
-    def parse_infields_list(self, prefix, fields):
-        '''
+        # update the dmdir.py file containing list of .dm files in current directory
+
+        initialize._make_dmdir()
+
+        # try:
+        #     self.oScript.Parsecommand(command)
+        # except:
+        #     print("Unexpected error:")
+
+    def parse_infields_list(self, prefix, fields, maxfields, vtype='*'):
+
+        """
         parse_infields_list
         -------------------
 
@@ -62,6 +70,10 @@ class init(object):
             starting letter or letters for the field e.g. 'F' for *F1.
         fields: list of str
             list of input fields
+        maxfields: int
+            maximum number of fields permitted by datamine command
+        vtype: str
+            variable type, input file or field. For input file vtype="&" for field vtype="*"
 
         Returns:
         --------
@@ -69,27 +81,21 @@ class init(object):
         field_string: str
             concatenated string formated for input in datamine commands
 
-        '''
-
+        """
+        
+        if maxfields < len(fields):
+            raise "More fields have been selected than allowed by Datamine command"
+        
         field_string = ""
         for i, field in enumerate(fields):
-            field_string += " *" + prefix + str(i + 1) + "=" + field + " "
+            field_string += " " + vtype + prefix + str(i + 1) + "=" + field + " "
 
         return field_string;
 
     def accmlt(self,
                in_i="required",
                out_o="required",
-               key1_f="optional",
-               key2_f="optional",
-               key3_f="optional",
-               key4_f="optional",
-               key5_f="optional",
-               key6_f="optional",
-               key7_f="optional",
-               key8_f="optional",
-               key9_f="optional",
-               key10_f="optional",
+               keys_f=["optional"],
                allrecs_p=0,
                unsorted_p=0,
                retrieval="optional"):
@@ -98,6 +104,11 @@ class init(object):
         ACCMLT
         ------
         This is auto-generated documentation. For more command information visit the Datamine help file.
+        
+        Note:
+        -----
+        
+        key1_f to key10_f is replaced by keys_f list
 
         Input Files:
         ------------
@@ -116,44 +127,8 @@ class init(object):
         Fields:
         -------
 
-        key1: Undefined : Undefined
+        keys: Undefined : Undefined
             Keyfield 1 for totalling.
-            Default=Undefined
-            Required=No
-        key2: Undefined : Undefined
-            Keyfield 2.
-            Default=Undefined
-            Required=No
-        key3: Undefined : Undefined
-            Keyfield 3.
-            Default=Undefined
-            Required=No
-        key4: Undefined : Undefined
-            Keyfield 4.
-            Default=Undefined
-            Required=No
-        key5: Undefined : Undefined
-            Keyfield 5.
-            Default=Undefined
-            Required=No
-        key6: Undefined : Undefined
-            Keyfield 6.
-            Default=Undefined
-            Required=No
-        key7: Undefined : Undefined
-            Keyfield 7.
-            Default=Undefined
-            Required=No
-        key8: Undefined : Undefined
-            Keyfield 8.
-            Default=Undefined
-            Required=No
-        key9: Undefined : Undefined
-            Keyfield 9.
-            Default=Undefined
-            Required=No
-        key10: Undefined : Undefined
-            Keyfield 10.
             Default=Undefined
             Required=No
 
@@ -197,35 +172,8 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if key1 != "optional":
-            command += " *key1=" + key1_f
-
-        if key2 != "optional":
-            command += " *key2=" + key2_f
-
-        if key3 != "optional":
-            command += " *key3=" + key3_f
-
-        if key4 != "optional":
-            command += " *key4=" + key4_f
-
-        if key5 != "optional":
-            command += " *key5=" + key5_f
-
-        if key6 != "optional":
-            command += " *key6=" + key6_f
-
-        if key7 != "optional":
-            command += " *key7=" + key7_f
-
-        if key8 != "optional":
-            command += " *key8=" + key8_f
-
-        if key9 != "optional":
-            command += " *key9=" + key9_f
-
-        if key10 != "optional":
-            command += " *key10=" + key10_f
+        if keys_f[0] != "optional":
+            command += self.parse_infields_list("key", keys_f, 10, "*")
 
         if allrecs_p != "optional":
             command += " @allrecs=" + str(allrecs_p)
@@ -533,7 +481,7 @@ class init(object):
         if apphlp_i != "optional":
             command += " &apphlp=" + apphlp_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
         if retrieval != "optional":
@@ -545,11 +493,7 @@ class init(object):
                in_i="required",
                fieldlst_i="optional",
                out_o="required",
-               f1_f="required",
-               f2_f="optional",
-               f3_f="optional",
-               f4_f="optional",
-               f5_f="optional",
+               fields_f=["required"],
                fieldnam_f="optional",
                retrieval="optional"):
 
@@ -557,6 +501,11 @@ class init(object):
         ALFNUM
         ------
         This is auto-generated documentation. For more command information visit the Datamine help file.
+        
+        Note:
+        -----
+        
+        ``f1`` to ``f5`` is replaced with ``fields_f[]`` list.
 
         Input Files:
         ------------
@@ -629,24 +578,13 @@ class init(object):
 
         # Required field error check
 
-        if f1_f == "required":
-            raise ValueError("f1_f is required.")
+        if fields_f[0] == "required":
+            raise ValueError("At least one f value required.")
 
-        command += " *f1=" + f1_f
+        command += self.parse_infields_list("f", fields_f, 5, "*")
 
-        if f2 != "optional":
-            command += " *f2=" + f2_f
 
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if retrieval != "optional":
@@ -659,6 +597,12 @@ class init(object):
                  sectstr_i="optional",
                  wiretr_i="optional",
                  wirept_i="optional",
+                 points_o="required",
+                 zone_f="optional",
+                 tripts_p="optional",
+                 planmode_p="optional",
+                 sectmode_p="optional",
+                 addsymb_p="optional",
                  retrieval="optional"):
 
         """
@@ -709,6 +653,23 @@ class init(object):
         if wirept_i != "optional":
             command += " &wirept=" + wirept_i
 
+        if points_o == "required":
+            raise ValueError("points_o is required.")
+
+        command += " &points=" + points_o
+
+        if tripts_p != "optional":
+            command += " &wirept=" + tripts_p
+
+        if planmode_p != "optional":
+            command += " &wirept=" + planmode_p
+
+        if sectmode_p != "optional":
+            command += " &wirept=" + sectmode_p
+
+        if addsymb_p != "optional":
+            command += " &wirept=" + addsymb_p
+
         if retrieval != "optional":
             command += "{" + retrieval + "}"
 
@@ -717,22 +678,18 @@ class init(object):
     def anova1(self,
                in_i="required",
                value_f="required",
-               key1_f="required",
-               key2_f="optional",
-               key3_f="optional",
-               key4_f="optional",
-               key5_f="optional",
-               key6_f="optional",
-               key7_f="optional",
-               key8_f="optional",
-               key9_f="optional",
-               key10_f="optional",
+               keys_f=["required"],
                retrieval="optional"):
 
         """
         ANOVA1
         ------
         This is auto-generated documentation. For more command information visit the Datamine help file.
+        
+        Note:
+        -----
+        
+        ``key1_f`` to ``key10_f`` variables are replaced with ``keys_f`` list
 
         Input Files:
         ------------
@@ -752,46 +709,10 @@ class init(object):
             Field for analysis of variance.
             Default=Undefined
             Required=Yes
-        key1: Undefined : Undefined
+        keys: Undefined : Undefined
             Keyfield 1 for replicate observations.
             Default=Undefined
             Required=Yes
-        key2: Undefined : Undefined
-            Keyfield 2.
-            Default=Undefined
-            Required=No
-        key3: Undefined : Undefined
-            Keyfield 3.
-            Default=Undefined
-            Required=No
-        key4: Undefined : Undefined
-            Keyfield 4.
-            Default=Undefined
-            Required=No
-        key5: Undefined : Undefined
-            Keyfield 5.
-            Default=Undefined
-            Required=No
-        key6: Undefined : Undefined
-            Keyfield 6.
-            Default=Undefined
-            Required=No
-        key7: Undefined : Undefined
-            Keyfield 7.
-            Default=Undefined
-            Required=No
-        key8: Undefined : Undefined
-            Keyfield 8.
-            Default=Undefined
-            Required=No
-        key9: Undefined : Undefined
-            Keyfield 9.
-            Default=Undefined
-            Required=No
-        key10: Undefined : Undefined
-            Keyfield 10.
-            Default=Undefined
-            Required=No
 
         Parameters:
         -----------
@@ -816,37 +737,10 @@ class init(object):
 
         # Required field error check
 
-        if key1_f == "required":
-            raise ValueError("key1_f is required.")
+        if keys_f[0] == "required":
+            raise ValueError("at least one key field is required")
 
-        command += " *key1=" + key1_f
-
-        if key2 != "optional":
-            command += " *key2=" + key2_f
-
-        if key3 != "optional":
-            command += " *key3=" + key3_f
-
-        if key4 != "optional":
-            command += " *key4=" + key4_f
-
-        if key5 != "optional":
-            command += " *key5=" + key5_f
-
-        if key6 != "optional":
-            command += " *key6=" + key6_f
-
-        if key7 != "optional":
-            command += " *key7=" + key7_f
-
-        if key8 != "optional":
-            command += " *key8=" + key8_f
-
-        if key9 != "optional":
-            command += " *key9=" + key9_f
-
-        if key10 != "optional":
-            command += " *key10=" + key10_f
+        command += self.parse_infields_list("key", keys_f, 10, "*")
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -1090,7 +984,7 @@ class init(object):
 
         command += " &xref=" + xref_i
 
-        if sampleid != "optional":
+        if sampleid_f != "optional":
             command += " *sampleid=" + sampleid_f
 
         if sprefix_p != "optional":
@@ -1161,16 +1055,8 @@ class init(object):
                in_i="required",
                legend_i="required",
                out_o="required",
-               datfld1_f="optional",
-               datfld2_f="optional",
-               datfld3_f="optional",
-               datfld4_f="optional",
-               datfld5_f="optional",
-               attrib1_f="optional",
-               attrib2_f="optional",
-               attrib3_f="optional",
-               attrib4_f="optional",
-               attrib5_f="optional",
+               dataflds_f=["optional"],
+               attribs_f=["optional"],
                mode_p=0,
                inrange_p=0,
                retrieval="optional"):
@@ -1179,6 +1065,12 @@ class init(object):
         ATTSET
         ------
         This is auto-generated documentation. For more command information visit the Datamine help file.
+        
+        Note:
+        -----
+        
+        ``datafld1_f`` to ``datafld5_f`` and ``attrib1_f`` to ``attrib5_f`` are replaced by ``datflds_f`` and 
+        ``attribs_f`` lists
 
         Input Files:
         ------------
@@ -1205,49 +1097,19 @@ class init(object):
         Fields:
         -------
 
-        datfld1: Undefined : Undefined
+        datflds: Undefined : Undefined
             Optional data field. If no DATFIELD field is supplied, then DATFLD1 is used to specify the
             required data field. Otherwise DATFLD1..5 can be used to select a subset of the data fields.
             Default=Undefined
             Required=No
-        datfld2: Undefined : Undefined
-            Second optional data field from those listed in DATFLD.
-            Default=Undefined
-            Required=No
-        datfld3: Undefined : Undefined
-            Third optional data field
-            Default=Undefined
-            Required=No
-        datfld4: Undefined : Undefined
-            Fourth optional data field
-            Default=Undefined
-            Required=No
-        datfld5: Undefined : Undefined
-            Fifth optional data field
-            Default=Undefined
-            Required=No
-        attrib1: Undefined : Undefined
+
+        attribs: Undefined : Undefined
             First optional attribute field. If no ATTFIELD field is specified, then ATTRIB1 is used to
             the single required attribute field. Otherwise ATTRIB1..5 can be used to select a subset of the
             fields.
             Default=Undefined
             Required=No
-        attrib2: Undefined : Undefined
-            Second optional attribute field from those listed in ATTFIELD.
-            Default=Undefined
-            Required=No
-        attrib3: Undefined : Undefined
-            Third optional attribute field
-            Default=Undefined
-            Required=No
-        attrib4: Undefined : Undefined
-            Fourth optional attribute field
-            Default=Undefined
-            Required=No
-        attrib5: Undefined : Undefined
-            Fifth optional attribute field
-            Default=Undefined
-            Required=No
+
 
         Parameters:
         -----------
@@ -1291,35 +1153,11 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if datfld1 != "optional":
-            command += " *datfld1=" + datfld1_f
+        if datflds_f[0] != "optional":
+            command += self.parse_infields_list("datafld", dataflds_f, 5, "*")
 
-        if datfld2 != "optional":
-            command += " *datfld2=" + datfld2_f
-
-        if datfld3 != "optional":
-            command += " *datfld3=" + datfld3_f
-
-        if datfld4 != "optional":
-            command += " *datfld4=" + datfld4_f
-
-        if datfld5 != "optional":
-            command += " *datfld5=" + datfld5_f
-
-        if attrib1 != "optional":
-            command += " *attrib1=" + attrib1_f
-
-        if attrib2 != "optional":
-            command += " *attrib2=" + attrib2_f
-
-        if attrib3 != "optional":
-            command += " *attrib3=" + attrib3_f
-
-        if attrib4 != "optional":
-            command += " *attrib4=" + attrib4_f
-
-        if attrib5 != "optional":
-            command += " *attrib5=" + attrib5_f
+        if attribs_f != "optional":
+            command += self.parse_infields_list("attrib", attribs_f, 5, "*")
 
         if mode_p != "optional":
             command += " @mode=" + str(mode_p)
@@ -1336,16 +1174,7 @@ class init(object):
                in_i="required",
                out_o="required",
                sampid_f="required",
-               f1_f="optional",
-               f2_f="optional",
-               f3_f="optional",
-               f4_f="optional",
-               f5_f="optional",
-               f6_f="optional",
-               f7_f="optional",
-               f8_f="optional",
-               f9_f="optional",
-               f10_f="optional",
+               fields_f=["optional"],
                sampdist_p=0,
                print_p=0,
                retrieval="optional"):
@@ -1354,6 +1183,11 @@ class init(object):
         AUTOCR
         ------
         This is auto-generated documentation. For more command information visit the Datamine help file.
+        
+        Note:
+        -----
+        
+        ``f1_f`` to ``f5_f`` variables are replaced by ``fields_f`` list
 
         Input Files:
         ------------
@@ -1377,44 +1211,8 @@ class init(object):
             Compulsory sample identifier field.
             Default=Undefined
             Required=Yes
-        f1: Undefined : Undefined
+        fields_f: Undefined : Undefined
             First variable for evaluation. If no variables are selected all variables will be processed.
-            Default=Undefined
-            Required=No
-        f2: Undefined : Undefined
-            Second variable for evaluation.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Third variable for evaluation.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Fourth variable for evaluation.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Fifth variable for evaluation.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Six variable for evaluation.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Seventh variable for evaluation.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Eighth variable for evaluation.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Ninth variable for evaluation.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Tenth variable for evaluation.
             Default=Undefined
             Required=No
 
@@ -1459,35 +1257,8 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
-
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, "*")
 
         if sampdist_p != "optional":
             command += " @sampdist=" + str(sampdist_p)
@@ -1666,7 +1437,7 @@ class init(object):
 
         command += " *normref=" + normref_f
 
-        if backval != "optional":
+        if backval_f != "optional":
             command += " *backval=" + backval_f
 
         if minnorm_p != "optional":
@@ -2055,7 +1826,7 @@ class init(object):
         if class_ != "optional":
             command += " *class=" + class_f
 
-        if modcol != "optional":
+        if modcol_f != "optional":
             command += " *modcol=" + modcol_f
 
             # Required parameter error check
@@ -2108,16 +1879,7 @@ class init(object):
               in_i="required",
               scores_o="optional",
               sampid_f="required",
-              f1_f="optional",
-              f2_f="optional",
-              f3_f="optional",
-              f4_f="optional",
-              f5_f="optional",
-              f6_f="optional",
-              f7_f="optional",
-              f8_f="optional",
-              f9_f="optional",
-              f10_f="optional",
+              fields_f=["optional"],
               nleft_p=1,
               print_p=0,
               retrieval="optional"):
@@ -2148,44 +1910,8 @@ class init(object):
             Field containing sample identification
             Default=Undefined
             Required=Yes
-        f1: Undefined : Undefined
-            First field to be used. No fields specified means all.
-            Default=Undefined
-            Required=No
-        f2: Undefined : Undefined
-            Second field to be used.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Third field to be used.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Fourth field to be used.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Fifth field to be used.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Sixth field to be used.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Seventh field to be used.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Eighth field to be used.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Ninth field to be used.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Tenth field to be used.
+        fields: Undefined : Undefined
+            Fields to be used. No fields specified means all.
             Default=Undefined
             Required=No
 
@@ -2215,7 +1941,7 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if scores != "optional":
+        if scores_o != "optional":
             command += " &scores=" + scores_o
 
             # Required field error check
@@ -2225,35 +1951,8 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
-
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, '*')
 
         if nleft_p != "optional":
             command += " @nleft=" + str(nleft_p)
@@ -2689,9 +2388,7 @@ class init(object):
               x_f="optional",
               y_f="optional",
               weight_f="optional",
-              key1_f="optional",
-              key2_f="optional",
-              key3_f="optional",
+              keys_f="optional",
               charttyp_p=1,
               histtyp_p=1,
               binsize_p=1,
@@ -2786,16 +2483,8 @@ class init(object):
 
             Default=Undefined
             Required=No
-        key1: Undefined : Undefined
-            First key field in the input IN file.
-            Default=Undefined
-            Required=No
-        key2: Undefined : Undefined
-            Second key field in the input IN file.
-            Default=Undefined
-            Required=No
-        key3: Undefined : Undefined
-            Third key field in the input IN file.
+        keys: Undefined : Undefined
+            Key fields in the input IN file.
             Default=Undefined
             Required=No
 
@@ -3125,29 +2814,23 @@ class init(object):
         if anno_i != "optional":
             command += " &anno=" + anno_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
-        if plot != "optional":
+        if plot_o != "optional":
             command += " &plot=" + plot_o
 
-        if x != "optional":
+        if x_f != "optional":
             command += " *x=" + x_f
 
-        if y != "optional":
+        if y_f != "optional":
             command += " *y=" + y_f
 
-        if weight != "optional":
+        if weight_f != "optional":
             command += " *weight=" + weight_f
 
-        if key1 != "optional":
-            command += " *key1=" + key1_f
-
-        if key2 != "optional":
-            command += " *key2=" + key2_f
-
-        if key3 != "optional":
-            command += " *key3=" + key3_f
+        if keys_f[0] != "optional":
+            command += self.parse_infields_list("key", keys_f, 3, "*")
 
         if charttyp_p != "optional":
             command += " @charttyp=" + str(charttyp_p)
@@ -3424,16 +3107,16 @@ class init(object):
         if points_i != "optional":
             command += " &points=" + points_i
 
-        if closhole != "optional":
+        if closhole_o != "optional":
             command += " &closhole=" + closhole_o
 
-        if closepts != "optional":
+        if closepts_o != "optional":
             command += " &closepts=" + closepts_o
 
-        if bhstr != "optional":
+        if bhstr_o != "optional":
             command += " &bhstr=" + bhstr_o
 
-        if ptsstr != "optional":
+        if ptsstr_o != "optional":
             command += " &ptsstr=" + ptsstr_o
 
             # Required field error check
@@ -3462,16 +3145,7 @@ class init(object):
                matxin_i="optional",
                matxfile_o="optional",
                sampid_f="required",
-               f1_f="optional",
-               f2_f="optional",
-               f3_f="optional",
-               f4_f="optional",
-               f5_f="optional",
-               f6_f="optional",
-               f7_f="optional",
-               f8_f="optional",
-               f9_f="optional",
-               f10_f="optional",
+               fields_f=["optional"],
                mattype_p=0,
                ztran_p=1,
                retrieval="optional"):
@@ -3506,46 +3180,11 @@ class init(object):
 
             Default=Undefined
             Required=Yes
-        f1: Undefined : Undefined
-            First field to be used. No fields specified means all.
+        fields_f: Undefined : Undefined
+            Fields to be used. No fields specified means all.
             Default=Undefined
             Required=No
-        f2: Undefined : Undefined
-            Second field to be used.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Third field to be used.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Fourth field to be used.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Fifth field to be used.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Sixth field to be used.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Seventh field to be used.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Eighth field to be used.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Ninth field to be used.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Tenth field to be used.
-            Default=Undefined
-            Required=No
+
 
         Parameters:
         -----------
@@ -3574,7 +3213,7 @@ class init(object):
         if matxin_i != "optional":
             command += " &matxin=" + matxin_i
 
-        if matxfile != "optional":
+        if matxfile_o != "optional":
             command += " &matxfile=" + matxfile_o
 
             # Required field error check
@@ -3584,35 +3223,8 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
-
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, "*")
 
         if mattype_p != "optional":
             command += " @mattype=" + str(mattype_p)
@@ -3691,13 +3303,13 @@ class init(object):
 
         command += " &wptin=" + wptin_i
 
-        if wtrout != "optional":
+        if wtrout_o != "optional":
             command += " &wtrout=" + wtrout_o
 
-        if wptout != "optional":
+        if wptout_o != "optional":
             command += " &wptout=" + wptout_o
 
-        if ptnout != "optional":
+        if ptnout_o != "optional":
             command += " &ptnout=" + ptnout_o
 
         if retrieval != "optional":
@@ -3707,26 +3319,7 @@ class init(object):
 
     def combmod(self,
                 proto_i="required",
-                in1_i="required",
-                in2_i="required",
-                in3_i="optional",
-                in4_i="optional",
-                in5_i="optional",
-                in6_i="optional",
-                in7_i="optional",
-                in8_i="optional",
-                in9_i="optional",
-                in10_i="optional",
-                in11_i="optional",
-                in12_i="optional",
-                in13_i="optional",
-                in14_i="optional",
-                in15_i="optional",
-                in16_i="optional",
-                in17_i="optional",
-                in18_i="optional",
-                in19_i="optional",
-                in20_i="optional",
+                inmods_i=["required"],
                 modelout_o="required",
                 tolernce_p=0.001,
                 retrieval="optional"):
@@ -3736,6 +3329,11 @@ class init(object):
         -------
         This is auto-generated documentation. For more command information visit the Datamine help file.
 
+        Note:
+        -----
+
+        ``in1_f`` to ``in20_f`` variables replaced by ``inmods_i[]`` list. At least 2 models required.
+
         Input Files:
         ------------
 
@@ -3744,68 +3342,12 @@ class init(object):
             Records in this file are ignored. This file is optional. If it is not specified models will be
             to fill the volume covered by the range of all input files.
             Required=Yes
-        in1: Input
+        inmods_i: Input
             First input model for combining (sorted on IJK). If no prototype is specified the output
             model prototype will have the same parent cell size specification as this file and the limits
             be determined from the combined range of all input files.
             Required=Yes
-        in2: Input
-            Second input model for combining (sorted on IJK)
-            Required=Yes
-        in3: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in4: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in5: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in6: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in7: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in8: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in9: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in10: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in11: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in12: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in13: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in14: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in15: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in16: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in17: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in18: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in19: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
-        in20: Input
-            Additional, optional input model files for combining (sorted on IJK)
-            Required=No
+
 
         Output Files:
         -------------
@@ -3841,71 +3383,10 @@ class init(object):
 
         # Required input error check
 
-        if in1_i == "required":
-            raise ValueError("in1 is required.")
+        if len(inmods_i) < 2:
+            raise ValueError("At least 2 models to combine are required")
 
-        command += " &in1=" + in1_i
-
-        # Required input error check
-
-        if in2_i == "required":
-            raise ValueError("in2 is required.")
-
-        command += " &in2=" + in2_i
-
-        if in3_i != "optional":
-            command += " &in3=" + in3_i
-
-        if in4_i != "optional":
-            command += " &in4=" + in4_i
-
-        if in5_i != "optional":
-            command += " &in5=" + in5_i
-
-        if in6_i != "optional":
-            command += " &in6=" + in6_i
-
-        if in7_i != "optional":
-            command += " &in7=" + in7_i
-
-        if in8_i != "optional":
-            command += " &in8=" + in8_i
-
-        if in9_i != "optional":
-            command += " &in9=" + in9_i
-
-        if in10_i != "optional":
-            command += " &in10=" + in10_i
-
-        if in11_i != "optional":
-            command += " &in11=" + in11_i
-
-        if in12_i != "optional":
-            command += " &in12=" + in12_i
-
-        if in13_i != "optional":
-            command += " &in13=" + in13_i
-
-        if in14_i != "optional":
-            command += " &in14=" + in14_i
-
-        if in15_i != "optional":
-            command += " &in15=" + in15_i
-
-        if in16_i != "optional":
-            command += " &in16=" + in16_i
-
-        if in17_i != "optional":
-            command += " &in17=" + in17_i
-
-        if in18_i != "optional":
-            command += " &in18=" + in18_i
-
-        if in19_i != "optional":
-            command += " &in19=" + in19_i
-
-        if in20_i != "optional":
-            command += " &in20=" + in20_i
+        command += self.parse_infields_list("in", inmods_i, 20, "&")
 
             # Required output error check
 
@@ -3919,6 +3400,8 @@ class init(object):
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
+
+        print command
 
         self.run_command(command)
 
@@ -4069,25 +3552,25 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if bhid != "optional":
+        if bhid_f != "optional":
             command += " *bhid=" + bhid_f
 
         if from_ != "optional":
             command += " *from=" + from_f
 
-        if to != "optional":
+        if to_f != "optional":
             command += " *to=" + to_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
-        if coreloss != "optional":
+        if coreloss_f != "optional":
             command += " *coreloss=" + coreloss_f
 
-        if corerec != "optional":
+        if corerec_f != "optional":
             command += " *corerec=" + corerec_f
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
             # Required parameter error check
@@ -4290,25 +3773,25 @@ class init(object):
 
         command += " *value=" + value_f
 
-        if bhid != "optional":
+        if bhid_f != "optional":
             command += " *bhid=" + bhid_f
 
         if from_ != "optional":
             command += " *from=" + from_f
 
-        if to != "optional":
+        if to_f != "optional":
             command += " *to=" + to_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
-        if coreloss != "optional":
+        if coreloss_f != "optional":
             command += " *coreloss=" + coreloss_f
 
-        if corerec != "optional":
+        if corerec_f != "optional":
             command += " *corerec=" + corerec_f
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
             # Required parameter error check
@@ -4501,25 +3984,25 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if bhid != "optional":
+        if bhid_f != "optional":
             command += " *bhid=" + bhid_f
 
-        if from_ != "optional":
+        if from_f != "optional":
             command += " *from=" + from_f
 
-        if to != "optional":
+        if to_f != "optional":
             command += " *to=" + to_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
-        if coreloss != "optional":
+        if coreloss_f != "optional":
             command += " *coreloss=" + coreloss_f
 
-        if corerec != "optional":
+        if corerec_f != "optional":
             command += " *corerec=" + corerec_f
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
             # Required parameter error check
@@ -4704,10 +4187,10 @@ class init(object):
 
         command += " *value=" + value_f
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
-        if owcode != "optional":
+        if owcode_f != "optional":
             command += " *owcode=" + owcode_f
 
             # Required parameter error check
@@ -5754,16 +5237,7 @@ class init(object):
     def correl(self,
                in_i="required",
                fieldlst_i="optional",
-               f1_f="optional",
-               f2_f="optional",
-               f3_f="optional",
-               f4_f="optional",
-               f5_f="optional",
-               f6_f="optional",
-               f7_f="optional",
-               f8_f="optional",
-               f9_f="optional",
-               f10_f="optional",
+               fields_f=["optional"],
                fieldnam_f="optional",
                retrieval="optional"):
 
@@ -5789,46 +5263,11 @@ class init(object):
         Fields:
         -------
 
-        f1: Undefined : Undefined
-            First field to be correlated. No fields specified means all.
+        fields_f: Undefined : Undefined
+            Fields to be correlated. No fields specified means all.
             Default=Undefined
             Required=No
-        f2: Undefined : Undefined
-            Second field to be correlated.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Third field to be correlated.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Fourth field to be correlated.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Fifth field to be correlated.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Sixth field to be correlated.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Seventh field to be correlated.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Eighth field to be correlated.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Ninth field to be correlated.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Tenth field to be correlated.
-            Default=Undefined
-            Required=No
+
         fieldnam: Undefined : Undefined
             Field in FIELDLST to identify selected fields.
             Default=Undefined
@@ -5851,37 +5290,10 @@ class init(object):
         if fieldlst_i != "optional":
             command += " &fieldlst=" + fieldlst_i
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, "*")
 
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
-
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if retrieval != "optional":
@@ -5892,16 +5304,7 @@ class init(object):
     def count(self,
               in_i="required",
               out_o="required",
-              key1_f="required",
-              key2_f="optional",
-              key3_f="optional",
-              key4_f="optional",
-              key5_f="optional",
-              key6_f="optional",
-              key7_f="optional",
-              key8_f="optional",
-              key9_f="optional",
-              key10_f="optional",
+              keys_f=["required"],
               retrieval="optional"):
 
         """
@@ -5927,46 +5330,10 @@ class init(object):
         Fields:
         -------
 
-        key1: Undefined : Undefined
+        keys_f: Undefined : Undefined
             Keyfield 1 for counting.
             Default=Undefined
-            Required=Yes
-        key2: Undefined : Undefined
-            Keyfield 2.
-            Default=Undefined
-            Required=No
-        key3: Undefined : Undefined
-            Keyfield 3.
-            Default=Undefined
-            Required=No
-        key4: Undefined : Undefined
-            Keyfield 4.
-            Default=Undefined
-            Required=No
-        key5: Undefined : Undefined
-            Keyfield 5.
-            Default=Undefined
-            Required=No
-        key6: Undefined : Undefined
-            Keyfield 6.
-            Default=Undefined
-            Required=No
-        key7: Undefined : Undefined
-            Keyfield 7.
-            Default=Undefined
-            Required=No
-        key8: Undefined : Undefined
-            Keyfield 8.
-            Default=Undefined
-            Required=No
-        key9: Undefined : Undefined
-            Keyfield 9.
-            Default=Undefined
-            Required=No
-        key10: Undefined : Undefined
-            Keyfield 10.
-            Default=Undefined
-            Required=No
+            Required=Yes (At least one key field)
 
         Parameters:
         -----------
@@ -5994,34 +5361,7 @@ class init(object):
         if key1_f == "required":
             raise ValueError("key1_f is required.")
 
-        command += " *key1=" + key1_f
-
-        if key2 != "optional":
-            command += " *key2=" + key2_f
-
-        if key3 != "optional":
-            command += " *key3=" + key3_f
-
-        if key4 != "optional":
-            command += " *key4=" + key4_f
-
-        if key5 != "optional":
-            command += " *key5=" + key5_f
-
-        if key6 != "optional":
-            command += " *key6=" + key6_f
-
-        if key7 != "optional":
-            command += " *key7=" + key7_f
-
-        if key8 != "optional":
-            command += " *key8=" + key8_f
-
-        if key9 != "optional":
-            command += " *key9=" + key9_f
-
-        if key10 != "optional":
-            command += " *key10=" + key10_f
+        command += self.parse_infields_list("key", keys_f, 10, "*")
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -6131,7 +5471,7 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
             # Required field error check
@@ -6171,16 +5511,7 @@ class init(object):
                in_i="required",
                out_o="required",
                sampid_f="required",
-               f1_f="optional",
-               f2_f="optional",
-               f3_f="optional",
-               f4_f="optional",
-               f5_f="optional",
-               f6_f="optional",
-               f7_f="optional",
-               f8_f="optional",
-               f9_f="optional",
-               f10_f="optional",
+               fields_f=["optional"],
                sampdist_p=0,
                print_p=0,
                retrieval="optional"):
@@ -6212,44 +5543,8 @@ class init(object):
             Sample identifier field in input file.
             Default=Undefined
             Required=Yes
-        f1: Undefined : Undefined
-            First variable for evaluation. If no variables are selected all variables will be processed.
-            Default=Undefined
-            Required=No
-        f2: Undefined : Undefined
-            Second variable for evaluation.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Third variable for evaluation.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Fourth variable for evaluation.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Fifth variable for evaluation.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Sixth variable for evaluation.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Seventh variable for evaluation.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Eighth variable for evaluation.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Ninth variable for evaluation.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Tenth variable for evaluation.
+        fields_f: Undefined : Undefined
+            Variables for evaluation. If no variables are selected all variables will be processed.
             Default=Undefined
             Required=No
 
@@ -6294,35 +5589,8 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
-
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, "*")
 
         if sampdist_p != "optional":
             command += " @sampdist=" + str(sampdist_p)
@@ -6552,16 +5820,16 @@ class init(object):
         if cutoff_i != "optional":
             command += " &cutoff=" + cutoff_i
 
-        if simmod != "optional":
+        if simmod_o != "optional":
             command += " &simmod=" + simmod_o
 
-        if statmod != "optional":
+        if statmod_o != "optional":
             command += " &statmod=" + statmod_o
 
-        if reserves != "optional":
+        if reserves_o != "optional":
             command += " &reserves=" + reserves_o
 
-        if plot != "optional":
+        if plot_o != "optional":
             command += " &plot=" + plot_o
 
             # Required field error check
@@ -6677,10 +5945,10 @@ class init(object):
 
         command += " &reserves=" + reserves_o
 
-        if oremod != "optional":
+        if oremod_o != "optional":
             command += " &oremod=" + oremod_o
 
-        if plot != "optional":
+        if plot_o != "optional":
             command += " &plot=" + plot_o
 
         if retrieval != "optional":
@@ -6985,10 +6253,10 @@ class init(object):
 
         command += " &priout=" + priout_o
 
-        if decout != "optional":
+        if decout_o != "optional":
             command += " &decout=" + decout_o
 
-        if splitout != "optional":
+        if splitout_o != "optional":
             command += " &splitout=" + splitout_o
 
         if retrieval != "optional":
@@ -7135,16 +6403,16 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
-        if wtout != "optional":
+        if wtout_o != "optional":
             command += " &wtout=" + wtout_o
 
-        if wgts_tbl != "optional":
+        if wgts_tbl_o != "optional":
             command += " &wgts_tbl=" + wgts_tbl_o
 
-        if stat_tbl != "optional":
+        if stat_tbl_o != "optional":
             command += " &stat_tbl=" + stat_tbl_o
 
             # Required field error check
@@ -7168,7 +6436,7 @@ class init(object):
 
         command += " *z=" + z_f
 
-        if wtfield != "optional":
+        if wtfield_f != "optional":
             command += " *wtfield=" + wtfield_f
 
         if method_p != "optional":
@@ -7306,7 +6574,7 @@ class init(object):
 
     def delete(self,
                in_i="required",
-               confirm_p=0,
+               confirm_p="optional",
                retrieval="optional"):
 
         """
@@ -7480,31 +6748,31 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if bhid != "optional":
+        if bhid_f != "optional":
             command += " *bhid=" + bhid_f
 
-        if xcollar != "optional":
+        if xcollar_f != "optional":
             command += " *xcollar=" + xcollar_f
 
-        if ycollar != "optional":
+        if ycollar_f != "optional":
             command += " *ycollar=" + ycollar_f
 
-        if zcollar != "optional":
+        if zcollar_f != "optional":
             command += " *zcollar=" + zcollar_f
 
         if from_ != "optional":
             command += " *from=" + from_f
 
-        if to != "optional":
+        if to_f != "optional":
             command += " *to=" + to_f
 
-        if at != "optional":
+        if at_f != "optional":
             command += " *at=" + at_f
 
-        if brg != "optional":
+        if brg_f != "optional":
             command += " *brg=" + brg_f
 
-        if dip != "optional":
+        if dip_f != "optional":
             command += " *dip=" + dip_f
 
         if survsmth_p != "optional":
@@ -7522,16 +6790,7 @@ class init(object):
                in1_i="required",
                in2_i="required",
                out_o="required",
-               key1_f="required",
-               key2_f="optional",
-               key3_f="optional",
-               key4_f="optional",
-               key5_f="optional",
-               key6_f="optional",
-               key7_f="optional",
-               key8_f="optional",
-               key9_f="optional",
-               key10_f="optional",
+               keys_f=["required"],
                retrieval="optional"):
 
         """
@@ -7559,46 +6818,10 @@ class init(object):
         Fields:
         -------
 
-        key1: Undefined : Undefined
+        keys: Undefined : Undefined
             Keyfield 1 for file matching.
             Default=Undefined
             Required=Yes
-        key2: Undefined : Undefined
-            Keyfield 2.
-            Default=Undefined
-            Required=No
-        key3: Undefined : Undefined
-            Keyfield 3.
-            Default=Undefined
-            Required=No
-        key4: Undefined : Undefined
-            Keyfield 4.
-            Default=Undefined
-            Required=No
-        key5: Undefined : Undefined
-            Keyfield 5.
-            Default=Undefined
-            Required=No
-        key6: Undefined : Undefined
-            Keyfield 6.
-            Default=Undefined
-            Required=No
-        key7: Undefined : Undefined
-            Keyfield 7.
-            Default=Undefined
-            Required=No
-        key8: Undefined : Undefined
-            Keyfield 8.
-            Default=Undefined
-            Required=No
-        key9: Undefined : Undefined
-            Keyfield 9.
-            Default=Undefined
-            Required=No
-        key10: Undefined : Undefined
-            Keyfield 10.
-            Default=Undefined
-            Required=No
 
         Parameters:
         -----------
@@ -7630,37 +6853,10 @@ class init(object):
 
         # Required field error check
 
-        if key1_f == "required":
-            raise ValueError("key1_f is required.")
+        if keys_f[0] == "required":
+            raise ValueError("At least 1 key required")
 
-        command += " *key1=" + key1_f
-
-        if key2 != "optional":
-            command += " *key2=" + key2_f
-
-        if key3 != "optional":
-            command += " *key3=" + key3_f
-
-        if key4 != "optional":
-            command += " *key4=" + key4_f
-
-        if key5 != "optional":
-            command += " *key5=" + key5_f
-
-        if key6 != "optional":
-            command += " *key6=" + key6_f
-
-        if key7 != "optional":
-            command += " *key7=" + key7_f
-
-        if key8 != "optional":
-            command += " *key8=" + key8_f
-
-        if key9 != "optional":
-            command += " *key9=" + key9_f
-
-        if key10 != "optional":
-            command += " *key10=" + key10_f
+        command += self.parse_infields_list("key", keys_f, 10, "*")
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -7814,16 +7010,7 @@ class init(object):
                  resource_o="optional",
                  rock_f="required",
                  density_f="optional",
-                 grade1_f="required",
-                 grade2_f="optional",
-                 grade3_f="optional",
-                 grade4_f="optional",
-                 grade5_f="optional",
-                 grade6_f="optional",
-                 grade7_f="optional",
-                 grade8_f="optional",
-                 grade9_f="optional",
-                 grade10_f="optional",
+                 grades_f=["required"],
                  xwidth_p=1,
                  ywidth_p=1,
                  zwidth_p=1,
@@ -7869,46 +7056,10 @@ class init(object):
             @DENSITY
             Default=Undefined
             Required=No
-        grade1: Undefined : Undefined
-            Grade field 1
+        grades: Undefined : Undefined
+            Grade fields
             Default=Undefined
             Required=Yes
-        grade2: Undefined : Undefined
-            Additional, optional, grade fields.
-            Default=Undefined
-            Required=No
-        grade3: Undefined : Undefined
-            Additional, optional, grade fields.
-            Default=Undefined
-            Required=No
-        grade4: Undefined : Undefined
-            Additional, optional, grade fields.
-            Default=Undefined
-            Required=No
-        grade5: Undefined : Undefined
-            Additional, optional, grade fields.
-            Default=Undefined
-            Required=No
-        grade6: Undefined : Undefined
-            Additional, optional, grade fields.
-            Default=Undefined
-            Required=No
-        grade7: Undefined : Undefined
-            Additional, optional, grade fields.
-            Default=Undefined
-            Required=No
-        grade8: Undefined : Undefined
-            Additional, optional, grade fields.
-            Default=Undefined
-            Required=No
-        grade9: Undefined : Undefined
-            Additional, optional, grade fields.
-            Default=Undefined
-            Required=No
-        grade10: Undefined : Undefined
-            Additional, optional, grade fields.
-            Default=Undefined
-            Required=No
 
         Parameters:
         -----------
@@ -7955,10 +7106,10 @@ class init(object):
 
         command += " &modout1=" + modout1_o
 
-        if modout2 != "optional":
+        if modout2_o != "optional":
             command += " &modout2=" + modout2_o
 
-        if resource != "optional":
+        if resource_o != "optional":
             command += " &resource=" + resource_o
 
             # Required field error check
@@ -7968,42 +7119,15 @@ class init(object):
 
         command += " *rock=" + rock_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
             # Required field error check
 
-        if grade1_f == "required":
+        if grades_f[0] == "required":
             raise ValueError("grade1_f is required.")
 
-        command += " *grade1=" + grade1_f
-
-        if grade2 != "optional":
-            command += " *grade2=" + grade2_f
-
-        if grade3 != "optional":
-            command += " *grade3=" + grade3_f
-
-        if grade4 != "optional":
-            command += " *grade4=" + grade4_f
-
-        if grade5 != "optional":
-            command += " *grade5=" + grade5_f
-
-        if grade6 != "optional":
-            command += " *grade6=" + grade6_f
-
-        if grade7 != "optional":
-            command += " *grade7=" + grade7_f
-
-        if grade8 != "optional":
-            command += " *grade8=" + grade8_f
-
-        if grade9 != "optional":
-            command += " *grade9=" + grade9_f
-
-        if grade10 != "optional":
-            command += " *grade10=" + grade10_f
+        command += self.parse_infields_list("grade", grades_f, 10, "*")
 
         if xwidth_p != "optional":
             command += " @xwidth=" + str(xwidth_p)
@@ -8029,16 +7153,7 @@ class init(object):
                scores_o="optional",
                groupid_f="required",
                sampid_f="required",
-               f1_f="optional",
-               f2_f="optional",
-               f3_f="optional",
-               f4_f="optional",
-               f5_f="optional",
-               f6_f="optional",
-               f7_f="optional",
-               f8_f="optional",
-               f9_f="optional",
-               f10_f="optional",
+               fields_f=["optional"],
                resum_p=0,
                primat_p=0,
                prisco_p=0,
@@ -8082,46 +7197,11 @@ class init(object):
             Compulsory sample identifier field contained in input file IN.
             Default=Undefined
             Required=Yes
-        f1: Undefined : Undefined
-            First field to be used. No fields specified means all.
+        fields_f: Undefined : Undefined
+            Fields to be used. No fields specified means all.
             Default=Undefined
             Required=No
-        f2: Undefined : Undefined
-            Second field to be used.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Third field to be used.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Fourth field to be used.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Fifth field to be used.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Sixth field to be used.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Seventh field to be used.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Eighth field to be used.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Ninth field to be used.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Tenth field to be used.
-            Default=Undefined
-            Required=No
+
 
         Parameters:
         -----------
@@ -8157,13 +7237,13 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if centrds != "optional":
+        if centrds_o != "optional":
             command += " &centrds=" + centrds_o
 
-        if functs != "optional":
+        if functs_o != "optional":
             command += " &functs=" + functs_o
 
-        if scores != "optional":
+        if scores_o != "optional":
             command += " &scores=" + scores_o
 
             # Required field error check
@@ -8180,35 +7260,8 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
-
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, "*")
 
         if resum_p != "optional":
             command += " @resum=" + str(resum_p)
@@ -8231,16 +7284,7 @@ class init(object):
                out_o="required",
                groupid_f="required",
                sampid_f="required",
-               f1_f="optional",
-               f2_f="optional",
-               f3_f="optional",
-               f4_f="optional",
-               f5_f="optional",
-               f6_f="optional",
-               f7_f="optional",
-               f8_f="optional",
-               f9_f="optional",
-               f10_f="optional",
+               fields_f=["optional"],
                retrieval="optional"):
 
         """
@@ -8281,44 +7325,8 @@ class init(object):
             Compulsory sample identifier field in input file IN.
             Default=Undefined
             Required=Yes
-        f1: Undefined : Undefined
-            First field to be used. No fields specified means all.
-            Default=Undefined
-            Required=No
-        f2: Undefined : Undefined
-            Second field to be used.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Third field to be used.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Fourth field to be used.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Fifth field to be used.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Sixth field to be used.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Seventh field to be used.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Eighth field to be used.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Ninth field to be used.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Tenth field to be used.
+        fields: Undefined : Undefined
+            Fields to be used. No fields specified means all.
             Default=Undefined
             Required=No
 
@@ -8371,35 +7379,8 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
-
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, "*")
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -8771,7 +7752,7 @@ class init(object):
 
         command += " *cutfld=" + cutfld_f
 
-        if attrib != "optional":
+        if attrib_f != "optional":
             command += " *attrib=" + attrib_f
 
             # Required parameter error check
@@ -8936,7 +7917,7 @@ class init(object):
         if perimin_i != "optional":
             command += " &perimin=" + perimin_i
 
-        if modelou != "optional":
+        if modelou_o != "optional":
             command += " &modelou=" + modelou_o
 
             # Required output error check
@@ -8967,7 +7948,7 @@ class init(object):
 
         command += " *cutfld=" + cutfld_f
 
-        if attrib != "optional":
+        if attrib_f != "optional":
             command += " *attrib=" + attrib_f
 
             # Required parameter error check
@@ -9086,7 +8067,7 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if layer != "optional":
+        if layer_f != "optional":
             command += " *layer=" + layer_f
 
         if tolernce_p != "optional":
@@ -9720,13 +8701,13 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if grade != "optional":
+        if grade_f != "optional":
             command += " *grade=" + grade_f
 
-        if value != "optional":
+        if value_f != "optional":
             command += " *value=" + value_f
 
-        if shapzone != "optional":
+        if shapzone_f != "optional":
             command += " *shapzone=" + shapzone_f
 
             # Required field error check
@@ -9743,10 +8724,10 @@ class init(object):
 
         command += " *envelope=" + envelope_f
 
-        if envnum != "optional":
+        if envnum_f != "optional":
             command += " *envnum=" + envnum_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
             # Required parameter error check
@@ -10244,46 +9225,46 @@ class init(object):
 
         command += " &model=" + model_o
 
-        if sampout != "optional":
+        if sampout_o != "optional":
             command += " &sampout=" + sampout_o
 
-        if x != "optional":
+        if x_f != "optional":
             command += " *x=" + x_f
 
-        if y != "optional":
+        if y_f != "optional":
             command += " *y=" + y_f
 
-        if z != "optional":
+        if z_f != "optional":
             command += " *z=" + z_f
 
-        if zone1_f != "optional":
+        if zone1_f_f != "optional":
             command += " *zone1_f=" + zone1_f_f
 
-        if zone2_f != "optional":
+        if zone2_f_f != "optional":
             command += " *zone2_f=" + zone2_f_f
 
-        if key != "optional":
+        if key_f != "optional":
             command += " *key=" + key_f
 
-        if length_f != "optional":
+        if length_f_f != "optional":
             command += " *length_f=" + length_f_f
 
-        if dens_f != "optional":
+        if dens_f_f != "optional":
             command += " *dens_f=" + dens_f_f
 
-        if section != "optional":
+        if section_f != "optional":
             command += " *section=" + section_f
 
-        if boundary != "optional":
+        if boundary_f != "optional":
             command += " *boundary=" + boundary_f
 
-        if wstag != "optional":
+        if wstag_f != "optional":
             command += " *wstag=" + wstag_f
 
-        if bstag != "optional":
+        if bstag_f != "optional":
             command += " *bstag=" + bstag_f
 
-        if tag != "optional":
+        if tag_f != "optional":
             command += " *tag=" + tag_f
 
         if discmeth_p != "optional":
@@ -10997,8 +9978,8 @@ class init(object):
     def extra(self,
               in_i="required",
               out_o="required",
-              print_p=0,
-              approx_p=0,
+              print_p="optional",
+              approx_p="optional",
               expression="optional",
               retrieval="optional"):
 
@@ -11068,7 +10049,7 @@ class init(object):
             command += "{" + retrieval + "}"
 
         if expression != "optional":
-            command += expression + " 'GO'"
+            command += " " + expression + " 'GO'"
 
         self.run_command(command)
 
@@ -11078,16 +10059,7 @@ class init(object):
                rscores_o="optional",
                oscores_o="optional",
                sampid_f="required",
-               f1_f="optional",
-               f2_f="optional",
-               f3_f="optional",
-               f4_f="optional",
-               f5_f="optional",
-               f6_f="optional",
-               f7_f="optional",
-               f8_f="optional",
-               f9_f="optional",
-               f10_f="optional",
+               fields_f=["optional"],
                maxit_p=0,
                eigenmin_p=1,
                numeigen_p=0,
@@ -11127,44 +10099,8 @@ class init(object):
             Field containing sample identification
             Default=Undefined
             Required=Yes
-        f1: Undefined : Undefined
-            First field to be used. No fields specified means all.
-            Default=Undefined
-            Required=No
-        f2: Undefined : Undefined
-            Second field to be used.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Third field to be used.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Fourth field to be used.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Fifth field to be used.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Sixth field to be used.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Seventh field to be used.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Eighth field to be used.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Ninth field to be used.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Tenth field to be used.
+        fields_f: Undefined : Undefined
+            Fields to be used. No fields specified means all.
             Default=Undefined
             Required=No
 
@@ -11215,13 +10151,13 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if uscores != "optional":
+        if uscores_o != "optional":
             command += " &uscores=" + uscores_o
 
-        if rscores != "optional":
+        if rscores_o != "optional":
             command += " &rscores=" + rscores_o
 
-        if oscores != "optional":
+        if oscores_o != "optional":
             command += " &oscores=" + oscores_o
 
             # Required field error check
@@ -11231,35 +10167,8 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
-
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, "*")
 
         if maxit_p != "optional":
             command += " @maxit=" + str(maxit_p)
@@ -11423,7 +10332,7 @@ class init(object):
 
         command += " &vmodparm=" + vmodparm_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
         if vmodnum_p != "optional":
@@ -11626,7 +10535,7 @@ class init(object):
 
         command += " *y=" + y_f
 
-        if z != "optional":
+        if z_f != "optional":
             command += " *z=" + z_f
 
         if radius_p != "optional":
@@ -12268,10 +11177,10 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if polyno != "optional":
+        if polyno_o != "optional":
             command += " &polyno=" + polyno_o
 
-        if trans != "optional":
+        if trans_o != "optional":
             command += " &trans=" + trans_o
 
         if retrieval != "optional":
@@ -12328,10 +11237,10 @@ class init(object):
 
         command += " &samples=" + samples_i
 
-        if graph != "optional":
+        if graph_o != "optional":
             command += " &graph=" + graph_o
 
-        if stats != "optional":
+        if stats_o != "optional":
             command += " &stats=" + stats_o
 
         if retrieval != "optional":
@@ -12512,7 +11421,7 @@ class init(object):
 
         command += " &qtn=" + qtn_o
 
-        if qtr != "optional":
+        if qtr_o != "optional":
             command += " &qtr=" + qtr_o
 
         if retrieval != "optional":
@@ -12565,7 +11474,7 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if modelou != "optional":
+        if modelou_o != "optional":
             command += " &modelou=" + modelou_o
 
         if retrieval != "optional":
@@ -12695,12 +11604,7 @@ class init(object):
     def holes3d(self,
                 collar_i="required",
                 survey_i="optional",
-                sample1_i="required",
-                sample2_i="optional",
-                sample3_i="optional",
-                sample4_i="optional",
-                sample5_i="optional",
-                sample6_i="optional",
+                samples_i=["required"],
                 out_o="required",
                 holesmry_o="optional",
                 errors_o="optional",
@@ -12737,30 +11641,10 @@ class init(object):
             of holes, then it is assumed that all holes which are not included in the survey file are
 
             Required=No
-        sample1: Input
-            First sample data file. This file is compulsory and must include fields BHID, FROM, and TO. It
+        samples: Input
+            Sample data files. This file is compulsory and must include fields BHID, FROM, and TO. It
             probably also include at least one sample attribute field, such as grade or lithology.
             Required=Yes
-        sample2: Input
-            Optional second sample data file. Expects fields BHID, FROM, and TO, and at least one assay or
-            attribute field.
-            Required=No
-        sample3: Input
-            Optional third sample data file. Expects fields BHID, FROM, and TO, and at least one assay or
-            attribute field.
-            Required=No
-        sample4: Input
-            Optional fourth sample data file. Expects fields BHID, FROM, and TO, and at least one assay or
-            attribute field.
-            Required=No
-        sample5: Input
-            Optional fifth sample data file. Expects fields BHID, FROM, and TO, and at least one assay or
-            attribute field.
-            Required=No
-        sample6: Input
-            Optional sixth sample data file. Expects fields BHID, FROM, and TO, and at least one assay or
-            attribute field.
-            Required=No
 
         Output Files:
         -------------
@@ -12894,25 +11778,10 @@ class init(object):
 
             # Required input error check
 
-        if sample1_i == "required":
-            raise ValueError("sample1 is required.")
+        if samples_i[0] == "required":
+            raise ValueError("At least one sample file is required.")
 
-        command += " &sample1=" + sample1_i
-
-        if sample2_i != "optional":
-            command += " &sample2=" + sample2_i
-
-        if sample3_i != "optional":
-            command += " &sample3=" + sample3_i
-
-        if sample4_i != "optional":
-            command += " &sample4=" + sample4_i
-
-        if sample5_i != "optional":
-            command += " &sample5=" + sample5_i
-
-        if sample6_i != "optional":
-            command += " &sample6=" + sample6_i
+        command += self.parse_infields_list("sample", samples_i, 5, "&")
 
             # Required output error check
 
@@ -12921,37 +11790,37 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if holesmry != "optional":
+        if holesmry_o != "optional":
             command += " &holesmry=" + holesmry_o
 
-        if errors != "optional":
+        if errors_o != "optional":
             command += " &errors=" + errors_o
 
-        if bhid != "optional":
+        if bhid_f != "optional":
             command += " *bhid=" + bhid_f
 
-        if xcollar != "optional":
+        if xcollar_f != "optional":
             command += " *xcollar=" + xcollar_f
 
-        if ycollar != "optional":
+        if ycollar_f != "optional":
             command += " *ycollar=" + ycollar_f
 
-        if zcollar != "optional":
+        if zcollar_f != "optional":
             command += " *zcollar=" + zcollar_f
 
-        if from_ != "optional":
+        if from_f != "optional":
             command += " *from=" + from_f
 
-        if to != "optional":
+        if to_f != "optional":
             command += " *to=" + to_f
 
-        if at != "optional":
+        if at_f != "optional":
             command += " *at=" + at_f
 
-        if brg != "optional":
+        if brg_f != "optional":
             command += " *brg=" + brg_f
 
-        if dip != "optional":
+        if dip_f != "optional":
             command += " *dip=" + dip_f
 
         if survsmth_p != "optional":
@@ -12968,6 +11837,8 @@ class init(object):
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
+
+        print command
 
         self.run_command(command)
 
@@ -13770,28 +12641,28 @@ class init(object):
 
         command += " &plot=" + plot_o
 
-        if value != "optional":
+        if value_f != "optional":
             command += " *value=" + value_f
 
-        if bhid != "optional":
+        if bhid_f != "optional":
             command += " *bhid=" + bhid_f
 
-        if x != "optional":
+        if x_f != "optional":
             command += " *x=" + x_f
 
-        if y != "optional":
+        if y_f != "optional":
             command += " *y=" + y_f
 
-        if z != "optional":
+        if z_f != "optional":
             command += " *z=" + z_f
 
-        if length != "optional":
+        if length_f != "optional":
             command += " *length=" + length_f
 
-        if a0 != "optional":
+        if a0_f != "optional":
             command += " *a0=" + a0_f
 
-        if b0 != "optional":
+        if b0_f != "optional":
             command += " *b0=" + b0_f
 
             # Required parameter error check
@@ -14671,16 +13542,7 @@ class init(object):
              in1_i="required",
              in2_i="required",
              out_o="required",
-             key1_f="optional",
-             key2_f="optional",
-             key3_f="optional",
-             key4_f="optional",
-             key5_f="optional",
-             key6_f="optional",
-             key7_f="optional",
-             key8_f="optional",
-             key9_f="optional",
-             key10_f="optional",
+             keys_f=["optional"],
              subsetr_p=0,
              subsetf_p=0,
              cartjoin_p=0,
@@ -14712,44 +13574,8 @@ class init(object):
         Fields:
         -------
 
-        key1: Undefined : Undefined
-            Keyfield 1 for matching.
-            Default=Undefined
-            Required=No
-        key2: Undefined : Undefined
-            Keyfield 2 for matching.
-            Default=Undefined
-            Required=No
-        key3: Undefined : Undefined
-            Keyfield 3 for matching.
-            Default=Undefined
-            Required=No
-        key4: Undefined : Undefined
-            Keyfield 4 for matching.
-            Default=Undefined
-            Required=No
-        key5: Undefined : Undefined
-            Keyfield 5 for matching.
-            Default=Undefined
-            Required=No
-        key6: Undefined : Undefined
-            Keyfield 6 for matching.
-            Default=Undefined
-            Required=No
-        key7: Undefined : Undefined
-            Keyfield 7 for matching.
-            Default=Undefined
-            Required=No
-        key8: Undefined : Undefined
-            Keyfield 8 for matching.
-            Default=Undefined
-            Required=No
-        key9: Undefined : Undefined
-            Keyfield 9 for matching.
-            Default=Undefined
-            Required=No
-        key10: Undefined : Undefined
-            Keyfield 10 for matching.
+        keys_f: Undefined : Undefined
+            Keys for matching.
             Default=Undefined
             Required=No
 
@@ -14812,35 +13638,8 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if key1 != "optional":
-            command += " *key1=" + key1_f
-
-        if key2 != "optional":
-            command += " *key2=" + key2_f
-
-        if key3 != "optional":
-            command += " *key3=" + key3_f
-
-        if key4 != "optional":
-            command += " *key4=" + key4_f
-
-        if key5 != "optional":
-            command += " *key5=" + key5_f
-
-        if key6 != "optional":
-            command += " *key6=" + key6_f
-
-        if key7 != "optional":
-            command += " *key7=" + key7_f
-
-        if key8 != "optional":
-            command += " *key8=" + key8_f
-
-        if key9 != "optional":
-            command += " *key9=" + key9_f
-
-        if key10 != "optional":
-            command += " *key10=" + key10_f
+        if keys_f[0] != "optional":
+            command += self.parse_infields_list("key", keys_f, 10, "*")
 
         if subsetr_p != "optional":
             command += " @subsetr=" + str(subsetr_p)
@@ -15071,11 +13870,7 @@ class init(object):
                wireptou_o="optional",
                wiretrou_o="optional",
                perimout_o="optional",
-               attrib1_f="optional",
-               attrib2_f="optional",
-               attrib3_f="optional",
-               attrib4_f="optional",
-               attrib5_f="optional",
+               attribs_f=["optional"],
                maxpts_p=500,
                copyper_p=0,
                copywf_p=0,
@@ -15131,28 +13926,12 @@ class init(object):
         Fields:
         -------
 
-        attrib1: Undefined : Undefined
-            Optional attribute field 1. If specified, this field will appear in the output file with a value
+        attribs_f: Undefined : Undefined
+            Optional attribute fields. If specified, this field will appear in the output file with a value
             for each digitised point. Attribute fields may be numeric or alphanumeric. If alphanumeric
             are used, they MUST already exist in the PERIMIN file. In LINK3D Attributes need only be
             if the PERIMIN file is being created. The process automatically picks up non-standard fields
             attributes.
-            Default=Undefined
-            Required=No
-        attrib2: Undefined : Undefined
-            Optional attribute field 2.
-            Default=Undefined
-            Required=No
-        attrib3: Undefined : Undefined
-            Optional attribute field 3.
-            Default=Undefined
-            Required=No
-        attrib4: Undefined : Undefined
-            Optional attribute field 4.
-            Default=Undefined
-            Required=No
-        attrib5: Undefined : Undefined
-            Optional attribute field 5. LINK3D can handle up to 10 attribute fields at once.
             Default=Undefined
             Required=No
 
@@ -15211,29 +13990,17 @@ class init(object):
         if section_i != "optional":
             command += " &section=" + section_i
 
-        if wireptou != "optional":
+        if wireptou_o != "optional":
             command += " &wireptou=" + wireptou_o
 
-        if wiretrou != "optional":
+        if wiretrou_o != "optional":
             command += " &wiretrou=" + wiretrou_o
 
-        if perimout != "optional":
+        if perimout_o != "optional":
             command += " &perimout=" + perimout_o
 
-        if attrib1 != "optional":
-            command += " *attrib1=" + attrib1_f
-
-        if attrib2 != "optional":
-            command += " *attrib2=" + attrib2_f
-
-        if attrib3 != "optional":
-            command += " *attrib3=" + attrib3_f
-
-        if attrib4 != "optional":
-            command += " *attrib4=" + attrib4_f
-
-        if attrib5 != "optional":
-            command += " *attrib5=" + attrib5_f
+        if attribs_f[0] != "optional":
+            command += self.parse_infields_list("attrib", attribs_f, 5, "*")
 
         if maxpts_p != "optional":
             command += " @maxpts=" + str(maxpts_p)
@@ -15317,16 +14084,7 @@ class init(object):
     def list(self,
              in_i="required",
              fieldlst_i="optional",
-             f1_f="optional",
-             f2_f="optional",
-             f3_f="optional",
-             f4_f="optional",
-             f5_f="optional",
-             f6_f="optional",
-             f7_f="optional",
-             f8_f="optional",
-             f9_f="optional",
-             f10_f="optional",
+             fields_f=["optional"],
              fieldnam_f="optional",
              retrieval="optional"):
 
@@ -15353,44 +14111,8 @@ class init(object):
         Fields:
         -------
 
-        f1: Undefined : Undefined
-            Optional first listed field. None specified means all.
-            Default=Undefined
-            Required=No
-        f2: Undefined : Undefined
-            Optional second listed field.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Optional third listed field.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Optional fourth listed field.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Optional fifth listed field.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Optional sixth listed field.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Optional seventh listed field.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Optional eighth listed field.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Optional ninth listed field.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Optional tenth listed field.
+        fields_f: Undefined : Undefined
+            Optional listed fields. None specified means all.
             Default=Undefined
             Required=No
         fieldnam: Undefined : Undefined
@@ -15415,37 +14137,10 @@ class init(object):
         if fieldlst_i != "optional":
             command += " &fieldlst=" + fieldlst_i
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, "*")
 
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
-
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if retrieval != "optional":
@@ -15567,16 +14262,7 @@ class init(object):
     def manova(self,
                in_i="required",
                value_f="required",
-               key1_f="required",
-               key2_f="required",
-               key3_f="optional",
-               key4_f="optional",
-               key5_f="optional",
-               key6_f="optional",
-               key7_f="optional",
-               key8_f="optional",
-               key9_f="optional",
-               key10_f="optional",
+               keys_f="required",
                retrieval="optional"):
 
         """
@@ -15602,46 +14288,10 @@ class init(object):
             Field for analysis of variance.
             Default=Undefined
             Required=Yes
-        key1: Undefined : Undefined
+        keys: Undefined : Undefined
             Keyfield 1 for replicate observations.
             Default=Undefined
             Required=Yes
-        key2: Undefined : Undefined
-            Keyfield 2.
-            Default=Undefined
-            Required=Yes
-        key3: Undefined : Undefined
-            Keyfield 3.
-            Default=Undefined
-            Required=No
-        key4: Undefined : Undefined
-            Keyfield 4.
-            Default=Undefined
-            Required=No
-        key5: Undefined : Undefined
-            Keyfield 5.
-            Default=Undefined
-            Required=No
-        key6: Undefined : Undefined
-            Keyfield 6.
-            Default=Undefined
-            Required=No
-        key7: Undefined : Undefined
-            Keyfield 7.
-            Default=Undefined
-            Required=No
-        key8: Undefined : Undefined
-            Keyfield 8.
-            Default=Undefined
-            Required=No
-        key9: Undefined : Undefined
-            Keyfield 9.
-            Default=Undefined
-            Required=No
-        key10: Undefined : Undefined
-            Keyfield 10.
-            Default=Undefined
-            Required=No
 
         Parameters:
         -----------
@@ -15666,41 +14316,10 @@ class init(object):
 
         # Required field error check
 
-        if key1_f == "required":
-            raise ValueError("key1_f is required.")
+        if keys_f == "required":
+            raise ValueError("At least 2 key fields are required.")
 
-        command += " *key1=" + key1_f
-
-        # Required field error check
-
-        if key2_f == "required":
-            raise ValueError("key2_f is required.")
-
-        command += " *key2=" + key2_f
-
-        if key3 != "optional":
-            command += " *key3=" + key3_f
-
-        if key4 != "optional":
-            command += " *key4=" + key4_f
-
-        if key5 != "optional":
-            command += " *key5=" + key5_f
-
-        if key6 != "optional":
-            command += " *key6=" + key6_f
-
-        if key7 != "optional":
-            command += " *key7=" + key7_f
-
-        if key8 != "optional":
-            command += " *key8=" + key8_f
-
-        if key9 != "optional":
-            command += " *key9=" + key9_f
-
-        if key10 != "optional":
-            command += " *key10=" + key10_f
+        command += self.parse_infields_list("key", keys_f, 10, "*")
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -15981,16 +14600,7 @@ class init(object):
     def mgsort(self,
                in_i="required",
                out_o="required",
-               key1_f="required",
-               key2_f="optional",
-               key3_f="optional",
-               key4_f="optional",
-               key5_f="optional",
-               key6_f="optional",
-               key7_f="optional",
-               key8_f="optional",
-               key9_f="optional",
-               key10_f="optional",
+               keys_f=["required"],
                order_p=1,
                keysfrst_p=1,
                roworder_p=1,
@@ -16018,46 +14628,10 @@ class init(object):
         Fields:
         -------
 
-        key1: Undefined : Undefined
-            Keyfield 1 for sorting on.
+        keys: Undefined : Undefined
+            Keyfields for sorting on.
             Default=Undefined
             Required=Yes
-        key2: Undefined : Undefined
-            Keyfield 2.
-            Default=Undefined
-            Required=No
-        key3: Undefined : Undefined
-            Keyfield 3.
-            Default=Undefined
-            Required=No
-        key4: Undefined : Undefined
-            Keyfield 4.
-            Default=Undefined
-            Required=No
-        key5: Undefined : Undefined
-            Keyfield 5.
-            Default=Undefined
-            Required=No
-        key6: Undefined : Undefined
-            Keyfield 6.
-            Default=Undefined
-            Required=No
-        key7: Undefined : Undefined
-            Keyfield 7.
-            Default=Undefined
-            Required=No
-        key8: Undefined : Undefined
-            Keyfield 8.
-            Default=Undefined
-            Required=No
-        key9: Undefined : Undefined
-            Keyfield 9.
-            Default=Undefined
-            Required=No
-        key10: Undefined : Undefined
-            Keyfield 10.
-            Default=Undefined
-            Required=No
 
         Parameters:
         -----------
@@ -16101,37 +14675,10 @@ class init(object):
 
         # Required field error check
 
-        if key1_f == "required":
-            raise ValueError("key1_f is required.")
+        if keys_f[0] == "required":
+            raise ValueError("At least 1 key field is required.")
 
-        command += " *key1=" + key1_f
-
-        if key2 != "optional":
-            command += " *key2=" + key2_f
-
-        if key3 != "optional":
-            command += " *key3=" + key3_f
-
-        if key4 != "optional":
-            command += " *key4=" + key4_f
-
-        if key5 != "optional":
-            command += " *key5=" + key5_f
-
-        if key6 != "optional":
-            command += " *key6=" + key6_f
-
-        if key7 != "optional":
-            command += " *key7=" + key7_f
-
-        if key8 != "optional":
-            command += " *key8=" + key8_f
-
-        if key9 != "optional":
-            command += " *key9=" + key9_f
-
-        if key10 != "optional":
-            command += " *key10=" + key10_f
+        command += self.parse_infields_list("key", keys_f, 10, "*")
 
         if order_p != "optional":
             command += " @order=" + str(order_p)
@@ -16151,16 +14698,7 @@ class init(object):
                  modelin_i="required",
                  modelout_o="required",
                  grade_f="required",
-                 f1_f="optional",
-                 f2_f="optional",
-                 f3_f="optional",
-                 f4_f="optional",
-                 f5_f="optional",
-                 f6_f="optional",
-                 f7_f="optional",
-                 f8_f="optional",
-                 f9_f="optional",
-                 f10_f="optional",
+                 fields_f=["optional"],
                  axis_p=3,
                  minvol_p=0,
                  tolernce_p=0.0001,
@@ -16193,43 +14731,7 @@ class init(object):
             Grade field in input model containing the MIK grade - that is the grade above a cutoff of zero.
             Default=Undefined
             Required=Yes
-        f1: Undefined : Undefined
-            Grade fields in input model. Will be copied to the output model.
-            Default=Undefined
-            Required=No
-        f2: Undefined : Undefined
-            Grade fields in input model. Will be copied to the output model.
-            Default=Undefined
-            Required=No
-        f3: Undefined : Undefined
-            Grade fields in input model. Will be copied to the output model.
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Grade fields in input model. Will be copied to the output model.
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Grade fields in input model. Will be copied to the output model.
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Grade fields in input model. Will be copied to the output model.
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Grade fields in input model. Will be copied to the output model.
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Grade fields in input model. Will be copied to the output model.
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Grade fields in input model. Will be copied to the output model.
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
+        fields: Undefined : Undefined
             Grade fields in input model. Will be copied to the output model.
             Default=Undefined
             Required=No
@@ -16288,35 +14790,8 @@ class init(object):
 
         command += " *grade=" + grade_f
 
-        if f1 != "optional":
-            command += " *f1=" + f1_f
-
-        if f2 != "optional":
-            command += " *f2=" + f2_f
-
-        if f3 != "optional":
-            command += " *f3=" + f3_f
-
-        if f4 != "optional":
-            command += " *f4=" + f4_f
-
-        if f5 != "optional":
-            command += " *f5=" + f5_f
-
-        if f6 != "optional":
-            command += " *f6=" + f6_f
-
-        if f7 != "optional":
-            command += " *f7=" + f7_f
-
-        if f8 != "optional":
-            command += " *f8=" + f8_f
-
-        if f9 != "optional":
-            command += " *f9=" + f9_f
-
-        if f10 != "optional":
-            command += " *f10=" + f10_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 10, "*")
 
             # Required parameter error check
 
@@ -16412,7 +14887,7 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if oreval != "optional":
+        if oreval_f != "optional":
             command += " *oreval=" + oreval_f
 
             # Required parameter error check
@@ -16976,11 +15451,7 @@ class init(object):
                thresh_i="optional",
                out_o="required",
                reserves_o="optional",
-               priorty1_f="optional",
-               priorty2_f="optional",
-               priorty3_f="optional",
-               priorty4_f="optional",
-               priorty5_f="optional",
+               priorties_f=["optional"],
                print1_f="optional",
                print2_f="optional",
                print3_f="optional",
@@ -17045,24 +15516,8 @@ class init(object):
         Fields:
         -------
 
-        priorty1: Undefined : Undefined
-            First field in model to be used in slice combination. Printed if PRINT=2.
-            Default=Undefined
-            Required=No
-        priorty2: Undefined : Undefined
-            Second field in model to be used in slice combination. Printed if PRINT=2.
-            Default=Undefined
-            Required=No
-        priorty3: Undefined : Undefined
-            Third field in model to be used in slice combination. Printed if PRINT=2.
-            Default=Undefined
-            Required=No
-        priorty4: Undefined : Undefined
-            Fourth field in model to be used in slice combination. Printed if PRINT=2.
-            Default=Undefined
-            Required=No
-        priorty5: Undefined : Undefined
-            Fifth field in model to be used in slice combination. Printed if PRINT=2.
+        priorties: Undefined : Undefined
+            Fields in model to be used in slice combination. Printed if PRINT=2.
             Default=Undefined
             Required=No
         print1: Undefined : Undefined
@@ -17243,43 +15698,31 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if reserves != "optional":
+        if reserves_o != "optional":
             command += " &reserves=" + reserves_o
 
-        if priorty1 != "optional":
-            command += " *priorty1=" + priorty1_f
+        if priorties_f[0] != "optional":
+            command += self.parse_infields_list("priorty", priorties_f, 5, "*")
 
-        if priorty2 != "optional":
-            command += " *priorty2=" + priorty2_f
-
-        if priorty3 != "optional":
-            command += " *priorty3=" + priorty3_f
-
-        if priorty4 != "optional":
-            command += " *priorty4=" + priorty4_f
-
-        if priorty5 != "optional":
-            command += " *priorty5=" + priorty5_f
-
-        if print1 != "optional":
+        if print1_f != "optional":
             command += " *print1=" + print1_f
 
-        if print2 != "optional":
+        if print2_f != "optional":
             command += " *print2=" + print2_f
 
-        if print3 != "optional":
+        if print3_f != "optional":
             command += " *print3=" + print3_f
 
-        if print4 != "optional":
+        if print4_f != "optional":
             command += " *print4=" + print4_f
 
-        if print5 != "optional":
+        if print5_f != "optional":
             command += " *print5=" + print5_f
 
-        if sliceno != "optional":
+        if sliceno_f != "optional":
             command += " *sliceno=" + sliceno_f
 
-        if slicewid != "optional":
+        if slicewid_f != "optional":
             command += " *slicewid=" + slicewid_f
 
             # Required parameter error check
@@ -18089,16 +16532,16 @@ class init(object):
         if exclude_i != "optional":
             command += " &exclude=" + exclude_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
-        if envmodel != "optional":
+        if envmodel_o != "optional":
             command += " &envmodel=" + envmodel_o
 
-        if results != "optional":
+        if results_o != "optional":
             command += " &results=" + results_o
 
-        if value != "optional":
+        if value_f != "optional":
             command += " *value=" + value_f
 
             # Required field error check
@@ -18108,25 +16551,25 @@ class init(object):
 
         command += " *grade=" + grade_f
 
-        if shapzone != "optional":
+        if shapzone_f != "optional":
             command += " *shapzone=" + shapzone_f
 
-        if envbest != "optional":
+        if envbest_f != "optional":
             command += " *envbest=" + envbest_f
 
-        if envelope != "optional":
+        if envelope_f != "optional":
             command += " *envelope=" + envelope_f
 
-        if envnum != "optional":
+        if envnum_f != "optional":
             command += " *envnum=" + envnum_f
 
-        if hdgrade != "optional":
+        if hdgrade_f != "optional":
             command += " *hdgrade=" + hdgrade_f
 
-        if mined != "optional":
+        if mined_f != "optional":
             command += " *mined=" + mined_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
             # Required parameter error check
@@ -18469,7 +16912,7 @@ class init(object):
 
         command += " &results=" + results_o
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
             # Required parameter error check
@@ -18708,34 +17151,34 @@ class init(object):
 
         command += " &fullmod=" + fullmod_o
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
-        if addf1 != "optional":
+        if addf1_f != "optional":
             command += " *addf1=" + addf1_f
 
-        if addf2 != "optional":
+        if addf2_f != "optional":
             command += " *addf2=" + addf2_f
 
-        if addf3 != "optional":
+        if addf3_f != "optional":
             command += " *addf3=" + addf3_f
 
-        if addf4 != "optional":
+        if addf4_f != "optional":
             command += " *addf4=" + addf4_f
 
-        if addf5 != "optional":
+        if addf5_f != "optional":
             command += " *addf5=" + addf5_f
 
-        if addf6 != "optional":
+        if addf6_f != "optional":
             command += " *addf6=" + addf6_f
 
-        if addf7 != "optional":
+        if addf7_f != "optional":
             command += " *addf7=" + addf7_f
 
-        if addf8 != "optional":
+        if addf8_f != "optional":
             command += " *addf8=" + addf8_f
 
-        if addf9 != "optional":
+        if addf9_f != "optional":
             command += " *addf9=" + addf9_f
 
             # Required parameter error check
@@ -18979,25 +17422,25 @@ class init(object):
 
         command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if xg != "optional":
+        if xg_f != "optional":
             command += " *xg=" + xg_f
 
-        if yg != "optional":
+        if yg_f != "optional":
             command += " *yg=" + yg_f
 
-        if zg != "optional":
+        if zg_f != "optional":
             command += " *zg=" + zg_f
 
         if plane_p != "optional":
@@ -19261,7 +17704,7 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if trandist != "optional":
+        if trandist_o != "optional":
             command += " &trandist=" + trandist_o
 
         if stat_tbl != "optional":
@@ -19274,13 +17717,13 @@ class init(object):
 
         command += " *grade=" + grade_f
 
-        if dcwgt != "optional":
+        if dcwgt_f != "optional":
             command += " *dcwgt=" + dcwgt_f
 
-        if refgrade != "optional":
+        if refgrade_f != "optional":
             command += " *refgrade=" + refgrade_f
 
-        if refwgt != "optional":
+        if refwgt_f != "optional":
             command += " *refwgt=" + refwgt_f
 
         if mingrade_p != "optional":
@@ -19449,13 +17892,13 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
-        if wiretr != "optional":
+        if wiretr_o != "optional":
             command += " &wiretr=" + wiretr_o
 
-        if wirept != "optional":
+        if wirept_o != "optional":
             command += " &wirept=" + wirept_o
 
             # Required field error check
@@ -19729,82 +18172,82 @@ class init(object):
         if fieldlst_i != "optional":
             command += " &fieldlst=" + fieldlst_i
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
-        if f11 != "optional":
+        if f11_f != "optional":
             command += " *f11=" + f11_f
 
-        if f12 != "optional":
+        if f12_f != "optional":
             command += " *f12=" + f12_f
 
-        if f13 != "optional":
+        if f13_f != "optional":
             command += " *f13=" + f13_f
 
-        if f14 != "optional":
+        if f14_f != "optional":
             command += " *f14=" + f14_f
 
-        if f15 != "optional":
+        if f15_f != "optional":
             command += " *f15=" + f15_f
 
-        if f16 != "optional":
+        if f16_f != "optional":
             command += " *f16=" + f16_f
 
-        if f17 != "optional":
+        if f17_f != "optional":
             command += " *f17=" + f17_f
 
-        if f18 != "optional":
+        if f18_f != "optional":
             command += " *f18=" + f18_f
 
-        if f19 != "optional":
+        if f19_f != "optional":
             command += " *f19=" + f19_f
 
-        if f20 != "optional":
+        if f20_f != "optional":
             command += " *f20=" + f20_f
 
-        if f21 != "optional":
+        if f21_f != "optional":
             command += " *f21=" + f21_f
 
-        if f22 != "optional":
+        if f22_f != "optional":
             command += " *f22=" + f22_f
 
-        if f23 != "optional":
+        if f23_f != "optional":
             command += " *f23=" + f23_f
 
-        if f24 != "optional":
+        if f24_f != "optional":
             command += " *f24=" + f24_f
 
-        if f25 != "optional":
+        if f25_f != "optional":
             command += " *f25=" + f25_f
 
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if csv_p != "optional":
@@ -20139,10 +18582,10 @@ class init(object):
         if disptin_i != "optional":
             command += " &disptin=" + disptin_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
-        if sampout != "optional":
+        if sampout_o != "optional":
             command += " &sampout=" + sampout_o
 
             # Required field error check
@@ -20159,7 +18602,7 @@ class init(object):
 
         command += " *y=" + y_f
 
-        if z != "optional":
+        if z_f != "optional":
             command += " *z=" + z_f
 
             # Required field error check
@@ -20169,16 +18612,16 @@ class init(object):
 
         command += " *value=" + value_f
 
-        if panel != "optional":
+        if panel_f != "optional":
             command += " *panel=" + panel_f
 
-        if xpt != "optional":
+        if xpt_f != "optional":
             command += " *xpt=" + xpt_f
 
-        if ypt != "optional":
+        if ypt_f != "optional":
             command += " *ypt=" + ypt_f
 
-        if zpt != "optional":
+        if zpt_f != "optional":
             command += " *zpt=" + zpt_f
 
         if minnum_p != "optional":
@@ -20438,7 +18881,7 @@ class init(object):
 
         command += " &in2=" + in2_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
             # Required field error check
@@ -20660,7 +19103,7 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if scores != "optional":
+        if scores_o != "optional":
             command += " &scores=" + scores_o
 
             # Required field error check
@@ -20670,34 +19113,34 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
         if matxtype_p != "optional":
@@ -21340,25 +19783,25 @@ class init(object):
 
         command += " &model=" + model_o
 
-        if dplus != "optional":
+        if dplus_f != "optional":
             command += " *dplus=" + dplus_f
 
-        if dminus != "optional":
+        if dminus_f != "optional":
             command += " *dminus=" + dminus_f
 
-        if attrib1 != "optional":
+        if attrib1_f != "optional":
             command += " *attrib1=" + attrib1_f
 
-        if attrib2 != "optional":
+        if attrib2_f != "optional":
             command += " *attrib2=" + attrib2_f
 
-        if attrib3 != "optional":
+        if attrib3_f != "optional":
             command += " *attrib3=" + attrib3_f
 
-        if attrib4 != "optional":
+        if attrib4_f != "optional":
             command += " *attrib4=" + attrib4_f
 
-        if attrib5 != "optional":
+        if attrib5_f != "optional":
             command += " *attrib5=" + attrib5_f
 
         if mode_p != "optional":
@@ -21662,7 +20105,7 @@ class init(object):
         if intersec_i != "optional":
             command += " &intersec=" + intersec_i
 
-        if perimout != "optional":
+        if perimout_o != "optional":
             command += " &perimout=" + perimout_o
 
             # Required field error check
@@ -21707,7 +20150,7 @@ class init(object):
 
         command += " *z=" + z_f
 
-        if tag != "optional":
+        if tag_f != "optional":
             command += " *tag=" + tag_f
 
             # Required parameter error check
@@ -21824,7 +20267,7 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if print_p != "optional":
@@ -21937,22 +20380,22 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if append_p != "optional":
@@ -22109,7 +20552,7 @@ class init(object):
 
         command += " &modelin=" + modelin_i
 
-        if modelou != "optional":
+        if modelou_o != "optional":
             command += " &modelou=" + modelou_o
 
             # Required output error check
@@ -22126,22 +20569,22 @@ class init(object):
 
         command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if key != "optional":
+        if key_f != "optional":
             command += " *key=" + key_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
             # Required parameter error check
@@ -22359,19 +20802,19 @@ class init(object):
         if model_i != "optional":
             command += " &model=" + model_i
 
-        if aux != "optional":
+        if aux_f != "optional":
             command += " *aux=" + aux_f
 
-        if aaux != "optional":
+        if aaux_f != "optional":
             command += " *aaux=" + aaux_f
 
-        if baux != "optional":
+        if baux_f != "optional":
             command += " *baux=" + baux_f
 
-        if grade != "optional":
+        if grade_f != "optional":
             command += " *grade=" + grade_f
 
-        if row != "optional":
+        if row_f != "optional":
             command += " *row=" + row_f
 
         if position_p != "optional":
@@ -22646,7 +21089,7 @@ class init(object):
 
         command += " *value=" + value_f
 
-        if charsz != "optional":
+        if charsz_f != "optional":
             command += " *charsz=" + charsz_f
 
             # Required parameter error check
@@ -23294,22 +21737,22 @@ class init(object):
 
         command += " &plot=" + plot_o
 
-        if string != "optional":
+        if string_o != "optional":
             command += " &string=" + string_o
 
-        if x != "optional":
+        if x_f != "optional":
             command += " *x=" + x_f
 
-        if y != "optional":
+        if y_f != "optional":
             command += " *y=" + y_f
 
-        if z != "optional":
+        if z_f != "optional":
             command += " *z=" + z_f
 
-        if field != "optional":
+        if field_f != "optional":
             command += " *field=" + field_f
 
-        if seam != "optional":
+        if seam_f != "optional":
             command += " *seam=" + seam_f
 
         if plane_p != "optional":
@@ -23928,22 +22371,22 @@ class init(object):
 
         command += " &plot=" + plot_o
 
-        if string != "optional":
+        if string_o != "optional":
             command += " &string=" + string_o
 
-        if x != "optional":
+        if x_f != "optional":
             command += " *x=" + x_f
 
-        if y != "optional":
+        if y_f != "optional":
             command += " *y=" + y_f
 
-        if z != "optional":
+        if z_f != "optional":
             command += " *z=" + z_f
 
-        if field != "optional":
+        if field_f != "optional":
             command += " *field=" + field_f
 
-        if seam != "optional":
+        if seam_f != "optional":
             command += " *seam=" + seam_f
 
         if plane_p != "optional":
@@ -24270,7 +22713,7 @@ class init(object):
 
         command += " *y=" + y_f
 
-        if value != "optional":
+        if value_f != "optional":
             command += " *value=" + value_f
 
         if vmax_p != "optional":
@@ -26591,7 +25034,7 @@ class init(object):
 
         command += " &plot=" + plot_o
 
-        if modcol != "optional":
+        if modcol_f != "optional":
             command += " *modcol=" + modcol_f
 
         if charsize_p != "optional":
@@ -27001,28 +25444,28 @@ class init(object):
 
         command += " *y=" + y_f
 
-        if apvalue != "optional":
+        if apvalue_f != "optional":
             command += " *apvalue=" + apvalue_f
 
-        if aptn != "optional":
+        if aptn_f != "optional":
             command += " *aptn=" + aptn_f
 
-        if pcode != "optional":
+        if pcode_f != "optional":
             command += " *pcode=" + pcode_f
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
         if linecode_p != "optional":
@@ -27359,25 +25802,25 @@ class init(object):
 
         command += " &plot=" + plot_o
 
-        if afield != "optional":
+        if afield_f != "optional":
             command += " *afield=" + afield_f
 
-        if sfield != "optional":
+        if sfield_f != "optional":
             command += " *sfield=" + sfield_f
 
-        if xp != "optional":
+        if xp_f != "optional":
             command += " *xp=" + xp_f
 
-        if yp != "optional":
+        if yp_f != "optional":
             command += " *yp=" + yp_f
 
-        if pcode != "optional":
+        if pcode_f != "optional":
             command += " *pcode=" + pcode_f
 
-        if symcode != "optional":
+        if symcode_f != "optional":
             command += " *symcode=" + symcode_f
 
-        if pfill != "optional":
+        if pfill_f != "optional":
             command += " *pfill=" + pfill_f
 
         if linecode_p != "optional":
@@ -27922,16 +26365,16 @@ class init(object):
 
         command += " &plot=" + plot_o
 
-        if afield != "optional":
+        if afield_f != "optional":
             command += " *afield=" + afield_f
 
-        if dash != "optional":
+        if dash_f != "optional":
             command += " *dash=" + dash_f
 
-        if noanno != "optional":
+        if noanno_f != "optional":
             command += " *noanno=" + noanno_f
 
-        if auxanno != "optional":
+        if auxanno_f != "optional":
             command += " *auxanno=" + auxanno_f
 
         if annotate_p != "optional":
@@ -28431,73 +26874,73 @@ class init(object):
 
         command += " *y=" + y_f
 
-        if layer != "optional":
+        if layer_f != "optional":
             command += " *layer=" + layer_f
 
-        if nan != "optional":
+        if nan_f != "optional":
             command += " *nan=" + nan_f
 
-        if field != "optional":
+        if field_f != "optional":
             command += " *field=" + field_f
 
-        if ndec != "optional":
+        if ndec_f != "optional":
             command += " *ndec=" + ndec_f
 
-        if charsize != "optional":
+        if charsize_f != "optional":
             command += " *charsize=" + charsize_f
 
-        if aspratio != "optional":
+        if aspratio_f != "optional":
             command += " *aspratio=" + aspratio_f
 
-        if xoffset != "optional":
+        if xoffset_f != "optional":
             command += " *xoffset=" + xoffset_f
 
-        if yoffset != "optional":
+        if yoffset_f != "optional":
             command += " *yoffset=" + yoffset_f
 
-        if angle != "optional":
+        if angle_f != "optional":
             command += " *angle=" + angle_f
 
-        if a != "optional":
+        if a_f != "optiona_fl":
             command += " *a=" + a_f
 
-        if symbol != "optional":
+        if symbol_f != "optional":
             command += " *symbol=" + symbol_f
 
-        if symsize != "optional":
+        if symsize_f != "optional":
             command += " *symsize=" + symsize_f
 
-        if s != "optional":
+        if s_f != "optional":
             command += " *s=" + s_f
 
-        if sfield != "optional":
+        if sfield_f != "optional":
             command += " *sfield=" + sfield_f
 
-        if scutmm != "optional":
+        if scutmm_f != "optional":
             command += " *scutmm=" + scutmm_f
 
-        if scutval != "optional":
+        if scutval_f != "optional":
             command += " *scutval=" + scutval_f
 
-        if ivalue != "optional":
+        if ivalue_f != "optional":
             command += " *ivalue=" + ivalue_f
 
-        if irotref != "optional":
+        if irotref_f != "optional":
             command += " *irotref=" + irotref_f
 
-        if iangle != "optional":
+        if iangle_f != "optional":
             command += " *iangle=" + iangle_f
 
-        if ixoffset != "optional":
+        if ixoffset_f != "optional":
             command += " *ixoffset=" + ixoffset_f
 
-        if iyoffset != "optional":
+        if iyoffset_f != "optional":
             command += " *iyoffset=" + iyoffset_f
 
-        if iscale != "optional":
+        if iscale_f != "optional":
             command += " *iscale=" + iscale_f
 
-        if iasprat != "optional":
+        if iasprat_f != "optional":
             command += " *iasprat=" + iasprat_f
 
         if ndec_p != "optional":
@@ -29599,7 +28042,7 @@ class init(object):
 
         command += " &plot=" + plot_o
 
-        if sampcolr != "optional":
+        if sampcolr_f != "optional":
             command += " *sampcolr=" + sampcolr_f
 
             # Required parameter error check
@@ -30470,7 +28913,7 @@ class init(object):
 
         command += " *y=" + y_f
 
-        if symcode != "optional":
+        if symcode_f != "optional":
             command += " *symcode=" + symcode_f
 
         if angle_p != "optional":
@@ -30930,7 +29373,7 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
             # Required field error check
@@ -31128,13 +29571,13 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if model != "optional":
+        if model_o != "optional":
             command += " &model=" + model_o
 
-        if polytr != "optional":
+        if polytr_o != "optional":
             command += " &polytr=" + polytr_o
 
-        if polypt != "optional":
+        if polypt_o != "optional":
             command += " &polypt=" + polypt_o
 
             # Required field error check
@@ -31158,10 +29601,10 @@ class init(object):
 
         command += " *z=" + z_f
 
-        if wtfield != "optional":
+        if wtfield_f != "optional":
             command += " *wtfield=" + wtfield_f
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
         if compleng_p != "optional":
@@ -31348,16 +29791,16 @@ class init(object):
 
         command += " &in2=" + in2_i
 
-        if ppout != "optional":
+        if ppout_o != "optional":
             command += " &ppout=" + ppout_o
 
-        if ppplot != "optional":
+        if ppplot_o != "optional":
             command += " &ppplot=" + ppplot_o
 
-        if qqout != "optional":
+        if qqout_o != "optional":
             command += " &qqout=" + qqout_o
 
-        if qqplot != "optional":
+        if qqplot_o != "optional":
             command += " &qqplot=" + qqplot_o
 
             # Required field error check
@@ -31374,13 +29817,13 @@ class init(object):
 
         command += " *value2=" + value2_f
 
-        if weight1 != "optional":
+        if weight1_f != "optional":
             command += " *weight1=" + weight1_f
 
-        if weight2 != "optional":
+        if weight2_f != "optional":
             command += " *weight2=" + weight2_f
 
-        if key != "optional":
+        if key_f != "optional":
             command += " *key=" + key_f
 
         if minimum1_p != "optional":
@@ -31613,40 +30056,40 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if remnants != "optional":
+        if remnants_o != "optional":
             command += " &remnants=" + remnants_o
 
-        if key1 != "optional":
+        if key1_f != "optional":
             command += " *key1=" + key1_f
 
-        if key2 != "optional":
+        if key2_f != "optional":
             command += " *key2=" + key2_f
 
-        if key3 != "optional":
+        if key3_f != "optional":
             command += " *key3=" + key3_f
 
-        if key4 != "optional":
+        if key4_f != "optional":
             command += " *key4=" + key4_f
 
-        if key5 != "optional":
+        if key5_f != "optional":
             command += " *key5=" + key5_f
 
-        if key6 != "optional":
+        if key6_f != "optional":
             command += " *key6=" + key6_f
 
-        if key7 != "optional":
+        if key7_f != "optional":
             command += " *key7=" + key7_f
 
-        if key8 != "optional":
+        if key8_f != "optional":
             command += " *key8=" + key8_f
 
-        if key9 != "optional":
+        if key9_f != "optional":
             command += " *key9=" + key9_f
 
-        if key10 != "optional":
+        if key10_f != "optional":
             command += " *key10=" + key10_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
         if density_p != "optional":
@@ -31800,7 +30243,7 @@ class init(object):
 
         command += " &perimin=" + perimin_i
 
-        if perimout != "optional":
+        if perimout_o != "optional":
             command += " &perimout=" + perimout_o
 
         if mode_p != "optional":
@@ -31977,7 +30420,7 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if scores != "optional":
+        if scores_o != "optional":
             command += " &scores=" + scores_o
 
             # Required field error check
@@ -31987,34 +30430,34 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
         if convlim_p != "optional":
@@ -32157,7 +30600,7 @@ class init(object):
 
         command += " &results=" + results_o
 
-        if primary != "optional":
+        if primary_o != "optional":
             command += " &primary=" + primary_o
 
         if print_ != "optional":
@@ -32170,10 +30613,10 @@ class init(object):
 
         command += " *value=" + value_f
 
-        if key != "optional":
+        if key_f != "optional":
             command += " *key=" + key_f
 
-        if weight != "optional":
+        if weight_f != "optional":
             command += " *weight=" + weight_f
 
         if quantil1_p != "optional":
@@ -32306,50 +30749,18 @@ class init(object):
                 density_f="required",
                 fillvol_f="optional",
                 voidvol_f="optional",
-                addfld1_f="optional",
-                addfld2_f="optional",
-                addfld3_f="optional",
-                addfld4_f="optional",
-                addfld5_f="optional",
-                addfld6_f="optional",
-                addfld7_f="optional",
-                addfld8_f="optional",
-                addfld9_f="optional",
-                addfld10_f="optional",
-                domfld1_f="optional",
-                domfld2_f="optional",
-                domfld3_f="optional",
-                domfld4_f="optional",
-                domfld5_f="optional",
-                domfld6_f="optional",
-                domfld7_f="optional",
-                domfld8_f="optional",
-                domfld9_f="optional",
-                vwfld1_f="optional",
-                vwfld2_f="optional",
-                vwfld3_f="optional",
-                vwfld4_f="optional",
-                vwfld5_f="optional",
-                vwfld6_f="optional",
-                vwfld7_f="optional",
-                vwfld8_f="optional",
-                vwfld9_f="optional",
-                vwfld10_f="optional",
-                vwfld11_f="optional",
-                vwfld12_f="optional",
-                vwfld13_f="optional",
-                vwfld14_f="optional",
-                vwfld15_f="optional",
-                minfld1_f="optional",
-                minfld2_f="optional",
-                minfld3_f="optional",
-                minfld4_f="optional",
-                minfld5_f="optional",
-                maxfld1_f="optional",
-                maxfld2_f="optional",
-                maxfld3_f="optional",
-                maxfld4_f="optional",
-                maxfld5_f="optional",
+                addflds_f=["optional"],
+                domflds_f=["optional"],
+                vwflds_f=["optional"],
+                minflds_f=["optional"],
+                maxflds_f=["optional"],
+                xinc_p="optional",
+                yinc_p="optional",
+                zinc_p="optional",
+                fullcell_p=0,
+                dbymass_p=0,
+                density_p=1.0,
+                setabsnt_p=0,
                 retrieval="optional"):
 
         """
@@ -32594,143 +31005,36 @@ class init(object):
 
         command += " *density=" + density_f
 
-        if fillvol != "optional":
+        if fillvol_f != "optional":
             command += " *fillvol=" + fillvol_f
 
-        if voidvol != "optional":
+        if voidvol_f != "optional":
             command += " *voidvol=" + voidvol_f
 
-        if addfld1 != "optional":
-            command += " *addfld1=" + addfld1_f
+        if addflds_f[0] != "optional":
+            command += self.parse_infields_list("addfld", addflds_f, 10, "*")
 
-        if addfld2 != "optional":
-            command += " *addfld2=" + addfld2_f
+        if domflds_f[0] != "optional":
+            command += self.parse_infields_list("domfld", domflds_f, 10, "*")
 
-        if addfld3 != "optional":
-            command += " *addfld3=" + addfld3_f
+        if vwflds_f[0] != "optional":
+            command += self.parse_infields_list("vwfld", vwflds_f, 15, "*")
 
-        if addfld4 != "optional":
-            command += " *addfld4=" + addfld4_f
+        if minflds_f[0] != "optional":
+            command += self.parse_infields_list("minflds", minflds_f, 5, "*")
 
-        if addfld5 != "optional":
-            command += " *addfld5=" + addfld5_f
+        if maxflds_f[0] != "optional":
+            command += self.parse_infields_list("maxfld", maxflds_f, 5, "*")
 
-        if addfld6 != "optional":
-            command += " *addfld6=" + addfld6_f
+        if xinc_p != "optional":
+            command += "@xinc=" + str(xinc_p)
+            command += "@yinc=" + str(yinc_p)
+            command += "@zinc=" + str(zinc_p)
 
-        if addfld7 != "optional":
-            command += " *addfld7=" + addfld7_f
-
-        if addfld8 != "optional":
-            command += " *addfld8=" + addfld8_f
-
-        if addfld9 != "optional":
-            command += " *addfld9=" + addfld9_f
-
-        if addfld10 != "optional":
-            command += " *addfld10=" + addfld10_f
-
-        if domfld1 != "optional":
-            command += " *domfld1=" + domfld1_f
-
-        if domfld2 != "optional":
-            command += " *domfld2=" + domfld2_f
-
-        if domfld3 != "optional":
-            command += " *domfld3=" + domfld3_f
-
-        if domfld4 != "optional":
-            command += " *domfld4=" + domfld4_f
-
-        if domfld5 != "optional":
-            command += " *domfld5=" + domfld5_f
-
-        if domfld6 != "optional":
-            command += " *domfld6=" + domfld6_f
-
-        if domfld7 != "optional":
-            command += " *domfld7=" + domfld7_f
-
-        if domfld8 != "optional":
-            command += " *domfld8=" + domfld8_f
-
-        if domfld9 != "optional":
-            command += " *domfld9=" + domfld9_f
-
-        if vwfld1 != "optional":
-            command += " *vwfld1=" + vwfld1_f
-
-        if vwfld2 != "optional":
-            command += " *vwfld2=" + vwfld2_f
-
-        if vwfld3 != "optional":
-            command += " *vwfld3=" + vwfld3_f
-
-        if vwfld4 != "optional":
-            command += " *vwfld4=" + vwfld4_f
-
-        if vwfld5 != "optional":
-            command += " *vwfld5=" + vwfld5_f
-
-        if vwfld6 != "optional":
-            command += " *vwfld6=" + vwfld6_f
-
-        if vwfld7 != "optional":
-            command += " *vwfld7=" + vwfld7_f
-
-        if vwfld8 != "optional":
-            command += " *vwfld8=" + vwfld8_f
-
-        if vwfld9 != "optional":
-            command += " *vwfld9=" + vwfld9_f
-
-        if vwfld10 != "optional":
-            command += " *vwfld10=" + vwfld10_f
-
-        if vwfld11 != "optional":
-            command += " *vwfld11=" + vwfld11_f
-
-        if vwfld12 != "optional":
-            command += " *vwfld12=" + vwfld12_f
-
-        if vwfld13 != "optional":
-            command += " *vwfld13=" + vwfld13_f
-
-        if vwfld14 != "optional":
-            command += " *vwfld14=" + vwfld14_f
-
-        if vwfld15 != "optional":
-            command += " *vwfld15=" + vwfld15_f
-
-        if minfld1 != "optional":
-            command += " *minfld1=" + minfld1_f
-
-        if minfld2 != "optional":
-            command += " *minfld2=" + minfld2_f
-
-        if minfld3 != "optional":
-            command += " *minfld3=" + minfld3_f
-
-        if minfld4 != "optional":
-            command += " *minfld4=" + minfld4_f
-
-        if minfld5 != "optional":
-            command += " *minfld5=" + minfld5_f
-
-        if maxfld1 != "optional":
-            command += " *maxfld1=" + maxfld1_f
-
-        if maxfld2 != "optional":
-            command += " *maxfld2=" + maxfld2_f
-
-        if maxfld3 != "optional":
-            command += " *maxfld3=" + maxfld3_f
-
-        if maxfld4 != "optional":
-            command += " *maxfld4=" + maxfld4_f
-
-        if maxfld5 != "optional":
-            command += " *maxfld5=" + maxfld5_f
+        command += " @fullcell=" + str(fullcell_p)
+        command += " @dbymass=" + str(dbymass_p)
+        command += " @density=" + str(density_p)
+        command += " @setabsnt=" + str(setabsnt_p)
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -33046,46 +31350,46 @@ class init(object):
 
         command += " *blockid=" + blockid_f
 
-        if dplus != "optional":
+        if dplus_f != "optional":
             command += " *dplus=" + dplus_f
 
-        if dminus != "optional":
+        if dminus_f != "optional":
             command += " *dminus=" + dminus_f
 
-        if key1 != "optional":
+        if key1_f != "optional":
             command += " *key1=" + key1_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
-        if grade1 != "optional":
+        if grade1_f != "optional":
             command += " *grade1=" + grade1_f
 
-        if grade2 != "optional":
+        if grade2_f != "optional":
             command += " *grade2=" + grade2_f
 
-        if grade3 != "optional":
+        if grade3_f != "optional":
             command += " *grade3=" + grade3_f
 
-        if grade4 != "optional":
+        if grade4_f != "optional":
             command += " *grade4=" + grade4_f
 
-        if grade5 != "optional":
+        if grade5_f != "optional":
             command += " *grade5=" + grade5_f
 
-        if grade6 != "optional":
+        if grade6_f != "optional":
             command += " *grade6=" + grade6_f
 
-        if grade7 != "optional":
+        if grade7_f != "optional":
             command += " *grade7=" + grade7_f
 
-        if grade8 != "optional":
+        if grade8_f != "optional":
             command += " *grade8=" + grade8_f
 
-        if grade9 != "optional":
+        if grade9_f != "optional":
             command += " *grade9=" + grade9_f
 
-        if grade10 != "optional":
+        if grade10_f != "optional":
             command += " *grade10=" + grade10_f
 
         if dplus_p != "optional":
@@ -33343,40 +31647,40 @@ class init(object):
 
         command += " *mined=" + mined_f
 
-        if key1 != "optional":
+        if key1_f != "optional":
             command += " *key1=" + key1_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
-        if grade1 != "optional":
+        if grade1_f != "optional":
             command += " *grade1=" + grade1_f
 
-        if grade2 != "optional":
+        if grade2_f != "optional":
             command += " *grade2=" + grade2_f
 
-        if grade3 != "optional":
+        if grade3_f != "optional":
             command += " *grade3=" + grade3_f
 
-        if grade4 != "optional":
+        if grade4_f != "optional":
             command += " *grade4=" + grade4_f
 
-        if grade5 != "optional":
+        if grade5_f != "optional":
             command += " *grade5=" + grade5_f
 
-        if grade6 != "optional":
+        if grade6_f != "optional":
             command += " *grade6=" + grade6_f
 
-        if grade7 != "optional":
+        if grade7_f != "optional":
             command += " *grade7=" + grade7_f
 
-        if grade8 != "optional":
+        if grade8_f != "optional":
             command += " *grade8=" + grade8_f
 
-        if grade9 != "optional":
+        if grade9_f != "optional":
             command += " *grade9=" + grade9_f
 
-        if grade10 != "optional":
+        if grade10_f != "optional":
             command += " *grade10=" + grade10_f
 
         if value_p != "optional":
@@ -33592,7 +31896,7 @@ class init(object):
 
         command += " &wirept=" + wirept_i
 
-        if modout != "optional":
+        if modout_o != "optional":
             command += " &modout=" + modout_o
 
             # Required output error check
@@ -33616,40 +31920,40 @@ class init(object):
 
         command += " *mined=" + mined_f
 
-        if key1 != "optional":
+        if key1_f != "optional":
             command += " *key1=" + key1_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
-        if grade1 != "optional":
+        if grade1_f != "optional":
             command += " *grade1=" + grade1_f
 
-        if grade2 != "optional":
+        if grade2_f != "optional":
             command += " *grade2=" + grade2_f
 
-        if grade3 != "optional":
+        if grade3_f != "optional":
             command += " *grade3=" + grade3_f
 
-        if grade4 != "optional":
+        if grade4_f != "optional":
             command += " *grade4=" + grade4_f
 
-        if grade5 != "optional":
+        if grade5_f != "optional":
             command += " *grade5=" + grade5_f
 
-        if grade6 != "optional":
+        if grade6_f != "optional":
             command += " *grade6=" + grade6_f
 
-        if grade7 != "optional":
+        if grade7_f != "optional":
             command += " *grade7=" + grade7_f
 
-        if grade8 != "optional":
+        if grade8_f != "optional":
             command += " *grade8=" + grade8_f
 
-        if grade9 != "optional":
+        if grade9_f != "optional":
             command += " *grade9=" + grade9_f
 
-        if grade10 != "optional":
+        if grade10_f != "optional":
             command += " *grade10=" + grade10_f
 
         if value_p != "optional":
@@ -33890,82 +32194,82 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
-        if f11 != "optional":
+        if f11_f != "optional":
             command += " *f11=" + f11_f
 
-        if f12 != "optional":
+        if f12_f != "optional":
             command += " *f12=" + f12_f
 
-        if f13 != "optional":
+        if f13_f != "optional":
             command += " *f13=" + f13_f
 
-        if f14 != "optional":
+        if f14_f != "optional":
             command += " *f14=" + f14_f
 
-        if f15 != "optional":
+        if f15_f != "optional":
             command += " *f15=" + f15_f
 
-        if f16 != "optional":
+        if f16_f != "optional":
             command += " *f16=" + f16_f
 
-        if f17 != "optional":
+        if f17_f != "optional":
             command += " *f17=" + f17_f
 
-        if f18 != "optional":
+        if f18_f != "optional":
             command += " *f18=" + f18_f
 
-        if f19 != "optional":
+        if f19_f != "optional":
             command += " *f19=" + f19_f
 
-        if f20 != "optional":
+        if f20_f != "optional":
             command += " *f20=" + f20_f
 
-        if f21 != "optional":
+        if f21_f != "optional":
             command += " *f21=" + f21_f
 
-        if f22 != "optional":
+        if f22_f != "optional":
             command += " *f22=" + f22_f
 
-        if f23 != "optional":
+        if f23_f != "optional":
             command += " *f23=" + f23_f
 
-        if f24 != "optional":
+        if f24_f != "optional":
             command += " *f24=" + f24_f
 
-        if f25 != "optional":
+        if f25_f != "optional":
             command += " *f25=" + f25_f
 
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if print_p != "optional":
@@ -34106,7 +32410,7 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if bltype != "optional":
+        if bltype_f != "optional":
             command += " *bltype=" + bltype_f
 
             # Required field error check
@@ -34116,16 +32420,16 @@ class init(object):
 
         command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
         if airval_p != "optional":
@@ -34419,79 +32723,79 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if key1 != "optional":
+        if key1_f != "optional":
             command += " *key1=" + key1_f
 
-        if key2 != "optional":
+        if key2_f != "optional":
             command += " *key2=" + key2_f
 
-        if key3 != "optional":
+        if key3_f != "optional":
             command += " *key3=" + key3_f
 
-        if key4 != "optional":
+        if key4_f != "optional":
             command += " *key4=" + key4_f
 
-        if key5 != "optional":
+        if key5_f != "optional":
             command += " *key5=" + key5_f
 
-        if key6 != "optional":
+        if key6_f != "optional":
             command += " *key6=" + key6_f
 
-        if key7 != "optional":
+        if key7_f != "optional":
             command += " *key7=" + key7_f
 
-        if key8 != "optional":
+        if key8_f != "optional":
             command += " *key8=" + key8_f
 
-        if key9 != "optional":
+        if key9_f != "optional":
             command += " *key9=" + key9_f
 
-        if key10 != "optional":
+        if key10_f != "optional":
             command += " *key10=" + key10_f
 
-        if key11 != "optional":
+        if key11_f != "optional":
             command += " *key11=" + key11_f
 
-        if key12 != "optional":
+        if key12_f != "optional":
             command += " *key12=" + key12_f
 
-        if key13 != "optional":
+        if key13_f != "optional":
             command += " *key13=" + key13_f
 
-        if key14 != "optional":
+        if key14_f != "optional":
             command += " *key14=" + key14_f
 
-        if key15 != "optional":
+        if key15_f != "optional":
             command += " *key15=" + key15_f
 
-        if key16 != "optional":
+        if key16_f != "optional":
             command += " *key16=" + key16_f
 
-        if key17 != "optional":
+        if key17_f != "optional":
             command += " *key17=" + key17_f
 
-        if key18 != "optional":
+        if key18_f != "optional":
             command += " *key18=" + key18_f
 
-        if key19 != "optional":
+        if key19_f != "optional":
             command += " *key19=" + key19_f
 
-        if key20 != "optional":
+        if key20_f != "optional":
             command += " *key20=" + key20_f
 
-        if key21 != "optional":
+        if key21_f != "optional":
             command += " *key21=" + key21_f
 
-        if key22 != "optional":
+        if key22_f != "optional":
             command += " *key22=" + key22_f
 
-        if key23 != "optional":
+        if key23_f != "optional":
             command += " *key23=" + key23_f
 
-        if key24 != "optional":
+        if key24_f != "optional":
             command += " *key24=" + key24_f
 
-        if key25 != "optional":
+        if key25_f != "optional":
             command += " *key25=" + key25_f
 
         if lines_p != "optional":
@@ -34906,31 +33210,31 @@ class init(object):
 
         command += " *key1=" + key1_f
 
-        if key2 != "optional":
+        if key2_f != "optional":
             command += " *key2=" + key2_f
 
-        if key3 != "optional":
+        if key3_f != "optional":
             command += " *key3=" + key3_f
 
-        if key4 != "optional":
+        if key4_f != "optional":
             command += " *key4=" + key4_f
 
-        if key5 != "optional":
+        if key5_f != "optional":
             command += " *key5=" + key5_f
 
-        if key6 != "optional":
+        if key6_f != "optional":
             command += " *key6=" + key6_f
 
-        if key7 != "optional":
+        if key7_f != "optional":
             command += " *key7=" + key7_f
 
-        if key8 != "optional":
+        if key8_f != "optional":
             command += " *key8=" + key8_f
 
-        if key9 != "optional":
+        if key9_f != "optional":
             command += " *key9=" + key9_f
 
-        if key10 != "optional":
+        if key10_f != "optional":
             command += " *key10=" + key10_f
 
         if retrieval != "optional":
@@ -35063,7 +33367,7 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if scores != "optional":
+        if scores_o != "optional":
             command += " &scores=" + scores_o
 
             # Required field error check
@@ -35073,34 +33377,34 @@ class init(object):
 
         command += " *sampid=" + sampid_f
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
         if convlim_p != "optional":
@@ -35313,79 +33617,79 @@ class init(object):
 
         command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
-        if f11 != "optional":
+        if f11_f != "optional":
             command += " *f11=" + f11_f
 
-        if f12 != "optional":
+        if f12_f != "optional":
             command += " *f12=" + f12_f
 
-        if f13 != "optional":
+        if f13_f != "optional":
             command += " *f13=" + f13_f
 
-        if f14 != "optional":
+        if f14_f != "optional":
             command += " *f14=" + f14_f
 
-        if f15 != "optional":
+        if f15_f != "optional":
             command += " *f15=" + f15_f
 
-        if f16 != "optional":
+        if f16_f != "optional":
             command += " *f16=" + f16_f
 
-        if f17 != "optional":
+        if f17_f != "optional":
             command += " *f17=" + f17_f
 
-        if f18 != "optional":
+        if f18_f != "optional":
             command += " *f18=" + f18_f
 
-        if f19 != "optional":
+        if f19_f != "optional":
             command += " *f19=" + f19_f
 
-        if f20 != "optional":
+        if f20_f != "optional":
             command += " *f20=" + f20_f
 
-        if f21 != "optional":
+        if f21_f != "optional":
             command += " *f21=" + f21_f
 
-        if f22 != "optional":
+        if f22_f != "optional":
             command += " *f22=" + f22_f
 
-        if f23 != "optional":
+        if f23_f != "optional":
             command += " *f23=" + f23_f
 
-        if f24 != "optional":
+        if f24_f != "optional":
             command += " *f24=" + f24_f
 
-        if f25 != "optional":
+        if f25_f != "optional":
             command += " *f25=" + f25_f
 
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if retrieval != "optional":
@@ -35579,82 +33883,82 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
-        if f11 != "optional":
+        if f11_f != "optional":
             command += " *f11=" + f11_f
 
-        if f12 != "optional":
+        if f12_f != "optional":
             command += " *f12=" + f12_f
 
-        if f13 != "optional":
+        if f13_f != "optional":
             command += " *f13=" + f13_f
 
-        if f14 != "optional":
+        if f14_f != "optional":
             command += " *f14=" + f14_f
 
-        if f15 != "optional":
+        if f15_f != "optional":
             command += " *f15=" + f15_f
 
-        if f16 != "optional":
+        if f16_f != "optional":
             command += " *f16=" + f16_f
 
-        if f17 != "optional":
+        if f17_f != "optional":
             command += " *f17=" + f17_f
 
-        if f18 != "optional":
+        if f18_f != "optional":
             command += " *f18=" + f18_f
 
-        if f19 != "optional":
+        if f19_f != "optional":
             command += " *f19=" + f19_f
 
-        if f20 != "optional":
+        if f20_f != "optional":
             command += " *f20=" + f20_f
 
-        if f21 != "optional":
+        if f21_f != "optional":
             command += " *f21=" + f21_f
 
-        if f22 != "optional":
+        if f22_f != "optional":
             command += " *f22=" + f22_f
 
-        if f23 != "optional":
+        if f23_f != "optional":
             command += " *f23=" + f23_f
 
-        if f24 != "optional":
+        if f24_f != "optional":
             command += " *f24=" + f24_f
 
-        if f25 != "optional":
+        if f25_f != "optional":
             command += " *f25=" + f25_f
 
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if retrieval != "optional":
@@ -35801,16 +34105,16 @@ class init(object):
 
         command += " *y=" + y_f
 
-        if attrib1 != "optional":
+        if attrib1_f != "optional":
             command += " *attrib1=" + attrib1_f
 
-        if attrib2 != "optional":
+        if attrib2_f != "optional":
             command += " *attrib2=" + attrib2_f
 
-        if attrib3 != "optional":
+        if attrib3_f != "optional":
             command += " *attrib3=" + attrib3_f
 
-        if attrib4 != "optional":
+        if attrib4_f != "optional":
             command += " *attrib4=" + attrib4_f
 
         if outside_p != "optional":
@@ -35985,7 +34289,7 @@ class init(object):
 
         command += " &perimin=" + perimin_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
             # Required field error check
@@ -36009,25 +34313,25 @@ class init(object):
 
         command += " *z=" + z_f
 
-        if dplus != "optional":
+        if dplus_f != "optional":
             command += " *dplus=" + dplus_f
 
-        if dminus != "optional":
+        if dminus_f != "optional":
             command += " *dminus=" + dminus_f
 
-        if attrib1 != "optional":
+        if attrib1_f != "optional":
             command += " *attrib1=" + attrib1_f
 
-        if attrib2 != "optional":
+        if attrib2_f != "optional":
             command += " *attrib2=" + attrib2_f
 
-        if attrib3 != "optional":
+        if attrib3_f != "optional":
             command += " *attrib3=" + attrib3_f
 
-        if attrib4 != "optional":
+        if attrib4_f != "optional":
             command += " *attrib4=" + attrib4_f
 
-        if attrib5 != "optional":
+        if attrib5_f != "optional":
             command += " *attrib5=" + attrib5_f
 
         if outside_p != "optional":
@@ -36217,19 +34521,19 @@ class init(object):
 
         command += " *z=" + z_f
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
-        if attrib1 != "optional":
+        if attrib1_f != "optional":
             command += " *attrib1=" + attrib1_f
 
-        if attrib2 != "optional":
+        if attrib2_f != "optional":
             command += " *attrib2=" + attrib2_f
 
-        if attrib3 != "optional":
+        if attrib3_f != "optional":
             command += " *attrib3=" + attrib3_f
 
-        if attrib4 != "optional":
+        if attrib4_f != "optional":
             command += " *attrib4=" + attrib4_f
 
         if zone_p != "optional":
@@ -36908,10 +35212,10 @@ class init(object):
 
         command += " &points=" + points_o
 
-        if model != "optional":
+        if model_o != "optional":
             command += " &model=" + model_o
 
-        if trandist != "optional":
+        if trandist_o != "optional":
             command += " &trandist=" + trandist_o
 
         if stat_tbl != "optional":
@@ -36945,19 +35249,19 @@ class init(object):
 
         command += " *grade=" + grade_f
 
-        if dcwgt != "optional":
+        if dcwgt_f != "optional":
             command += " *dcwgt=" + dcwgt_f
 
-        if secfld1 != "optional":
+        if secfld1_f != "optional":
             command += " *secfld1=" + secfld1_f
 
-        if secfld2 != "optional":
+        if secfld2_f != "optional":
             command += " *secfld2=" + secfld2_f
 
-        if refgrade != "optional":
+        if refgrade_f != "optional":
             command += " *refgrade=" + refgrade_f
 
-        if refwgt != "optional":
+        if refwgt_f != "optional":
             command += " *refwgt=" + refwgt_f
 
         if mingrade_p != "optional":
@@ -37242,10 +35546,10 @@ class init(object):
 
         command += " &perimin=" + perimin_i
 
-        if intersec != "optional":
+        if intersec_o != "optional":
             command += " &intersec=" + intersec_o
 
-        if perimout != "optional":
+        if perimout_o != "optional":
             command += " &perimout=" + perimout_o
 
             # Required parameter error check
@@ -37555,7 +35859,7 @@ class init(object):
 
         command += " *variance=" + variance_f
 
-        if pcode != "optional":
+        if pcode_f != "optional":
             command += " *pcode=" + pcode_f
 
         if dvmethod_p != "optional":
@@ -38074,31 +36378,31 @@ class init(object):
 
         command += " *key1=" + key1_f
 
-        if key2 != "optional":
+        if key2_f != "optional":
             command += " *key2=" + key2_f
 
-        if key3 != "optional":
+        if key3_f != "optional":
             command += " *key3=" + key3_f
 
-        if key4 != "optional":
+        if key4_f != "optional":
             command += " *key4=" + key4_f
 
-        if key5 != "optional":
+        if key5_f != "optional":
             command += " *key5=" + key5_f
 
-        if key6 != "optional":
+        if key6_f != "optional":
             command += " *key6=" + key6_f
 
-        if key7 != "optional":
+        if key7_f != "optional":
             command += " *key7=" + key7_f
 
-        if key8 != "optional":
+        if key8_f != "optional":
             command += " *key8=" + key8_f
 
-        if key9 != "optional":
+        if key9_f != "optional":
             command += " *key9=" + key9_f
 
-        if key10 != "optional":
+        if key10_f != "optional":
             command += " *key10=" + key10_f
 
         if order_p != "optional":
@@ -38448,19 +36752,19 @@ class init(object):
 
         command += " &plot=" + plot_o
 
-        if string != "optional":
+        if string_o != "optional":
             command += " &string=" + string_o
 
-        if x != "optional":
+        if x_f != "optional":
             command += " *x=" + x_f
 
-        if y != "optional":
+        if y_f != "optional":
             command += " *y=" + y_f
 
-        if field != "optional":
+        if field_f != "optional":
             command += " *field=" + field_f
 
-        if seam != "optional":
+        if seam_f != "optional":
             command += " *seam=" + seam_f
 
             # Required parameter error check
@@ -38860,37 +37164,37 @@ class init(object):
         if fieldlst_i != "optional":
             command += " &fieldlst=" + fieldlst_i
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
         if plot_p != "optional":
@@ -39124,103 +37428,103 @@ class init(object):
         if fieldlst_i != "optional":
             command += " &fieldlst=" + fieldlst_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
-        if f11 != "optional":
+        if f11_f != "optional":
             command += " *f11=" + f11_f
 
-        if f12 != "optional":
+        if f12_f != "optional":
             command += " *f12=" + f12_f
 
-        if f13 != "optional":
+        if f13_f != "optional":
             command += " *f13=" + f13_f
 
-        if f14 != "optional":
+        if f14_f != "optional":
             command += " *f14=" + f14_f
 
-        if f15 != "optional":
+        if f15_f != "optional":
             command += " *f15=" + f15_f
 
-        if f16 != "optional":
+        if f16_f != "optional":
             command += " *f16=" + f16_f
 
-        if f17 != "optional":
+        if f17_f != "optional":
             command += " *f17=" + f17_f
 
-        if f18 != "optional":
+        if f18_f != "optional":
             command += " *f18=" + f18_f
 
-        if f19 != "optional":
+        if f19_f != "optional":
             command += " *f19=" + f19_f
 
-        if f20 != "optional":
+        if f20_f != "optional":
             command += " *f20=" + f20_f
 
-        if fieldnam != "optional":
+        if fieldnam_f != "optional":
             command += " *fieldnam=" + fieldnam_f
 
-        if key1 != "optional":
+        if key1_f != "optional":
             command += " *key1=" + key1_f
 
-        if key2 != "optional":
+        if key2_f != "optional":
             command += " *key2=" + key2_f
 
-        if key3 != "optional":
+        if key3_f != "optional":
             command += " *key3=" + key3_f
 
-        if key4 != "optional":
+        if key4_f != "optional":
             command += " *key4=" + key4_f
 
-        if key5 != "optional":
+        if key5_f != "optional":
             command += " *key5=" + key5_f
 
-        if key6 != "optional":
+        if key6_f != "optional":
             command += " *key6=" + key6_f
 
-        if key7 != "optional":
+        if key7_f != "optional":
             command += " *key7=" + key7_f
 
-        if key8 != "optional":
+        if key8_f != "optional":
             command += " *key8=" + key8_f
 
-        if key9 != "optional":
+        if key9_f != "optional":
             command += " *key9=" + key9_f
 
-        if key10 != "optional":
+        if key10_f != "optional":
             command += " *key10=" + key10_f
 
-        if weight != "optional":
+        if weight_f != "optional":
             command += " *weight=" + weight_f
 
         if retrieval != "optional":
@@ -39345,31 +37649,31 @@ class init(object):
 
         command += " *key1=" + key1_f
 
-        if key2 != "optional":
+        if key2_f != "optional":
             command += " *key2=" + key2_f
 
-        if key3 != "optional":
+        if key3_f != "optional":
             command += " *key3=" + key3_f
 
-        if key4 != "optional":
+        if key4_f != "optional":
             command += " *key4=" + key4_f
 
-        if key5 != "optional":
+        if key5_f != "optional":
             command += " *key5=" + key5_f
 
-        if key6 != "optional":
+        if key6_f != "optional":
             command += " *key6=" + key6_f
 
-        if key7 != "optional":
+        if key7_f != "optional":
             command += " *key7=" + key7_f
 
-        if key8 != "optional":
+        if key8_f != "optional":
             command += " *key8=" + key8_f
 
-        if key9 != "optional":
+        if key9_f != "optional":
             command += " *key9=" + key9_f
 
-        if key10 != "optional":
+        if key10_f != "optional":
             command += " *key10=" + key10_f
 
         if retrieval != "optional":
@@ -39494,31 +37798,31 @@ class init(object):
 
         command += " *key1=" + key1_f
 
-        if key2 != "optional":
+        if key2_f != "optional":
             command += " *key2=" + key2_f
 
-        if key3 != "optional":
+        if key3_f != "optional":
             command += " *key3=" + key3_f
 
-        if key4 != "optional":
+        if key4_f != "optional":
             command += " *key4=" + key4_f
 
-        if key5 != "optional":
+        if key5_f != "optional":
             command += " *key5=" + key5_f
 
-        if key6 != "optional":
+        if key6_f != "optional":
             command += " *key6=" + key6_f
 
-        if key7 != "optional":
+        if key7_f != "optional":
             command += " *key7=" + key7_f
 
-        if key8 != "optional":
+        if key8_f != "optional":
             command += " *key8=" + key8_f
 
-        if key9 != "optional":
+        if key9_f != "optional":
             command += " *key9=" + key9_f
 
-        if key10 != "optional":
+        if key10_f != "optional":
             command += " *key10=" + key10_f
 
         if retrieval != "optional":
@@ -39607,28 +37911,28 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if pvalue != "optional":
+        if pvalue_f != "optional":
             command += " *pvalue=" + pvalue_f
 
-        if xp != "optional":
+        if xp_f != "optional":
             command += " *xp=" + xp_f
 
-        if yp != "optional":
+        if yp_f != "optional":
             command += " *yp=" + yp_f
 
-        if zp != "optional":
+        if zp_f != "optional":
             command += " *zp=" + zp_f
 
-        if strbrk != "optional":
+        if strbrk_f != "optional":
             command += " *strbrk=" + strbrk_f
 
-        if d0 != "optional":
+        if d0_f != "optional":
             command += " *d0=" + d0_f
 
-        if d1 != "optional":
+        if d1_f != "optional":
             command += " *d1=" + d1_f
 
-        if d2 != "optional":
+        if d2_f != "optional":
             command += " *d2=" + d2_f
 
         if retrieval != "optional":
@@ -39712,22 +38016,22 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if xp != "optional":
+        if xp_f != "optional":
             command += " *xp=" + xp_f
 
-        if yp != "optional":
+        if yp_f != "optional":
             command += " *yp=" + yp_f
 
-        if zp != "optional":
+        if zp_f != "optional":
             command += " *zp=" + zp_f
 
-        if desc1 != "optional":
+        if desc1_f != "optional":
             command += " *desc1=" + desc1_f
 
-        if desc2 != "optional":
+        if desc2_f != "optional":
             command += " *desc2=" + desc2_f
 
-        if desc3 != "optional":
+        if desc3_f != "optional":
             command += " *desc3=" + desc3_f
 
         if strno_p != "optional":
@@ -39811,7 +38115,7 @@ class init(object):
 
         command += " &in=" + in_i
 
-        if ptn != "optional":
+        if ptn_f != "optional":
             command += " *ptn=" + ptn_f
 
             # Required field error check
@@ -39835,13 +38139,13 @@ class init(object):
 
         command += " *zp=" + zp_f
 
-        if desc1 != "optional":
+        if desc1_f != "optional":
             command += " *desc1=" + desc1_f
 
-        if desc2 != "optional":
+        if desc2_f != "optional":
             command += " *desc2=" + desc2_f
 
-        if desc3 != "optional":
+        if desc3_f != "optional":
             command += " *desc3=" + desc3_f
 
         if retrieval != "optional":
@@ -39896,10 +38200,10 @@ class init(object):
 
         command = "suppcorr "
 
-        if graph != "optional":
+        if graph_o != "optional":
             command += " &graph=" + graph_o
 
-        if stats != "optional":
+        if stats_o != "optional":
             command += " &stats=" + stats_o
 
             # Required field error check
@@ -40550,7 +38854,7 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if error != "optional":
+        if error_o != "optional":
             command += " &error=" + error_o
 
         if angle_p != "optional":
@@ -40944,13 +39248,13 @@ class init(object):
 
         command += " &segou=" + segou_o
 
-        if stype != "optional":
+        if stype_f != "optional":
             command += " *stype=" + stype_f
 
-        if svalue != "optional":
+        if svalue_f != "optional":
             command += " *svalue=" + svalue_f
 
-        if station != "optional":
+        if station_f != "optional":
             command += " *station=" + station_f
 
             # Required parameter error check
@@ -41177,13 +39481,13 @@ class init(object):
 
         command += " &wirept=" + wirept_o
 
-        if xpt != "optional":
+        if xpt_f != "optional":
             command += " *xpt=" + xpt_f
 
-        if ypt != "optional":
+        if ypt_f != "optional":
             command += " *ypt=" + ypt_f
 
-        if zpt != "optional":
+        if zpt_f != "optional":
             command += " *zpt=" + zpt_f
 
         if surface_p != "optional":
@@ -41391,7 +39695,7 @@ class init(object):
 
         command += " &segou=" + segou_o
 
-        if eval != "optional":
+        if eval_o != "optional":
             command += " &eval=" + eval_o
 
             # Required parameter error check
@@ -41851,16 +40155,16 @@ class init(object):
 
         command += " &swath2=" + swath2_o
 
-        if swathstr != "optional":
+        if swathstr_o != "optional":
             command += " &swathstr=" + swathstr_o
 
-        if samplex != "optional":
+        if samplex_f != "optional":
             command += " *samplex=" + samplex_f
 
-        if sampley != "optional":
+        if sampley_f != "optional":
             command += " *sampley=" + sampley_f
 
-        if samplez != "optional":
+        if samplez_f != "optional":
             command += " *samplez=" + samplez_f
 
             # Required field error check
@@ -41870,64 +40174,64 @@ class init(object):
 
         command += " *grade1=" + grade1_f
 
-        if dcweight != "optional":
+        if dcweight_f != "optional":
             command += " *dcweight=" + dcweight_f
 
-        if sgrade1 != "optional":
+        if sgrade1_f != "optional":
             command += " *sgrade1=" + sgrade1_f
 
-        if sgrade2 != "optional":
+        if sgrade2_f != "optional":
             command += " *sgrade2=" + sgrade2_f
 
-        if sgrade3 != "optional":
+        if sgrade3_f != "optional":
             command += " *sgrade3=" + sgrade3_f
 
-        if sgrade4 != "optional":
+        if sgrade4_f != "optional":
             command += " *sgrade4=" + sgrade4_f
 
-        if sgrade5 != "optional":
+        if sgrade5_f != "optional":
             command += " *sgrade5=" + sgrade5_f
 
-        if sgrade6 != "optional":
+        if sgrade6_f != "optional":
             command += " *sgrade6=" + sgrade6_f
 
-        if sgrade7 != "optional":
+        if sgrade7_f != "optional":
             command += " *sgrade7=" + sgrade7_f
 
-        if sgrade8 != "optional":
+        if sgrade8_f != "optional":
             command += " *sgrade8=" + sgrade8_f
 
-        if sgrade9 != "optional":
+        if sgrade9_f != "optional":
             command += " *sgrade9=" + sgrade9_f
 
-        if sgrade10 != "optional":
+        if sgrade10_f != "optional":
             command += " *sgrade10=" + sgrade10_f
 
-        if grade2 != "optional":
+        if grade2_f != "optional":
             command += " *grade2=" + grade2_f
 
-        if grade3 != "optional":
+        if grade3_f != "optional":
             command += " *grade3=" + grade3_f
 
-        if grade4 != "optional":
+        if grade4_f != "optional":
             command += " *grade4=" + grade4_f
 
-        if grade5 != "optional":
+        if grade5_f != "optional":
             command += " *grade5=" + grade5_f
 
-        if grade6 != "optional":
+        if grade6_f != "optional":
             command += " *grade6=" + grade6_f
 
-        if grade7 != "optional":
+        if grade7_f != "optional":
             command += " *grade7=" + grade7_f
 
-        if grade8 != "optional":
+        if grade8_f != "optional":
             command += " *grade8=" + grade8_f
 
-        if grade9 != "optional":
+        if grade9_f != "optional":
             command += " *grade9=" + grade9_f
 
-        if grade10 != "optional":
+        if grade10_f != "optional":
             command += " *grade10=" + grade10_f
 
         if retrieval != "optional":
@@ -42181,7 +40485,7 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if error != "optional":
+        if error_o != "optional":
             command += " &error=" + error_o
 
             # Required parameter error check
@@ -42297,7 +40601,7 @@ class init(object):
 
         command += " *value=" + value_f
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
         if retrieval != "optional":
@@ -42712,121 +41016,121 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if csvout != "optional":
+        if csvout_o != "optional":
             command += " &csvout=" + csvout_o
 
-        if tgcumtiv != "optional":
+        if tgcumtiv_o != "optional":
             command += " &tgcumtiv=" + tgcumtiv_o
 
-        if f1 != "optional":
+        if f1_f != "optional":
             command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
-        if f11 != "optional":
+        if f11_f != "optional":
             command += " *f11=" + f11_f
 
-        if f12 != "optional":
+        if f12_f != "optional":
             command += " *f12=" + f12_f
 
-        if f13 != "optional":
+        if f13_f != "optional":
             command += " *f13=" + f13_f
 
-        if f14 != "optional":
+        if f14_f != "optional":
             command += " *f14=" + f14_f
 
-        if f15 != "optional":
+        if f15_f != "optional":
             command += " *f15=" + f15_f
 
-        if f16 != "optional":
+        if f16_f != "optional":
             command += " *f16=" + f16_f
 
-        if f17 != "optional":
+        if f17_f != "optional":
             command += " *f17=" + f17_f
 
-        if f18 != "optional":
+        if f18_f != "optional":
             command += " *f18=" + f18_f
 
-        if f19 != "optional":
+        if f19_f != "optional":
             command += " *f19=" + f19_f
 
-        if f20 != "optional":
+        if f20_f != "optional":
             command += " *f20=" + f20_f
 
-        if key1 != "optional":
+        if key1_f != "optional":
             command += " *key1=" + key1_f
 
-        if key2 != "optional":
+        if key2_f != "optional":
             command += " *key2=" + key2_f
 
-        if key3 != "optional":
+        if key3_f != "optional":
             command += " *key3=" + key3_f
 
-        if key4 != "optional":
+        if key4_f != "optional":
             command += " *key4=" + key4_f
 
-        if key5 != "optional":
+        if key5_f != "optional":
             command += " *key5=" + key5_f
 
-        if orefrac != "optional":
+        if orefrac_f != "optional":
             command += " *orefrac=" + orefrac_f
 
-        if density != "optional":
+        if density_f != "optional":
             command += " *density=" + density_f
 
-        if addf1 != "optional":
+        if addf1_f != "optional":
             command += " *addf1=" + addf1_f
 
-        if addf2 != "optional":
+        if addf2_f != "optional":
             command += " *addf2=" + addf2_f
 
-        if addf3 != "optional":
+        if addf3_f != "optional":
             command += " *addf3=" + addf3_f
 
-        if addf4 != "optional":
+        if addf4_f != "optional":
             command += " *addf4=" + addf4_f
 
-        if addf5 != "optional":
+        if addf5_f != "optional":
             command += " *addf5=" + addf5_f
 
-        if addf6 != "optional":
+        if addf6_f != "optional":
             command += " *addf6=" + addf6_f
 
-        if addf7 != "optional":
+        if addf7_f != "optional":
             command += " *addf7=" + addf7_f
 
-        if addf8 != "optional":
+        if addf8_f != "optional":
             command += " *addf8=" + addf8_f
 
-        if addf9 != "optional":
+        if addf9_f != "optional":
             command += " *addf9=" + addf9_f
 
-        if addf10 != "optional":
+        if addf10_f != "optional":
             command += " *addf10=" + addf10_f
 
         if factor_p != "optional":
@@ -43213,13 +41517,13 @@ class init(object):
 
         command += " &plot=" + plot_o
 
-        if x != "optional":
+        if x_f != "optional":
             command += " *x=" + x_f
 
-        if y != "optional":
+        if y_f != "optional":
             command += " *y=" + y_f
 
-        if value != "optional":
+        if value_f != "optional":
             command += " *value=" + value_f
 
             # Required parameter error check
@@ -43472,7 +41776,7 @@ class init(object):
 
         command += " &model=" + model_o
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
             # Required parameter error check
@@ -43806,10 +42110,10 @@ class init(object):
 
         command += " &results=" + results_o
 
-        if modelo != "optional":
+        if modelo_o != "optional":
             command += " &modelo=" + modelo_o
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
             # Required parameter error check
@@ -43940,10 +42244,10 @@ class init(object):
         if perimin_i != "optional":
             command += " &perimin=" + perimin_i
 
-        if out != "optional":
+        if out_o != "optional":
             command += " &out=" + out_o
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
             # Required parameter error check
@@ -44289,49 +42593,49 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if quads != "optional":
+        if quads_o != "optional":
             command += " &quads=" + quads_o
 
-        if x != "optional":
+        if x_f != "optional":
             command += " *x=" + x_f
 
-        if y != "optional":
+        if y_f != "optional":
             command += " *y=" + y_f
 
-        if z != "optional":
+        if z_f != "optional":
             command += " *z=" + z_f
 
-        if section != "optional":
+        if section_f != "optional":
             command += " *section=" + section_f
 
-        if boundary != "optional":
+        if boundary_f != "optional":
             command += " *boundary=" + boundary_f
 
-        if wstag != "optional":
+        if wstag_f != "optional":
             command += " *wstag=" + wstag_f
 
-        if bstag != "optional":
+        if bstag_f != "optional":
             command += " *bstag=" + bstag_f
 
-        if tag != "optional":
+        if tag_f != "optional":
             command += " *tag=" + tag_f
 
-        if unitname != "optional":
+        if unitname_f != "optional":
             command += " *unitname=" + unitname_f
 
-        if hangwall != "optional":
+        if hangwall_f != "optional":
             command += " *hangwall=" + hangwall_f
 
-        if footwall != "optional":
+        if footwall_f != "optional":
             command += " *footwall=" + footwall_f
 
-        if ucsa != "optional":
+        if ucsa_f != "optional":
             command += " *ucsa=" + ucsa_f
 
-        if ucsb != "optional":
+        if ucsb_f != "optional":
             command += " *ucsb=" + ucsb_f
 
-        if ucsc != "optional":
+        if ucsc_f != "optional":
             command += " *ucsc=" + ucsc_f
 
         if linkmode_p != "optional":
@@ -44536,7 +42840,7 @@ class init(object):
 
         command += " *grade=" + grade_f
 
-        if weight != "optional":
+        if weight_f != "optional":
             command += " *weight=" + weight_f
 
             # Required field error check
@@ -44553,7 +42857,7 @@ class init(object):
 
         command += " *dispvar=" + dispvar_f
 
-        if errcode != "optional":
+        if errcode_f != "optional":
             command += " *errcode=" + errcode_f
 
         if vrefnum_p != "optional":
@@ -44770,16 +43074,16 @@ class init(object):
         if ave_dist != "optional":
             command += " *ave.dist=" + ave.dist_f
 
-        if vgram != "optional":
+        if vgram_f != "optional":
             command += " *vgram=" + vgram_f
 
-        if key != "optional":
+        if key_f != "optional":
             command += " *key=" + key_f
 
-        if azi != "optional":
+        if azi_f != "optional":
             command += " *azi=" + azi_f
 
-        if dip != "optional":
+        if dip_f != "optional":
             command += " *dip=" + dip_f
 
         if retrieval != "optional":
@@ -45340,16 +43644,16 @@ class init(object):
 
         command += " &out=" + out_o
 
-        if pairsout != "optional":
+        if pairsout_o != "optional":
             command += " &pairsout=" + pairsout_o
 
-        if x != "optional":
+        if x_f != "optional":
             command += " *x=" + x_f
 
-        if y != "optional":
+        if y_f != "optional":
             command += " *y=" + y_f
 
-        if z != "optional":
+        if z_f != "optional":
             command += " *z=" + z_f
 
             # Required field error check
@@ -45359,73 +43663,73 @@ class init(object):
 
         command += " *f1=" + f1_f
 
-        if f2 != "optional":
+        if f2_f != "optional":
             command += " *f2=" + f2_f
 
-        if f3 != "optional":
+        if f3_f != "optional":
             command += " *f3=" + f3_f
 
-        if f4 != "optional":
+        if f4_f != "optional":
             command += " *f4=" + f4_f
 
-        if f5 != "optional":
+        if f5_f != "optional":
             command += " *f5=" + f5_f
 
-        if f6 != "optional":
+        if f6_f != "optional":
             command += " *f6=" + f6_f
 
-        if f7 != "optional":
+        if f7_f != "optional":
             command += " *f7=" + f7_f
 
-        if f8 != "optional":
+        if f8_f != "optional":
             command += " *f8=" + f8_f
 
-        if f9 != "optional":
+        if f9_f != "optional":
             command += " *f9=" + f9_f
 
-        if f10 != "optional":
+        if f10_f != "optional":
             command += " *f10=" + f10_f
 
-        if f11 != "optional":
+        if f11_f != "optional":
             command += " *f11=" + f11_f
 
-        if f12 != "optional":
+        if f12_f != "optional":
             command += " *f12=" + f12_f
 
-        if f13 != "optional":
+        if f13_f != "optional":
             command += " *f13=" + f13_f
 
-        if f14 != "optional":
+        if f14_f != "optional":
             command += " *f14=" + f14_f
 
-        if f15 != "optional":
+        if f15_f != "optional":
             command += " *f15=" + f15_f
 
-        if f16 != "optional":
+        if f16_f != "optional":
             command += " *f16=" + f16_f
 
-        if f17 != "optional":
+        if f17_f != "optional":
             command += " *f17=" + f17_f
 
-        if f18 != "optional":
+        if f18_f != "optional":
             command += " *f18=" + f18_f
 
-        if f19 != "optional":
+        if f19_f != "optional":
             command += " *f19=" + f19_f
 
-        if f20 != "optional":
+        if f20_f != "optional":
             command += " *f20=" + f20_f
 
-        if f21 != "optional":
+        if f21_f != "optional":
             command += " *f21=" + f21_f
 
-        if f22 != "optional":
+        if f22_f != "optional":
             command += " *f22=" + f22_f
 
-        if f23 != "optional":
+        if f23_f != "optional":
             command += " *f23=" + f23_f
 
-        if key != "optional":
+        if key_f != "optional":
             command += " *key=" + key_f
 
             # Required parameter error check
@@ -45656,31 +43960,31 @@ class init(object):
 
         command += " *key1=" + key1_f
 
-        if key2 != "optional":
+        if key2_f != "optional":
             command += " *key2=" + key2_f
 
-        if key3 != "optional":
+        if key3_f != "optional":
             command += " *key3=" + key3_f
 
-        if key4 != "optional":
+        if key4_f != "optional":
             command += " *key4=" + key4_f
 
-        if key5 != "optional":
+        if key5_f != "optional":
             command += " *key5=" + key5_f
 
-        if key6 != "optional":
+        if key6_f != "optional":
             command += " *key6=" + key6_f
 
-        if key7 != "optional":
+        if key7_f != "optional":
             command += " *key7=" + key7_f
 
-        if key8 != "optional":
+        if key8_f != "optional":
             command += " *key8=" + key8_f
 
-        if key9 != "optional":
+        if key9_f != "optional":
             command += " *key9=" + key9_f
 
-        if key10 != "optional":
+        if key10_f != "optional":
             command += " *key10=" + key10_f
 
         if retrieval != "optional":
@@ -45923,19 +44227,19 @@ class init(object):
 
         command += " *z=" + z_f
 
-        if zone != "optional":
+        if zone_f != "optional":
             command += " *zone=" + zone_f
 
-        if attrib1 != "optional":
+        if attrib1_f != "optional":
             command += " *attrib1=" + attrib1_f
 
-        if attrib2 != "optional":
+        if attrib2_f != "optional":
             command += " *attrib2=" + attrib2_f
 
-        if attrib3 != "optional":
+        if attrib3_f != "optional":
             command += " *attrib3=" + attrib3_f
 
-        if attrib4 != "optional":
+        if attrib4_f != "optional":
             command += " *attrib4=" + attrib4_f
 
         if retrieval != "optional":
@@ -46099,7 +44403,7 @@ class init(object):
 
         command += " &wirept=" + wirept_o
 
-        if pointou != "optional":
+        if pointou_o != "optional":
             command += " &pointou=" + pointou_o
 
             # Required field error check
@@ -46415,16 +44719,16 @@ class init(object):
 
         command += " &perimout=" + perimout_o
 
-        if attrib1 != "optional":
+        if attrib1_f != "optional":
             command += " *attrib1=" + attrib1_f
 
-        if attrib2 != "optional":
+        if attrib2_f != "optional":
             command += " *attrib2=" + attrib2_f
 
-        if attrib3 != "optional":
+        if attrib3_f != "optional":
             command += " *attrib3=" + attrib3_f
 
-        if attrib4 != "optional":
+        if attrib4_f != "optional":
             command += " *attrib4=" + attrib4_f
 
         if retrieval != "optional":
@@ -46667,13 +44971,13 @@ class init(object):
         if vgram_i != "optional":
             command += " &vgram=" + vgram_i
 
-        if xvsamps != "optional":
+        if xvsamps_o != "optional":
             command += " &xvsamps=" + xvsamps_o
 
-        if xvstats != "optional":
+        if xvstats_o != "optional":
             command += " &xvstats=" + xvstats_o
 
-        if sampout != "optional":
+        if sampout_o != "optional":
             command += " &sampout=" + sampout_o
 
             # Required field error check
@@ -46697,19 +45001,19 @@ class init(object):
 
         command += " *z=" + z_f
 
-        if zone1_f != "optional":
+        if zone1_f_f != "optional":
             command += " *zone1_f=" + zone1_f_f
 
-        if zone2_f != "optional":
+        if zone2_f_f != "optional":
             command += " *zone2_f=" + zone2_f_f
 
-        if key != "optional":
+        if key_f != "optional":
             command += " *key=" + key_f
 
-        if length_f != "optional":
+        if length_f_f != "optional":
             command += " *length_f=" + length_f_f
 
-        if dens_f != "optional":
+        if dens_f_f != "optional":
             command += " *dens_f=" + dens_f_f
 
         if sminfac_p != "optional":

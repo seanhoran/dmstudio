@@ -11,7 +11,7 @@ and to facilitate more readable code.
 
 import dmfiles
 import dmcommands
-import pandas
+import pandas as pd
 
 # -----------------------------------------------------------------------------------#
 # Special fields
@@ -69,8 +69,7 @@ class dmfile_def(object):
         dmtemp = dmtemp[field_order]
         self.definition = self.definition.append(dmtemp).reset_index(drop=True)
 
-
-def csv_to_dm(csv=None, out_o=None, definition=None):
+def inpfil(csv=None, out_o=None, definition=None):
 
     if definition is None:
         definition = csv_to_definition(csv)
@@ -78,27 +77,26 @@ def csv_to_dm(csv=None, out_o=None, definition=None):
     arguments = " 'csvfile' "
     for i in range(len(definition)):
 
-        for char8 in char8_fields:
-            if definition['Field Name'].iloc[i] == char8:
-                definition['Field Type'].iloc[i] = 'A'
-                definition['Length'].iloc[i] = 8
+        if definition['Field Name'].iloc[i] in CHAR8_FIELDS:
+            definition['Field Type'].iloc[i] = 'A'
+            definition['Length'].iloc[i] = 8
 
-        for impf in implicit_fields:
-            if definition['Field Name'].iloc[i] == impf:
-                definition['Field Type'].iloc[i] = 'N'
-                definition['Keep'].iloc[i] = 'N'
-                definition['Default'].iloc[i] = df[impf].iloc[0]
+        if definition['Field Name'].iloc[i] in IMPLICIT_FIELDS:
+            definition['Field Type'].iloc[i] = 'N'
+            definition['Keep'].iloc[i] = 'N'
+            definition['Default'].iloc[i] = df[impf].iloc[0]
 
         for column in definition.columns:
             arguments += " '" + (str(definition[column].iloc[i])).strip() + "' "
 
-    arguments += "'!' 'Y' " + infile
+    arguments += "'!' 'Y' " + csv
+
 
     dmf.inpfil(out_o=out_o, arguments=arguments)
 
 def csv_to_definition(csv):
 
-    df = pd.DataFrame(csv)
+    df = pd.read_csv(csv)
 
     return pd_to_definition(df);
 
@@ -117,7 +115,7 @@ def pd_to_definition(df):
             length.append('')
         else:
             an.append('A')
-            if column in char8_fields:
+            if column in CHAR8_FIELDS:
                 length.append(8)
             else:
                 length.append(int((df[column].str.len().max()-1)/4+1)*4)

@@ -326,7 +326,7 @@ class init(object):
             command += " @print=" + str(print_p)
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
 
         self.run_command(command)
 
