@@ -1,6 +1,6 @@
 '''
 dmstudio.special
-----------------
+================
 
 Python package with modified studio processes. The package is designed to make processes such as inpfil easier to use
 and to facilitate more readable code.
