@@ -67,7 +67,7 @@ Using the ``dmstudio.dmfiles`` module:
     >>> from dmstudio import dmfiles
     >>> dmf = dmfiles.studio(version='StudioRM')
     >>> arguments = "'XXXXXXXX'"
-    >>> dmf.infile(out_o='points.csv', arguments=arguments)
+    >>> dmf.infile(out_o='points', arguments=arguments)
 
 Initialization
 --------------
