@@ -10,16 +10,8 @@ To do:
 * Replace multiple field/file inputs with input lists e.g. *f1, *f2... -> fields_f=['f1', 'f2']
 * Exhaustive testing and debugging
 * Use the same field parsing as ``dmcommands``
-* Fix argument parsing (currently only working for inpfil)
-* Add retrieval criteria where appropriate
 
 '''
-
-
-import numpy as np
-import pandas as pd
-import struct
-import os
 import initialize
 
 # constant to avoid redundant COM connections which slows down processing
@@ -102,7 +94,8 @@ class init(object):
     def comres(self,
                reserve_o='required',
                zone_f='optional',
-               arguments='optional'):
+               arguments='optional',
+               retrieval='optional'):
 
         """
         COMRES
@@ -157,12 +150,16 @@ class init(object):
             command += " *zone=" + zone_f
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def fdin(self,
-             arguments='optional'):
+             arguments='optional', 
+             retrieval='optional'):
 
         """
         FDIN
@@ -189,13 +186,17 @@ class init(object):
         command = "fdin "
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def fxin(self,
              out_o='required',
-             arguments='optional'):
+             arguments='optional',
+              retrieval='optional'):
 
         """
         FXIN
@@ -232,14 +233,18 @@ class init(object):
         command += " &out=" + out_o
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def inpddf(self,
                out_o='required',
                print_p=0,
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         INPDDF
@@ -286,14 +291,18 @@ class init(object):
             command += " @print=" + str(print_p)
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def inpfil(self,
                out_o='required',
                print_p=0,
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         INPFIL
@@ -340,13 +349,17 @@ class init(object):
 
         if arguments != "optional":
             command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def inpfml(self,
                out_o='required',
                print_p=0,
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         INPFML
@@ -392,13 +405,17 @@ class init(object):
             command += " @print=" + str(print_p)
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def inputc(self,
                out_o='required',
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         INPUTC
@@ -435,13 +452,17 @@ class init(object):
         command += " &out=" + out_o
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def inputd(self,
                out_o='required',
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         INPUTD
@@ -478,13 +499,17 @@ class init(object):
         command += " &out=" + out_o
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+        
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def link(self,
              out_o='required',
-             arguments='optional'):
+             arguments='optional', 
+             retrieval='optional'):
 
         """
         LINK
@@ -521,7 +546,10 @@ class init(object):
         command += " &out=" + out_o
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
@@ -532,7 +560,8 @@ class init(object):
                print_p=0,
                sort_p=0,
                longname_p=0,
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         PICDIR
@@ -617,14 +646,18 @@ class init(object):
             command += " @longname=" + str(longname_p)
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def protom(self,
                out_o='required',
                rotmod_p=0,
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         PROTOM
@@ -670,13 +703,17 @@ class init(object):
             command += " @rotmod=" + str(rotmod_p)
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def protop(self,
                out_o='required',
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         PROTOP
@@ -713,12 +750,16 @@ class init(object):
         command += " &out=" + out_o
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def quig(self,
-             arguments='optional'):
+             arguments='optional', 
+             retrieval='optional'):
 
         """
         QUIG
@@ -745,14 +786,18 @@ class init(object):
         command = "quig "
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def scrfmt(self,
                out_o='optional',
                text_f='optional',
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         SCRFMT
@@ -792,13 +837,17 @@ class init(object):
             command += " *text=" + text_f
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def secdef(self,
                out_o='required',
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         SECDEF
@@ -836,7 +885,10 @@ class init(object):
         command += " &out=" + out_o
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
@@ -844,7 +896,8 @@ class init(object):
                wiretr_o='required',
                wirept_o='required',
                sid_p=-1,
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         SUDTTR
@@ -904,12 +957,16 @@ class init(object):
         command += " @sid=" + str(sid_p)
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def sustp2(self,
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         SUSTP2
@@ -936,7 +993,10 @@ class init(object):
         command = "sustp2 "
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
@@ -993,12 +1053,16 @@ class init(object):
         command += " @direct=" + str(direct_p)
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
     def picted(self,
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         PICTED
@@ -1025,7 +1089,10 @@ class init(object):
         command = "picted "
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
@@ -1033,7 +1100,8 @@ class init(object):
                print_p=0,
                level_p=0,
                encrypt_p=0,
-               arguments='optional'):
+               arguments='optional', 
+               retrieval='optional'):
 
         """
         LOADCF
@@ -1088,7 +1156,10 @@ class init(object):
             command += " @encrypt=" + str(encrypt_p)
 
         if arguments != "optional":
-            command += "{" + arguments + "}"
+            command += " " + arguments + " "
+            
+        if retrieval != "optional":
+            command += "{" + retrieval + "}"
 
         self.run_command(command)
 
