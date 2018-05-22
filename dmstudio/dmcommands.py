@@ -41621,6 +41621,7 @@ class init(object):
                pvalue_p="optional",
                resol_p=0,
                checkrot_p=0,
+               autosort_p=0,
                retrieval="optional"):
 
         """
@@ -41815,6 +41816,9 @@ class init(object):
 
         if checkrot_p != "optional":
             command += " @checkrot=" + str(checkrot_p)
+
+        if autosort_p != "optional":
+            command += " @autosort=" + str(autosort_p)
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
