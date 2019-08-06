@@ -12,7 +12,7 @@ To do:
 * Use the same field parsing as ``dmcommands``
 
 '''
-import initialize
+import dmstudio.initialize
 
 # constant to avoid redundant COM connections which slows down processing
 
@@ -41,7 +41,7 @@ class init(object):
         self.oScript = OSCRIPTCON
         self.version = version
         if self.oScript is None:
-            self.oScript = initialize.studio(self.version)
+            self.oScript = dmstudio.initialize.studio(self.version)
 
     def run_command(self, command):
         '''
