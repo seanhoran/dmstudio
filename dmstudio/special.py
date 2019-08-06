@@ -9,8 +9,8 @@ and to facilitate more readable code.
 
 '''
 
-import dmfiles
-import dmcommands
+import dmstudio.dmfiles
+import dmstudio.dmcommands
 import pandas as pd
 
 # -----------------------------------------------------------------------------------#
@@ -24,8 +24,8 @@ IMPLICIT_FIELDS = ['XMORIG', 'YMORIG', 'ZMORIG', 'NX', 'NY', 'NZ']
 
 #------------------------------------------------------------------------------------#
 
-dmf = dmfiles.init()
-dmc = dmcommands.init()
+dmf = dmstudio.dmfiles.init()
+dmc = dmstudio.dmcommands.init()
 
 class dmfile_def(object):
 

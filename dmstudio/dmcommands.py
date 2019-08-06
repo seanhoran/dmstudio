@@ -1,4 +1,4 @@
-import initialize
+import dmstudio.initialize
 
 
 # constant to avoid redundant COM connections which slows down processing
@@ -27,7 +27,7 @@ class init(object):
         self.oScript = OSCRIPTCON
         self.version = version
         if self.oScript is None:
-            self.oScript = initialize.studio(self.version)
+            self.oScript = dmstudio.initialize.studio(self.version)
 
     def run_command(self, command):
 
@@ -48,12 +48,8 @@ class init(object):
 
         # update the dmdir.py file containing list of .dm files in current directory
 
-        initialize._make_dmdir()
+        dmstudio.initialize._make_dmdir()
 
-        # try:
-        #     self.oScript.Parsecommand(command)
-        # except:
-        #     print("Unexpected error:")
 
     def parse_infields_list(self, prefix, fields, maxfields, vtype='*'):
 
@@ -82,10 +78,10 @@ class init(object):
             concatenated string formated for input in datamine commands
 
         """
-        
+
         if maxfields < len(fields):
-            raise "More fields have been selected than allowed by Datamine command"
-        
+            raise ValueError("More fields have been selected than allowed by Datamine command")
+
         field_string = ""
         for i, field in enumerate(fields):
             field_string += " " + vtype + prefix + str(i + 1) + "=" + field + " "
@@ -103,11 +99,12 @@ class init(object):
         """
         ACCMLT
         ------
+
         This is auto-generated documentation. For more command information visit the Datamine help file.
-        
+
         Note:
         -----
-        
+
         key1_f to key10_f is replaced by keys_f list
 
         Input Files:
@@ -501,10 +498,10 @@ class init(object):
         ALFNUM
         ------
         This is auto-generated documentation. For more command information visit the Datamine help file.
-        
+
         Note:
         -----
-        
+
         ``f1`` to ``f5`` is replaced with ``fields_f[]`` list.
 
         Input Files:
@@ -658,17 +655,20 @@ class init(object):
 
         command += " &points=" + points_o
 
+        if zone_f != "optional":
+            command += " *zone=" + zone_f
+
         if tripts_p != "optional":
-            command += " &wirept=" + tripts_p
+            command += " @tripts=" + tripts_p
 
         if planmode_p != "optional":
-            command += " &wirept=" + planmode_p
+            command += " @planmode=" + planmode_p
 
         if sectmode_p != "optional":
-            command += " &wirept=" + sectmode_p
+            command += " @sectmode=" + sectmode_p
 
         if addsymb_p != "optional":
-            command += " &wirept=" + addsymb_p
+            command += " @addsymb=" + addsymb_p
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -685,10 +685,10 @@ class init(object):
         ANOVA1
         ------
         This is auto-generated documentation. For more command information visit the Datamine help file.
-        
+
         Note:
         -----
-        
+
         ``key1_f`` to ``key10_f`` variables are replaced with ``keys_f`` list
 
         Input Files:
@@ -1065,11 +1065,11 @@ class init(object):
         ATTSET
         ------
         This is auto-generated documentation. For more command information visit the Datamine help file.
-        
+
         Note:
         -----
-        
-        ``datafld1_f`` to ``datafld5_f`` and ``attrib1_f`` to ``attrib5_f`` are replaced by ``datflds_f`` and 
+
+        ``datafld1_f`` to ``datafld5_f`` and ``attrib1_f`` to ``attrib5_f`` are replaced by ``datflds_f`` and
         ``attribs_f`` lists
 
         Input Files:
@@ -1183,10 +1183,10 @@ class init(object):
         AUTOCR
         ------
         This is auto-generated documentation. For more command information visit the Datamine help file.
-        
+
         Note:
         -----
-        
+
         ``f1_f`` to ``f5_f`` variables are replaced by ``fields_f`` list
 
         Input Files:
@@ -3401,7 +3401,7 @@ class init(object):
         if retrieval != "optional":
             command += "{" + retrieval + "}"
 
-        print command
+        print(command)
 
         self.run_command(command)
 
@@ -11838,7 +11838,7 @@ class init(object):
         if retrieval != "optional":
             command += "{" + retrieval + "}"
 
-        print command
+        print(command)
 
         self.run_command(command)
 
@@ -30761,6 +30761,7 @@ class init(object):
                 dbymass_p=0,
                 density_p=1.0,
                 setabsnt_p=0,
+                absgrade_p=0,
                 retrieval="optional"):
 
         """
@@ -31033,6 +31034,7 @@ class init(object):
 
         command += " @fullcell=" + str(fullcell_p)
         command += " @dbymass=" + str(dbymass_p)
+        command += " @absgrade=" + str(absgrade_p)
         command += " @density=" + str(density_p)
         command += " @setabsnt=" + str(setabsnt_p)
 
@@ -35218,7 +35220,7 @@ class init(object):
         if trandist_o != "optional":
             command += " &trandist=" + trandist_o
 
-        if stat_tbl != "optional":
+        if stat_tbl_o != "optional":
             command += " &stat_tbl=" + stat_tbl_o
 
             # Required field error check
@@ -40713,43 +40715,11 @@ class init(object):
                 out_o="required",
                 csvout_o="optional",
                 tgcumtiv_o="optional",
-                f1_f="optional",
-                f2_f="optional",
-                f3_f="optional",
-                f4_f="optional",
-                f5_f="optional",
-                f6_f="optional",
-                f7_f="optional",
-                f8_f="optional",
-                f9_f="optional",
-                f10_f="optional",
-                f11_f="optional",
-                f12_f="optional",
-                f13_f="optional",
-                f14_f="optional",
-                f15_f="optional",
-                f16_f="optional",
-                f17_f="optional",
-                f18_f="optional",
-                f19_f="optional",
-                f20_f="optional",
-                key1_f="optional",
-                key2_f="optional",
-                key3_f="optional",
-                key4_f="optional",
-                key5_f="optional",
+                fields_f=["optional"],
+                keys_f=["optional"],
                 orefrac_f="optional",
                 density_f="optional",
-                addf1_f="optional",
-                addf2_f="optional",
-                addf3_f="optional",
-                addf4_f="optional",
-                addf5_f="optional",
-                addf6_f="optional",
-                addf7_f="optional",
-                addf8_f="optional",
-                addf9_f="optional",
-                addf10_f="optional",
+                addfs_f=["optional"],
                 factor_p=1,
                 density_p=1,
                 column_p=0,
@@ -40791,107 +40761,15 @@ class init(object):
         Fields:
         -------
 
-        f1: Undefined : Undefined
+        fields: List : Undefined
             First (main) grade field for evaluation
             Default=Undefined
             Required=No
-        f2: Undefined : Undefined
-            Second grade field for evaluation
+        keys: List : Undefined
+            Key fields for reserve classification.
             Default=Undefined
             Required=No
-        f3: Undefined : Undefined
-            Third grade field for evaluation
-            Default=Undefined
-            Required=No
-        f4: Undefined : Undefined
-            Fourth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f5: Undefined : Undefined
-            Fifth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f6: Undefined : Undefined
-            Sixth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f7: Undefined : Undefined
-            Seventh grade field for evaluation
-            Default=Undefined
-            Required=No
-        f8: Undefined : Undefined
-            Eighth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f9: Undefined : Undefined
-            Nineth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f10: Undefined : Undefined
-            Tenth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f11: Undefined : Undefined
-            Eleventh grade field for evaluation
-            Default=Undefined
-            Required=No
-        f12: Undefined : Undefined
-            Twelfth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f13: Undefined : Undefined
-            Thirteenth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f14: Undefined : Undefined
-            Fourteenth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f15: Undefined : Undefined
-            Fifteenth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f16: Undefined : Undefined
-            Sixteenth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f17: Undefined : Undefined
-            Seventeenth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f18: Undefined : Undefined
-            Eighteenth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f19: Undefined : Undefined
-            Nineteenth grade field for evaluation
-            Default=Undefined
-            Required=No
-        f20: Undefined : Undefined
-            Twentieth grade field for evaluation Up to 60 fields can be selected using *F21 etc from a macro
-            script.
-            Default=Undefined
-            Required=No
-        key1: Undefined : Undefined
-            First key field for reserve classification.
-            Default=Undefined
-            Required=No
-        key2: Undefined : Undefined
-            Second key field for reserve classification.
-            Default=Undefined
-            Required=No
-        key3: Undefined : Undefined
-            Third key field for reserve classification.
-            Default=Undefined
-            Required=No
-        key4: Undefined : Undefined
-            Fourth key field for reserve classification.
-            Default=Undefined
-            Required=No
-        key5: Undefined : Undefined
-            Five key field for reserve classification.
-            Default=Undefined
-            Required=No
+
         orefrac: Undefined : Undefined
             Ore fraction field - containing values between 0 and 1.
             Default=Undefined
@@ -40901,43 +40779,7 @@ class init(object):
             parameter will be used.
             Default=DENSITY
             Required=No
-        addf1: Numeric : IN
-            1st to 10th fields to be treated as additive.
-            Default=DENSITY
-            Required=No
-        addf2: Numeric : IN
-            1st to 10th fields to be treated as additive.
-            Default=DENSITY
-            Required=No
-        addf3: Numeric : IN
-            1st to 10th fields to be treated as additive.
-            Default=DENSITY
-            Required=No
-        addf4: Numeric : IN
-            1st to 10th fields to be treated as additive.
-            Default=DENSITY
-            Required=No
-        addf5: Numeric : IN
-            1st to 10th fields to be treated as additive.
-            Default=DENSITY
-            Required=No
-        addf6: Numeric : IN
-            1st to 10th fields to be treated as additive.
-            Default=DENSITY
-            Required=No
-        addf7: Numeric : IN
-            1st to 10th fields to be treated as additive.
-            Default=DENSITY
-            Required=No
-        addf8: Numeric : IN
-            1st to 10th fields to be treated as additive.
-            Default=DENSITY
-            Required=No
-        addf9: Numeric : IN
-            1st to 10th fields to be treated as additive.
-            Default=DENSITY
-            Required=No
-        addf10: Numeric : IN
+        addfs: Numeric List : IN
             1st to 10th fields to be treated as additive.
             Default=DENSITY
             Required=No
@@ -41022,80 +40864,11 @@ class init(object):
         if tgcumtiv_o != "optional":
             command += " &tgcumtiv=" + tgcumtiv_o
 
-        if f1_f != "optional":
-            command += " *f1=" + f1_f
+        if fields_f[0] != "optional":
+            command += self.parse_infields_list("f", fields_f, 20)
 
-        if f2_f != "optional":
-            command += " *f2=" + f2_f
-
-        if f3_f != "optional":
-            command += " *f3=" + f3_f
-
-        if f4_f != "optional":
-            command += " *f4=" + f4_f
-
-        if f5_f != "optional":
-            command += " *f5=" + f5_f
-
-        if f6_f != "optional":
-            command += " *f6=" + f6_f
-
-        if f7_f != "optional":
-            command += " *f7=" + f7_f
-
-        if f8_f != "optional":
-            command += " *f8=" + f8_f
-
-        if f9_f != "optional":
-            command += " *f9=" + f9_f
-
-        if f10_f != "optional":
-            command += " *f10=" + f10_f
-
-        if f11_f != "optional":
-            command += " *f11=" + f11_f
-
-        if f12_f != "optional":
-            command += " *f12=" + f12_f
-
-        if f13_f != "optional":
-            command += " *f13=" + f13_f
-
-        if f14_f != "optional":
-            command += " *f14=" + f14_f
-
-        if f15_f != "optional":
-            command += " *f15=" + f15_f
-
-        if f16_f != "optional":
-            command += " *f16=" + f16_f
-
-        if f17_f != "optional":
-            command += " *f17=" + f17_f
-
-        if f18_f != "optional":
-            command += " *f18=" + f18_f
-
-        if f19_f != "optional":
-            command += " *f19=" + f19_f
-
-        if f20_f != "optional":
-            command += " *f20=" + f20_f
-
-        if key1_f != "optional":
-            command += " *key1=" + key1_f
-
-        if key2_f != "optional":
-            command += " *key2=" + key2_f
-
-        if key3_f != "optional":
-            command += " *key3=" + key3_f
-
-        if key4_f != "optional":
-            command += " *key4=" + key4_f
-
-        if key5_f != "optional":
-            command += " *key5=" + key5_f
+        if keys_f[0] != "optional":
+            command += self.parse_infields_list("key", keys_f, 5)
 
         if orefrac_f != "optional":
             command += " *orefrac=" + orefrac_f
@@ -41103,35 +40876,8 @@ class init(object):
         if density_f != "optional":
             command += " *density=" + density_f
 
-        if addf1_f != "optional":
-            command += " *addf1=" + addf1_f
-
-        if addf2_f != "optional":
-            command += " *addf2=" + addf2_f
-
-        if addf3_f != "optional":
-            command += " *addf3=" + addf3_f
-
-        if addf4_f != "optional":
-            command += " *addf4=" + addf4_f
-
-        if addf5_f != "optional":
-            command += " *addf5=" + addf5_f
-
-        if addf6_f != "optional":
-            command += " *addf6=" + addf6_f
-
-        if addf7_f != "optional":
-            command += " *addf7=" + addf7_f
-
-        if addf8_f != "optional":
-            command += " *addf8=" + addf8_f
-
-        if addf9_f != "optional":
-            command += " *addf9=" + addf9_f
-
-        if addf10_f != "optional":
-            command += " *addf10=" + addf10_f
+        if addfs_f[0] != "optional":
+            command += self.parse_infields_list("addf", addfs_f, 10)
 
         if factor_p != "optional":
             command += " @factor=" + str(factor_p)
@@ -41778,7 +41524,7 @@ class init(object):
         command += " &model=" + model_o
 
         if zone_f != "optional":
-            command += " *zone=" + zone_f
+            command += " *zone=" + str(zone_f)
 
             # Required parameter error check
 

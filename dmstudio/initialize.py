@@ -3,7 +3,7 @@ import sys
 import glob
 import numpy as np
 
-def _scriptinit(studio_object):
+def _scriptinit(dm_object):
     '''
     _scriptinit
     -----------
@@ -22,7 +22,7 @@ def _scriptinit(studio_object):
     ActiveX connection
     '''
 
-    return win32com.client.Dispatch(studio_object);
+    return win32com.client.Dispatch(dm_object);
 
 def studio(version):
     '''
@@ -67,6 +67,12 @@ def studio(version):
     # print 'Connected to Datamine:', oScript
 
     return oScript;
+
+def dmFile():
+
+    print("here")
+    # assert oDmFile = _scriptinit("DmFile.DmTableADO"), "Could not initialize dmTableADO"
+
 
 def _make_dmdir():
     
