@@ -59,13 +59,13 @@ Usage
 Using the ``dmstudio.dmcommands`` module:
 
     >>> from dmstudio import dmcommands
-    >>> cmd = dmcommands.studio(version='StudioRM')
+    >>> cmd = dmcommands.init(version='StudioRM')
     >>> cmd.copy(in_i='fake_model', out_o='fake_model_copy', retrieval='AU>2.0')
     
 Using the ``dmstudio.dmfiles`` module:
 
     >>> from dmstudio import dmfiles
-    >>> dmf = dmfiles.studio(version='StudioRM')
+    >>> dmf = dmfiles.init(version='StudioRM')
     >>> arguments = "'XXXXXXXX'"
     >>> dmf.infile(out_o='points', arguments=arguments)
 
