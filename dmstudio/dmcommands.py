@@ -18066,6 +18066,7 @@ class init(object):
                nodd_p=0,
                dplace_p=-1,
                implicit_p=0,
+               csv_n="optional",
                retrieval="optional"):
 
         """
@@ -18227,6 +18228,12 @@ class init(object):
             Values=0,1
             Default=0
             Required=No
+        csv_n:
+            Exporting to CSV only: if required, an output csv name of the file can be given.
+            If not defined, the csv will be saved with the same name as input.
+            Optional string for output csv name.
+            Default=Undefined
+            Required=No
         """
 
         command = "output "
@@ -18333,6 +18340,11 @@ class init(object):
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
+
+        if csv_n != "optional":
+            command += " " + csv_n
+        else:
+            command += " " + in_i + '.csv'
 
         self.run_command(command)
 
