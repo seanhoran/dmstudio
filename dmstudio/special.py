@@ -20,7 +20,7 @@ import pandas as pd
 CHAR8_FIELDS = ['VALUE_IN', 'VALUE_OU', 'NUMSAM_F', 'SVOL_F', 'VAR_F', 'MINDIS_F']
 
 #  fields that are always implicit
-IMPLICIT_FIELDS = ['XMORIG', 'YMORIG', 'ZMORIG', 'NX', 'NY', 'NZ']
+IMPLICIT_FIELDS = ['XMORIG', 'YMORIG', 'ZMORIG', 'NX', 'NY', 'NZ','X0','Y0','Z0','ANGLE1','ANGLE2','ANGLE3','ROTAXIS1','ROTAXIS2','ROTAXIS3']
 
 #------------------------------------------------------------------------------------#
 
@@ -75,22 +75,23 @@ def inpfil(csv=None, out_o=None, definition=None):
         definition = csv_to_definition(csv)
 
     arguments = " 'csvfile' "
+    df = pd.read_csv(csv)
+
     for i in range(len(definition)):
 
         if definition['Field Name'].iloc[i] in CHAR8_FIELDS:
             definition['Field Type'].iloc[i] = 'A'
             definition['Length'].iloc[i] = 8
 
-        if definition['Field Name'].iloc[i] in IMPLICIT_FIELDS:
+        if definition['Field Name'].iloc[i].strip() in IMPLICIT_FIELDS:
             definition['Field Type'].iloc[i] = 'N'
             definition['Keep'].iloc[i] = 'N'
-            definition['Default'].iloc[i] = df[impf].iloc[0]
+            definition['Default'].iloc[i] = df[definition['Field Name'].iloc[i]].iloc[0]
 
         for column in definition.columns:
-            arguments += " '" + (str(definition[column].iloc[i])).strip() + "' "
+            arguments += " '" + (str(definition[column].iloc[i])).strip()[:8] + "' "
 
     arguments += "'!' 'Y' " + csv
-
 
     dmf.inpfil(out_o=out_o, arguments=arguments)
 
