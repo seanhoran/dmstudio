@@ -48,7 +48,7 @@ class init(object):
 
         # update the dmdir.py file containing list of .dm files in current directory
 
-        dmstudio.initialize._make_dmdir()
+        # dmstudio.initialize._make_dmdir()
 
 
     def parse_infields_list(self, prefix, fields, maxfields, vtype='*'):
@@ -7543,6 +7543,9 @@ class init(object):
 
         if print_p != "optional":
             command += " @print=" + str(print_p)
+
+        if arguments != "optional":
+            command += " " + arguments + " "
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -15825,6 +15828,20 @@ class init(object):
     def mod2xyz(self,
                 in1_i="required",
                 in2_i="required",
+                out_o="required",
+                x_f="required",
+                y_f="required",
+                z_f="required",
+                f1_f="required",
+                f2_f="optional",
+                f3_f="optional",
+                f4_f="optional",
+                f5_f="optional",
+                f6_f="optional",
+                f7_f="optional",
+                f8_f="optional",
+                f9_f="optional",
+                f10_f="optional",
                 retrieval="optional"):
 
         """
@@ -15870,6 +15887,58 @@ class init(object):
             raise ValueError("in2 is required.")
 
         command += " &in2=" + in2_i
+
+        if out_o == "required":
+            raise ValueError("out_o is required.")
+
+        command += " &out=" + out_o
+
+        if x_f == "required":
+            raise ValueError("x_f is required.")
+
+        command += " *x=" + x_f
+
+        if y_f == "required":
+            raise ValueError("y_f is required.")
+
+        command += " *y=" + y_f
+
+        if z_f == "required":
+            raise ValueError("z_f is required.")
+
+        command += " *z=" + z_f
+
+        if f1_f == "required":
+            raise ValueError("f1_f is required.")
+
+        command += " *f1=" + f1_f
+
+        if f2_f != "optional":
+            command += " *f2=" + f2_f
+
+        if f3_f != "optional":
+            command += " *f3=" + f3_f
+
+        if f4_f != "optional":
+            command += " *f4=" + f4_f
+
+        if f5_f != "optional":
+            command += " *f5=" + f5_f
+
+        if f6_f != "optional":
+            command += " *f6=" + f6_f
+
+        if f7_f != "optional":
+            command += " *f7=" + f7_f
+
+        if f8_f != "optional":
+            command += " *f8=" + f8_f
+
+        if f9_f != "optional":
+            command += " *f9=" + f9_f
+
+        if f10_f != "optional":
+            command += " *f10=" + f10_f
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -34152,6 +34221,8 @@ class init(object):
                clip_p=0,
                dplus_p="optional",
                dminus_p="optional",
+               checkrot_p=1,
+               ijksort_p=1,
                print_p=0,
                retrieval="optional"):
 
@@ -34350,6 +34421,12 @@ class init(object):
 
         if dminus_p != "optional":
             command += " @dminus=" + str(dminus_p)
+
+        if checkrot_p != "optional":
+            command += " @checkrot=" + str(checkrot_p)
+
+        if ijksort_p != "optional":
+            command += " @ijksort=" + str(ijksort_p)
 
         if print_p != "optional":
             command += " @print=" + str(print_p)
@@ -36424,6 +36501,7 @@ class init(object):
     def splat(self,
               in1_i="required",
               in2_i="required",
+              out_o="required",
               retrieval="optional"):
 
         """
@@ -36440,6 +36518,11 @@ class init(object):
         in2: Input
             Second input file.
             Required=Yes
+
+        out_o: Output
+        Output file.
+        Required=Yes
+
 
         Output Files:
         -------------
@@ -36469,6 +36552,11 @@ class init(object):
             raise ValueError("in2 is required.")
 
         command += " &in2=" + in2_i
+
+        if out_o == "required":
+            raise ValueError("out is required.")
+
+        command += " &out=" + out_o
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
@@ -44486,7 +44574,7 @@ class init(object):
 
         self.run_command(command)
 
-    def xrun(self):
+    def xrun(self, macro_i="required", macro_name_p="required"):
 
         """
         XRUN
@@ -44510,7 +44598,13 @@ class init(object):
 
         """
 
-        command = "xrun "
+        if macro_i == "required":
+            raise ValueError("macro_i is required.")
+
+        if macro_name_p == "required":
+            raise ValueError("macro_name is required.")
+
+        command = "xrun " + macro_i + " " + str(macro_name_p)
 
         self.run_command(command)
 
