@@ -18066,7 +18066,7 @@ class init(object):
                nodd_p=0,
                dplace_p=-1,
                implicit_p=0,
-               csv_n="optional",
+               csv_o="optional",
                retrieval="optional"):
 
         """
@@ -18341,8 +18341,8 @@ class init(object):
         if retrieval != "optional":
             command += "{" + retrieval + "}"
 
-        if csv_n != "optional":
-            command += " " + csv_n
+        if csv_o != "optional":
+            command += " " + csv_o
         else:
             command += " " + in_i + '.csv'
 
