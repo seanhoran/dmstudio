@@ -77,6 +77,6 @@ The COM object is intialized using ``win32client`` package and is passed to a va
 Installation
 ------------
 
-For those starting out in python, the easiest option for windows is downloading [Anaconda](https://www.anaconda.com/download/) for python 2.7. This has all the basic packages that will be required.
+For those starting out in python, the easiest option for windows is downloading [Anaconda](https://www.anaconda.com/download/) for python 3.7. This has all the basic packages that will be required.
 
 A pip install version of dmstudio will be available shortly. For the time being a pre-release version is available on github.
