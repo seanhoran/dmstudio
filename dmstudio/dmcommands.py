@@ -10052,8 +10052,15 @@ class init(object):
             command += "{" + retrieval + "}"
 
         if expression != "optional":
-            command += " " + expression + " 'GO'"
+            if type(expression) == list:
+                exp_list = ''
+                for i in range(len(expression)):
+                    exp_list += "'" + expression[i] + "' "
+                command += " " + exp_list + " 'GO'"
+            else:
+                command += " " + expression + " 'GO'"
 
+        # return command
         self.run_command(command)
 
     def factor(self,
@@ -10360,6 +10367,7 @@ class init(object):
 
     def filcom(self,
                in_i="required",
+               out_o="required",
                retrieval="optional"):
 
         """
@@ -10392,9 +10400,12 @@ class init(object):
         # Required input error check
 
         if in_i == "required":
-            raise ValueError("in_ is required.")
+            raise ValueError("in_i is required.")
 
-        command += " &in=" + in_i
+        if out_o == "required":
+            raise ValueError("out_o is required.")
+
+        command += " &in=" + in_i + " &out=" + out_o
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
