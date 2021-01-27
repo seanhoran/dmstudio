@@ -34660,6 +34660,21 @@ class init(object):
               in_i="required",
               wiretr_i="required",
               wirept_i="required",
+              out_o="required",
+              x_f="required",
+              y_f="required",
+              z_f="required",
+              zone_f="optional",
+              attrib1_f="optional",
+              attrib2_f="optional",
+              attrib3_f="optional",
+              attrib4_f="optional",
+              select_p=3,
+              plane_p="optional",
+              exclude_p=0,
+              toleranc_p=0.001,
+              checkrot_p=1,
+              print_p=0,
               retrieval="optional"):
 
         """
@@ -34715,6 +34730,67 @@ class init(object):
             raise ValueError("wirept is required.")
 
         command += " &wirept=" + wirept_i
+        
+        # Required output error check
+        
+        if out_o == "required":
+            raise ValueError("out_ is required.")
+
+        command += " &out=" + out_o
+        
+        # Required field error check
+        
+        if x_f == "required":
+            raise ValueError("X co-ordinated is required.")
+        
+        command += " *x=" + str(x_f)
+        
+        if y_f == "required":
+            raise ValueError("Y co-ordinated is required.")
+        
+        command += " *y=" + str(y_f)
+        
+        if z_f == "required":
+            raise ValueError("Z co-ordinated is required.")
+        
+        command += " *z=" + str(z_f)
+        
+        if zone_f != "optional":
+            command += " *zone=" + str(zone_f)
+        
+        if attrib1_f != "optional":
+            command += " *attrib1=" + str(attrib1_f)
+        
+        if attrib2_f != "optional":
+            command += " *attrib2=" + str(attrib2_f)
+        
+        if attrib3_f != "optional":
+            command += " *attrib3=" + str(attrib3_f)
+        
+        if attrib4_f != "optional":
+            command += " *attrib4=" + str(attrib4_f)
+        
+        # Required parameter error check
+        
+        if select_p == "required":
+            raise ValueError("select points is required.")
+        
+        command += " @select=" + str(select_p)
+        
+        if plane_p != "optional":
+            command += " @plane=" + str(plane_p)
+        
+        if exclude_p != "optional":
+            command += " @exclude=" + str(exclude_p)
+        
+        if toleranc_p != "optional":
+            command += " @toleranc=" + str(toleranc_p)
+        
+        if checkrot_p != "optional":
+            command += " @checkrot=" + str(checkrot_p)
+        
+        if print_p != "optional":
+            command += " @print=" + str(print_p)
 
         if retrieval != "optional":
             command += "{" + retrieval + "}"
