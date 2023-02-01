@@ -44999,22 +44999,41 @@ class init(object):
         -----
 
         VGRAMS:
-        description: A Datamine table (.dm) that contains experimental variograms. It must contain the columns GRADE (and GRADE2 for crossvariograms), AVE.DIST, NO.PAIRS, VGRAM and VRGRADE.  If fitting anisotropic variograms (ANISO=1), it must have the fields WAZI and WDIP or AZI and DIP.  Each experimental variogram (defined by a GRADE, GRADE2, (W)AZI and (W)DIP) must be ordered by AVE.DIST.  VRGRADE must be consistent for each record of each GRADE/GRADE2 combination.
+        description: A Datamine table (.dm) that contains experimental variograms.
+        It must contain the columns GRADE (and GRADE2 for crossvariograms),
+        AVE.DIST, NO.PAIRS, VGRAM and VRGRADE.  If fitting anisotropic variograms
+        (ANISO=1), it must have the fields WAZI and WDIP or AZI and DIP.  Each
+        experimental variogram (defined by a GRADE, GRADE2, (W)AZI and (W)DIP)
+        must be ordered by AVE.DIST.  VRGRADE must be consistent for each record
+        of each GRADE/GRADE2 combination.
         default: nan
         range: nan
 
         NUGGET:
-        description: File to define fixed nugget values for the variogram model. The file must contain GRADE, GRADE2 and NUGGET to define the variable, covariable and fixed nugget values respectively. Missing variable/covariable combinations will have their nugget value set to 0. If the file is not defined, nugget values will be fitted.
+        description: File to define fixed nugget values for the variogram model.
+        The file must contain GRADE, GRADE2 and NUGGET to define the variable,
+        covariable and fixed nugget values respectively. Missing
+        variable/covariable combinations will have their nugget value set to 0. If
+        the file is not defined, nugget values will be fitted.
         default: nan
         range: nan
 
         SILLS:
-        description: File to define the cumulative sill value for each variable. It must contain the fields GRADE and SILL to define the variable and the cumulative sill for that variable. If the file is not defined there will be no constraints set on the cumulative sill.
+        description: File to define the cumulative sill value for each variable.
+        It must contain the fields GRADE and SILL to define the variable and the
+        cumulative sill for that variable. If the file is not defined there will
+        be no constraints set on the cumulative sill.
         default: nan
         range: nan
 
         STRUCTS:
-        description: File to define the allowed structures in the fitted model.  The file must contain the MODEL field which should be set to 1 (Spherical), 3(Exponential) or 4(Gaussian).  It can optionally contain the numeric fields RANGEMIN and RANGEMAX to define the minimum and maximum range value for that structure - these values can be set to absent if no range is to be defined for that structure. If the file does not exist up to 3 spherical structures will be allowed.
+        description: File to define the allowed structures in the fitted model.
+        The file must contain the MODEL field which should be set to 1
+        (Spherical), 3(Exponential) or 4(Gaussian).  It can optionally contain the
+        numeric fields RANGEMIN and RANGEMAX to define the minimum and maximum
+        range value for that structure - these values can be set to absent if no
+        range is to be defined for that structure. If the file does not exist up
+        to 3 spherical structures will be allowed.
         default: nan
         range: nan
 
@@ -45023,7 +45042,9 @@ class init(object):
         ------
 
         VMODEL:
-        description: Output file for the fitted variogram model(s). If the file already exists the model will be appended to the file, otherwise a new file will be created.
+        description: Output file for the fitted variogram model(s). If the file
+        already exists the model will be appended to the file, otherwise a new
+        file will be created.
         default: nan
         range: nan
 
@@ -45061,12 +45082,14 @@ class init(object):
         range: Undefined
 
         MULTIVAR:
-        description: Set to 1 load cross-variograms if present and fit a multivariate variogram model suitable for use in cokriging.
+        description: Set to 1 load cross-variograms if present and fit a
+        multivariate variogram model suitable for use in cokriging.
         default: 1
         range: 0,1
 
         ANISO:
-        description: Set to 1 to fit anisotropic variograms, 0 to fit isotropic variograms.
+        description: Set to 1 to fit anisotropic variograms, 0 to fit isotropic
+        variograms.
         default: 1
         range: 0,1
 
@@ -45076,17 +45099,20 @@ class init(object):
         range: Undefined
 
         MAJORDIP:
-        description: Set to 1 to fit anisotropic variograms, 0 to fit isotropic variograms.
+        description: Set to 1 to fit anisotropic variograms, 0 to fit isotropic
+        variograms.
         default: Undefined
         range: Undefined
 
         SEMIMAZI:
-        description: Set to 1 to fit anisotropic variograms, 0 to fit isotropic variograms.
+        description: Set to 1 to fit anisotropic variograms, 0 to fit isotropic
+        variograms.
         default: Undefined
         range: Undefined
 
         SEMIMDIP:
-        description: Set to 1 to fit anisotropic variograms, 0 to fit isotropic variograms.
+        description: Set to 1 to fit anisotropic variograms, 0 to fit isotropic
+        variograms.
         default: Undefined
         range: Undefined
 
@@ -45154,17 +45180,22 @@ class init(object):
         -----
 
         SURVPTS:
-        description: Survey data point file containing channel identifier and 3D coordinates. Expects fields BHID, XPT, YPT, ZPT. The points must be sorted by location along the channel.
+        description: Survey data point file containing channel identifier and 3D
+        coordinates. Expects fields BHID, XPT, YPT, ZPT. The points must be sorted
+        by location along the channel.
         default: nan
         range: nan
 
         SAMPLE1:
-        description: First sample data file. This file is compulsory and must include fields BHID, FROM, and TO. It will probably also include at least one sample attribute field, such as grade or lithology.
+        description: First sample data file. This file is compulsory and must
+        include fields BHID, FROM, and TO. It will probably also include at least
+        one sample attribute field, such as grade or lithology.
         default: nan
         range: nan
 
         SAMPLE2-6:
-        description: Five optional sample data files containing BHID, FROM and TO, and probably at least one sample attribute field.
+        description: Five optional sample data files containing BHID, FROM and TO,
+        and probably at least one sample attribute field.
         default: nan
         range: nan
 
@@ -45173,17 +45204,27 @@ class init(object):
         ------
 
         OUT:
-        description: Output desurveyed sample data file. This will include fields BHID, FROM, TO, LENGTH, X, Y, Z, A0, B0, and all other fields which were included in the sample file(s). The X, Y and Z fields are the coordinates of the centre of each sample. The A0 and B0 fields are the azimuth and dip of the sample, respectively.
+        description: Output desurveyed sample data file. This will include fields
+        BHID, FROM, TO, LENGTH, X, Y, Z, A0, B0, and all other fields which were
+        included in the sample file(s). The X, Y and Z fields are the coordinates
+        of the centre of each sample. The A0 and B0 fields are the azimuth and dip
+        of the sample, respectively.
         default: nan
         range: nan
 
         CHANSMRY:
-        description: Optional output file containing a summary record for each channel in the input files. Although the file is optional it is recommended that it is created as it can be useful for validating the data, and showing what data is missing from which channels.
+        description: Optional output file containing a summary record for each
+        channel in the input files. Although the file is optional it is
+        recommended that it is created as it can be useful for validating the
+        data, and showing what data is missing from which channels.
         default: nan
         range: nan
 
         ERRORS:
-        description: Optional output file containing a list of samples which do not pass the validation tests. These validation tests identify errors in the FROM / TO values. These errors will cause the process to fail so it is recommended that you create and review the ERRORS file.
+        description: Optional output file containing a list of samples which do
+        not pass the validation tests. These validation tests identify errors in
+        the FROM / TO values. These errors will cause the process to fail so it is
+        recommended that you create and review the ERRORS file.
         default: nan
         range: nan
 
@@ -45226,12 +45267,17 @@ class init(object):
         ----------
 
         EXTEND:
-        description: Option to extend channel beyond last survey point:  0 - Terminate channel at the last survey point.  1 - Extend channel to maximum TO value in the input samples files.
+        description: Option to extend channel beyond last survey point:  0 -
+        Terminate channel at the last survey point.  1 - Extend channel to maximum
+        TO value in the input samples files.
         default: 1
         range: 1, 3
 
         ENDPOINT:
-        description: Option to include the X, Y, Z coordinates of the start and end of each sample in the desurveyed output file.  0 - Start and end coordinates are not included in OUT file.  1 - Fields XSTART, YSTART, ZSTART, XEND, YEND and ZEND are created in the OUT file.
+        description: Option to include the X, Y, Z coordinates of the start and
+        end of each sample in the desurveyed output file.  0 - Start and end
+        coordinates are not included in OUT file.  1 - Fields XSTART, YSTART,
+        ZSTART, XEND, YEND and ZEND are created in the OUT file.
         default: 1
         range: 1,4
 
@@ -45313,32 +45359,56 @@ class init(object):
         -----
 
         SAMPLES:
-        description: A samples file containing sample positional information and supporting attributes.  Details of fields are given in the SAMPLES section above.
+        description: A samples file containing sample positional information and
+        supporting attributes.  Details of fields are given in the SAMPLES section
+        above.
         default: nan
         range: nan
 
         PROTO:
-        description: Input model prototype.  The input model prototype is a standard block model file containing the 13 compulsory fields. It may contain optional fields such as zone control. It may also contain the rotated model fields. If it includes cells then it must be sorted on IJK.
+        description: Input model prototype.  The input model prototype is a
+        standard block model file containing the 13 compulsory fields. It may
+        contain optional fields such as zone control. It may also contain the
+        rotated model fields. If it includes cells then it must be sorted on IJK.
         default: nan
         range: nan
 
         EPAR:
-        description: The input estimation parameter file used to specify parameters for each estimation run.  Compulsory fields are EREFNUM, VSETNUM, SREFNUM, IMETHOD.  Optional fields are POWER, SDYNAISO, VDYNAISO, DISCX, DISCY, DISCZ, ZONE1, ZONE2.  Details of all fields are given in the EPAR section above.
+        description: The input estimation parameter file used to specify
+        parameters for each estimation run.  Compulsory fields are EREFNUM,
+        VSETNUM, SREFNUM, IMETHOD.  Optional fields are POWER, SDYNAISO, VDYNAISO,
+        DISCX, DISCY, DISCZ, ZONE1, ZONE2.  Details of all fields are given in the
+        EPAR section above.
         default: nan
         range: nan
 
         FIELDS:
-        description: A file that contains field names of input variables to be used for estimation (which must be present in the SAMPLES file) and output variables to be included in the file specified by OUTMODEL.  These must be defined for each estimation run under the same EREFNUM value.  Compulsory fields are EREFNUM, IN_VAR, EST.  Optional fields are LOC_MEAN, VAR, NUMSAMP, WTOFMEAN, SUMPOSWT, CORZZSTR. COVZZSTR, COVZ1SZS, SLPZZSTR, VARZSTR, KRIGEFF, LAGRANGE, SINDEX.  Details of all fields are given in the FIELDS section above.
+        description: A file that contains field names of input variables to be
+        used for estimation (which must be present in the SAMPLES file) and output
+        variables to be included in the file specified by OUTMODEL.  These must be
+        defined for each estimation run under the same EREFNUM value.  Compulsory
+        fields are EREFNUM, IN_VAR, EST.  Optional fields are LOC_MEAN, VAR,
+        NUMSAMP, WTOFMEAN, SUMPOSWT, CORZZSTR. COVZZSTR, COVZ1SZS, SLPZZSTR,
+        VARZSTR, KRIGEFF, LAGRANGE, SINDEX.  Details of all fields are given in
+        the FIELDS section above.
         default: nan
         range: nan
 
         VMODEL:
-        description: The input variogram model parameter file.  Compulsory fields are GRADE, GRADE2, VSETNUM, VANGLE1, VANGLE2, VANGLE3, VAXIS1, VAXIS2, VAXIS3, NUGGET, ST1, ST1PAR1, ST1PAR2, ST1PAR3, ST1PAR4.  Optional fields are STiPAR1, STiPAR2, STiPAR3, STiPAR4, i=2,9  Details of all fields are given in the VMODEL section above.
+        description: The input variogram model parameter file.  Compulsory fields
+        are GRADE, GRADE2, VSETNUM, VANGLE1, VANGLE2, VANGLE3, VAXIS1, VAXIS2,
+        VAXIS3, NUGGET, ST1, ST1PAR1, ST1PAR2, ST1PAR3, ST1PAR4.  Optional fields
+        are STiPAR1, STiPAR2, STiPAR3, STiPAR4, i=2,9  Details of all fields are
+        given in the VMODEL section above.
         default: nan
         range: nan
 
         SPAR:
-        description: The input search parameter file.  Compulsory fields are SREFNUM, SDIST1, SDIST2, SDIST3, SAXIS1, SAXIS2, SAXIS3, SANGLE1, SANGLE2, SANGLE3, MINNUM1, MAXNUM1.  Optional fields are SMETHOD, (SVOLFACi, MINNUMi, MAXNUMi, i=2,9), NSECTORS, SPLITSEC, MAXEMPSC, MVSEARCH, OPTKEY, MAXKEY.  Details of all fields are given in the SPAR section above.
+        description: The input search parameter file.  Compulsory fields are
+        SREFNUM, SDIST1, SDIST2, SDIST3, SAXIS1, SAXIS2, SAXIS3, SANGLE1, SANGLE2,
+        SANGLE3, MINNUM1, MAXNUM1.  Optional fields are SMETHOD, (SVOLFACi,
+        MINNUMi, MAXNUMi, i=2,9), NSECTORS, SPLITSEC, MAXEMPSC, MVSEARCH, OPTKEY,
+        MAXKEY.  Details of all fields are given in the SPAR section above.
         default: nan
         range: nan
 
@@ -45347,12 +45417,14 @@ class init(object):
         ------
 
         OUTMODEL:
-        description: The output model file containing estimated grades and optional additional statistics.
+        description: The output model file containing estimated grades and
+        optional additional statistics.
         default: nan
         range: nan
 
         SAMPOUT:
-        description: Output sample file containing details of weights and other statistics for each sample for each cell estimated.
+        description: Output sample file containing details of weights and other
+        statistics for each sample for each cell estimated.
         default: nan
         range: nan
 
@@ -45376,47 +45448,57 @@ class init(object):
         range: nan
 
         ZONE1_F:
-        description: First field for zonal control. If a field is specified it must be present in both the SAMPLES and PROTO files.
+        description: First field for zonal control. If a field is specified it
+        must be present in both the SAMPLES and PROTO files.
         default: Undefined
         range: nan
 
         ZONE2_F:
-        description: Second field for zonal control. If a field is specified it must be present in both the SAMPLES and PROTO files.
+        description: Second field for zonal control. If a field is specified it
+        must be present in both the SAMPLES and PROTO files.
         default: Undefined
         range: nan
 
         KEY:
-        description: Key field used to specify the field limiting the number of samples for estimation using the optional OPTKEY and MAXKEY parameters in the SPAR file. The field must exist in the SAMPLES file.
+        description: Key field used to specify the field limiting the number of
+        samples for estimation using the optional OPTKEY and MAXKEY parameters in
+        the SPAR file. The field must exist in the SAMPLES file.
         default: Undefined
         range: nan
 
         SANGL1_F:
-        description: Field containing local angles for first rotation when using search volume dynamic anisotropy. Angles must be specified in degrees.
+        description: Field containing local angles for first rotation when using
+        search volume dynamic anisotropy. Angles must be specified in degrees.
         default: Undefined
         range: nan
 
         SANGL2_F:
-        description: Field containing local angles for second rotation when using search volume dynamic anisotropy. Angles must be specified in degrees.
+        description: Field containing local angles for second rotation when using
+        search volume dynamic anisotropy. Angles must be specified in degrees.
         default: Undefined
         range: nan
 
         SANGL3_F:
-        description: Field containing local angles for third rotation when using search volume dynamic anisotropy. Angles must be specified in degrees.
+        description: Field containing local angles for third rotation when using
+        search volume dynamic anisotropy. Angles must be specified in degrees.
         default: Undefined
         range: nan
 
         VANGL1_F:
-        description: Field containing local angles for first rotation when using variogram model dynamic anisotropy. Angles must be specified in degrees.
+        description: Field containing local angles for first rotation when using
+        variogram model dynamic anisotropy. Angles must be specified in degrees.
         default: Undefined
         range: nan
 
         VANGL2_F:
-        description: Field containing local angles for second rotation when using variogram model dynamic anisotropy. Angles must be specified in degrees.
+        description: Field containing local angles for second rotation when using
+        variogram model dynamic anisotropy. Angles must be specified in degrees.
         default: Undefined
         range: nan
 
         VANGL3_F:
-        description: Field containing local angles for third rotation when using variogram model dynamic anisotropy. Angles must be specified in degrees.
+        description: Field containing local angles for third rotation when using
+        variogram model dynamic anisotropy. Angles must be specified in degrees.
         default: Undefined
         range: nan
 
@@ -45425,12 +45507,15 @@ class init(object):
         ----------
 
         NTHREADS:
-        description: Number of threads to be used for the main calculation. Any value less than 1 will automatically select the values based on the number of virtual cores on the computer.
+        description: Number of threads to be used for the main calculation. Any
+        value less than 1 will automatically select the values based on the number
+        of virtual cores on the computer.
         default: -1
         range: Undefined
 
         DA_AXIS1/2/3:
-        description: Axis of first/second/third rotation angle used for both search volume and variogram model dynamic anisotropy. 1=X, 2=Y, 3=Z.
+        description: Axis of first/second/third rotation angle used for both
+        search volume and variogram model dynamic anisotropy. 1=X, 2=Y, 3=Z.
         default: 3-1-3
         range: 1,3
 
@@ -45538,32 +45623,80 @@ class init(object):
         -----
 
         IN:
-        description: Input points file containing simulated points as created by SGSIM. This must include the coordinate fields XPT, YPT, ZPT, the grade field GRADE and the simulation (realization) number field SIMNUM. It must also include the implicit fields XMORIG1, YMORIG1, ZMORIG1, XINC1, YINC1, ZINC1, NX1, NY1, NZ1 defining the grid origin, size and number of points, as well as the fields XPPPC, YPPPC, ZPPPC defining the number of points per parent cell for the output model.  These implicit fields will have been added automatically by the process SGSIM
+        description: Input points file containing simulated points as created by
+        SGSIM. This must include the coordinate fields XPT, YPT, ZPT, the grade
+        field GRADE and the simulation (realization) number field SIMNUM. It must
+        also include the implicit fields XMORIG1, YMORIG1, ZMORIG1, XINC1, YINC1,
+        ZINC1, NX1, NY1, NZ1 defining the grid origin, size and number of points,
+        as well as the fields XPPPC, YPPPC, ZPPPC defining the number of points
+        per parent cell for the output model.  These implicit fields will have
+        been added automatically by the process SGSIM
         default: nan
         range: nan
 
         SRCPARM:
-        description: Search volume parameter file. This contains 24 compulsory fields defining the search volume and the number of samples needed for grade estimation.  More than one search volume may be defined. All fields are numeric: SREFNUM Search volume reference number. SMETHOD Search volume shape. 1 = 3D rectangle 2 = ellipsoid. SDIST1 Max search distance in direction 1. SDIST2 Max search distance in direction 2. SDIST3 Max search distance in direction 3. SANGLE1 First rotation angle for search vol. SANGLE2 Second rotation angle. SANGLE3 Third rotation angle. SAXIS1 Axis for 1st rotation (1=X,2=Y,3=Z). SAXIS2 Axis for 2nd rotation (1=X,2=Y,3=Z). SAXIS3 Axis for 3rd rotation (1=X,2=Y,3=Z). MINNUM1 Min number of samples, 1st search vol. MAXNUM1 Max number of samples, 1st search vol. SVOLFAC2 Axis multiplying factor,2nd search vol. MINNUM2 Min number of samples, 2nd search vol. MAXNUM2 Max number of samples, 2nd search vol. SVOLFAC3 Axis multiplying factor,3rd search vol. MINNUM3 Min number of samples, 3rd search vol. MAXNUM3 Max number of samples, 3rd search vol. OCTMETH Octant method flag. 0 = no octant search, 1 = use octants. MINOCT Minimum number of octants to be filled. MINPEROC Minimum number of samples in an octant. MAXPEROC Maximum number of samples in an octant. MAXKEY Maximum number of samples with the same key value within an octant SANGL1_F Name of field in the input prototype model file that contains the first rotation angle for dynamic anisotropy. SANGL2_F Name of field in the input prototype model file that contains the second rotation angle for dynamic anisotropy. SANGL3_F Name of field in the input prototype model file that contains the third rotation angle for dynamic anisotropy
+        description: Search volume parameter file. This contains 24 compulsory
+        fields defining the search volume and the number of samples needed for
+        grade estimation.  More than one search volume may be defined. All fields
+        are numeric: SREFNUM Search volume reference number. SMETHOD Search volume
+        shape. 1 = 3D rectangle 2 = ellipsoid. SDIST1 Max search distance in
+        direction 1. SDIST2 Max search distance in direction 2. SDIST3 Max search
+        distance in direction 3. SANGLE1 First rotation angle for search vol.
+        SANGLE2 Second rotation angle. SANGLE3 Third rotation angle. SAXIS1 Axis
+        for 1st rotation (1=X,2=Y,3=Z). SAXIS2 Axis for 2nd rotation
+        (1=X,2=Y,3=Z). SAXIS3 Axis for 3rd rotation (1=X,2=Y,3=Z). MINNUM1 Min
+        number of samples, 1st search vol. MAXNUM1 Max number of samples, 1st
+        search vol. SVOLFAC2 Axis multiplying factor,2nd search vol. MINNUM2 Min
+        number of samples, 2nd search vol. MAXNUM2 Max number of samples, 2nd
+        search vol. SVOLFAC3 Axis multiplying factor,3rd search vol. MINNUM3 Min
+        number of samples, 3rd search vol. MAXNUM3 Max number of samples, 3rd
+        search vol. OCTMETH Octant method flag. 0 = no octant search, 1 = use
+        octants. MINOCT Minimum number of octants to be filled. MINPEROC Minimum
+        number of samples in an octant. MAXPEROC Maximum number of samples in an
+        octant. MAXKEY Maximum number of samples with the same key value within an
+        octant SANGL1_F Name of field in the input prototype model file that
+        contains the first rotation angle for dynamic anisotropy. SANGL2_F Name of
+        field in the input prototype model file that contains the second rotation
+        angle for dynamic anisotropy. SANGL3_F Name of field in the input
+        prototype model file that contains the third rotation angle for dynamic
+        anisotropy
         default: nan
         range: nan
 
         CUTOFF:
-        description: Input file containing list of cutoff grades defined using field COGRADE
+        description: Input file containing list of cutoff grades defined using
+        field COGRADE
         default: nan
         range: nan
 
         MODEL:
-        description: Input block model file containing cells covering the volume to be analysed. This must be same volume, or a subset, as the volume covered by the simulated points file.
+        description: Input block model file containing cells covering the volume
+        to be analysed. This must be same volume, or a subset, as the volume
+        covered by the simulated points file.
         default: nan
         range: nan
 
         VMODPARM:
-        description: Variogram model parameter file. Each record in this file defines a variogram model type and its parameters. VREFNUM Model variogram reference number. VANGLE1 Variogram anisotropy angle 1. VANGLE2 Variogram anisotropy angle 2. VANGLE3 Variogram anisotropy angle 3. VAXIS1 Model variogram rotation axis 1. VAXIS2 Model variogram rotation axis 2. VAXIS3 Model variogram rotation axis 3. NUGGET Nugget variance. ST1 Variogram model type for structure 1. 1 = Spherical. 2 = Power [eg 1 - linear]. 3 = Exponential. 4 = Gaussian. 5 = De Wijsian. ST1PAR1 1st parameter of structure 1 [Range 1 for spherical model]. ST1PAR2 2nd parameter of structure 1 [Range 2 for spherical model]. ST1PAR3 3rd parameter of structure 1 [Range 3 for spherical model]. ST1PAR4 4th parameter of structure 1 [C variance for spherical model]. STn Variogram model type for structure n. STnPARp pth parameter for structure n, where n<=3
+        description: Variogram model parameter file. Each record in this file
+        defines a variogram model type and its parameters. VREFNUM Model variogram
+        reference number. VANGLE1 Variogram anisotropy angle 1. VANGLE2 Variogram
+        anisotropy angle 2. VANGLE3 Variogram anisotropy angle 3. VAXIS1 Model
+        variogram rotation axis 1. VAXIS2 Model variogram rotation axis 2. VAXIS3
+        Model variogram rotation axis 3. NUGGET Nugget variance. ST1 Variogram
+        model type for structure 1. 1 = Spherical. 2 = Power [eg 1 - linear]. 3 =
+        Exponential. 4 = Gaussian. 5 = De Wijsian. ST1PAR1 1st parameter of
+        structure 1 [Range 1 for spherical model]. ST1PAR2 2nd parameter of
+        structure 1 [Range 2 for spherical model]. ST1PAR3 3rd parameter of
+        structure 1 [Range 3 for spherical model]. ST1PAR4 4th parameter of
+        structure 1 [C variance for spherical model]. STn Variogram model type for
+        structure n. STnPARp pth parameter for structure n, where n<=3
         default: nan
         range: nan
 
         IN:
-        description: Input file containing a compound (multiple) block model created and saved during a previous run of DRILGRID. It includes multiple models appended into a single file
+        description: Input file containing a compound (multiple) block model
+        created and saved during a previous run of DRILGRID. It includes multiple
+        models appended into a single file
         default: nan
         range: nan
 
@@ -45572,7 +45705,10 @@ class init(object):
         ------
 
         CASENAME:
-        description: A case name or code that forms the first part of multiple output plot and table files that are created during processing. The second part of the file name is fixed. A description of each file is given in the main Help.
+        description: A case name or code that forms the first part of multiple
+        output plot and table files that are created during processing. The second
+        part of the file name is fixed. A description of each file is given in the
+        main Help.
         default: nan
         range: nan
 
@@ -45581,12 +45717,14 @@ class init(object):
         ------
 
         GRADE:
-        description: Field in the input POINTS sample file defining the simulated grade
+        description: Field in the input POINTS sample file defining the simulated
+        grade
         default: X
         range: nan
 
         CUTOFF:
-        description: Field in the input CUTOFF file defining a set of cutoff grades
+        description: Field in the input CUTOFF file defining a set of cutoff
+        grades
         default: Y
         range: nan
 
@@ -45595,12 +45733,19 @@ class init(object):
         ----------
 
         X/YGSTART:
-        description: Minimum size of drilling grid in the X/Y direction defined as a multiple of the simulated point spacing in X. For example if the X spacing between points in the POINTS file is 5m and X/YGSTART=2 then the minimum X grid size for drilling spacing will be 5*2=10m
+        description: Minimum size of drilling grid in the X/Y direction defined as
+        a multiple of the simulated point spacing in X. For example if the X
+        spacing between points in the POINTS file is 5m and X/YGSTART=2 then the
+        minimum X grid size for drilling spacing will be 5*2=10m
         default: 1
         range: Undefined
 
         XYGINC:
-        description: Increment in X/Y direction between successive drilling grid sizes defined as a multiple of the simulated point spacing in Y. For example if the Y spacing between points in the POINTS file is 5m and X/YGINC=1 then the increment between successive Y grid sizes will be 5*1=5m
+        description: Increment in X/Y direction between successive drilling grid
+        sizes defined as a multiple of the simulated point spacing in Y. For
+        example if the Y spacing between points in the POINTS file is 5m and
+        X/YGINC=1 then the increment between successive Y grid sizes will be
+        5*1=5m
         default: 1
         range: Undefined
 
@@ -45615,62 +45760,94 @@ class init(object):
         range: Undefined
 
         REVENUE:
-        description: Sales revenue per unit. For example if the simulated values are g/t then the revenue must be defined as $/g
+        description: Sales revenue per unit. For example if the simulated values
+        are g/t then the revenue must be defined as $/g
         default: -
         range: Undefined
 
         PROCOST:
-        description: Processing cost. For example if the simulated values are g/t and the revenue $/g then the processing cost should be $/t
+        description: Processing cost. For example if the simulated values are g/t
+        and the revenue $/g then the processing cost should be $/t
         default: 0
         range: Undefined
 
         OUTMODEL:
-        description: Flag to select whether output compound model is created  =0 : Output compound model is not created. =1 : Output compound model is created.
+        description: Flag to select whether output compound model is created  =0 :
+        Output compound model is not created. =1 : Output compound model is
+        created.
         default: 0
         range: 0,1
 
         OUTSAMPS:
-        description: Flag to select whether output compound sample file is created  =0 : Output compound sample file is not created. =1 : Output compound sample file is created.
+        description: Flag to select whether output compound sample file is created
+        =0 : Output compound sample file is not created. =1 : Output compound
+        sample file is created.
         default: 0
         range: 0,1
 
         PLOTS:
-        description: Flag to select which plots to create  =0 : No plots created. Therefore no tables will be created either. Just create the compound model and sample file. =1 : Create plots showing relationship between estimation error and grid spacing/number of samples. =2 : Create other plots including misclassification cost analysis. =3 : Create all plots ie both 1 and 2.
+        description: Flag to select which plots to create  =0 : No plots created.
+        Therefore no tables will be created either. Just create the compound model
+        and sample file. =1 : Create plots showing relationship between estimation
+        error and grid spacing/number of samples. =2 : Create other plots
+        including misclassification cost analysis. =3 : Create all plots ie both 1
+        and 2.
         default: 1
         range: 0,3
 
         TABLES:
-        description: Flag to select table output. Note that tables are only created if corresponding plots are selected  =0 : No tables created. =1 : Create tables for which plots have been selected using parameter PLOTS.
+        description: Flag to select table output. Note that tables are only
+        created if corresponding plots are selected  =0 : No tables created. =1 :
+        Create tables for which plots have been selected using parameter PLOTS.
         default: 0
         range: 0,1
 
         GRIDMETH:
-        description: Method for defining relationship between the size of the drilling grid in the X and Y directions  =1 : The drilling grid size increases in both X and Y as defined by parameters XGSTART, XGINC, NGRID, YGSTART, YGINC. =2 : The drilling grid size increases in X but is constant in Y as defined by parameters XGSTART, XGINC, NGRID, YGSTART. =3 : The drilling grid size increases in Y but is constant in X as defined by parameters YGSTART, YGINC, NGRID, XGSTART.
+        description: Method for defining relationship between the size of the
+        drilling grid in the X and Y directions  =1 : The drilling grid size
+        increases in both X and Y as defined by parameters XGSTART, XGINC, NGRID,
+        YGSTART, YGINC. =2 : The drilling grid size increases in X but is constant
+        in Y as defined by parameters XGSTART, XGINC, NGRID, YGSTART. =3 : The
+        drilling grid size increases in Y but is constant in X as defined by
+        parameters YGSTART, YGINC, NGRID, XGSTART.
         default: 1
         range: 1,3
 
         ORIGMETH:
-        description: Method for defining the origin for selecting samples from the simulated points file  =1 : Only use one grid origin position. This can lead to biased results as not all relative locations of samples and model cells will be tested. However it will result in amuch faster run time. =2 : All grid origin positions within a model cell are selected and the results are averaged over all combinations. =3 : Every nth possible grid origin position in X and Y are selected and the results are averaged over all combinations. The value of n is defined by parameter ORIGSEL.
+        description: Method for defining the origin for selecting samples from the
+        simulated points file  =1 : Only use one grid origin position. This can
+        lead to biased results as not all relative locations of samples and model
+        cells will be tested. However it will result in amuch faster run time. =2
+        : All grid origin positions within a model cell are selected and the
+        results are averaged over all combinations. =3 : Every nth possible grid
+        origin position in X and Y are selected and the results are averaged over
+        all combinations. The value of n is defined by parameter ORIGSEL.
         default: 3
         range: 1,3
 
         ORIGSEL:
-        description: Origin selection number. If 1 then all possible origin positions will be selected. If 2 then every second origin position will be selected. If n then every nth origin position will be selected.
+        description: Origin selection number. If 1 then all possible origin
+        positions will be selected. If 2 then every second origin position will be
+        selected. If n then every nth origin position will be selected.
         default: 1
         range: Undefined
 
         NSIM:
-        description: Number of simulations to be used. This must be less than or equal to the maximum number of simulations in the POINTS file. The default is the maximum number in the POINTS file
+        description: Number of simulations to be used. This must be less than or
+        equal to the maximum number of simulations in the POINTS file. The default
+        is the maximum number in the POINTS file
         default: 1
         range: Undefined
 
         MODX(Y/Z)MIN:
-        description: Minimum X(Y/Z)C value of cell in input MODEL to be estimated. The default is the model origin
+        description: Minimum X(Y/Z)C value of cell in input MODEL to be estimated.
+        The default is the model origin
         default: -
         range: Undefined
 
         MODX(Y/Z)MAX:
-        description: Maximum X(Y/Z)C value of cell in input MODEL to be estimated. The default is the maximum possible XC value in the model
+        description: Maximum X(Y/Z)C value of cell in input MODEL to be estimated.
+        The default is the maximum possible XC value in the model
         default: -
         range: Undefined
 
@@ -45685,12 +45862,15 @@ class init(object):
         range: Undefined
 
         SAMPCOST:
-        description: Drilling and sampling cost in $/sample. The drilling component of the cost must therefore take account of the sample length
+        description: Drilling and sampling cost in $/sample. The drilling
+        component of the cost must therefore take account of the sample length
         default: 0
         range: Undefined
 
         CFACTOR:
-        description: Cost factor. Dividing factor applied to cost values plotted on the Y axis. For example if CFACTOR=1000000 then the annotated units will be millions of dollars
+        description: Cost factor. Dividing factor applied to cost values plotted
+        on the Y axis. For example if CFACTOR=1000000 then the annotated units
+        will be millions of dollars
         default: 1
         range: Undefined
 
@@ -45700,12 +45880,16 @@ class init(object):
         range: Undefined
 
         SCROFF1:
-        description: Flag to select whether command output is sent to a log file. This parameter will be removed for the release version  =0 : Output is sent to the Command Window. =1 : Output is sent to the log file.
+        description: Flag to select whether command output is sent to a log file.
+        This parameter will be removed for the release version  =0 : Output is
+        sent to the Command Window. =1 : Output is sent to the log file.
         default: 1
         range: 0,1
 
         DELETE:
-        description: Flag to select whether temporary files are deleted when the command finishes  =0 : Do not delete temporary files. =1 : Delete temporary files.
+        description: Flag to select whether temporary files are deleted when the
+        command finishes  =0 : Do not delete temporary files. =1 : Delete
+        temporary files.
         default: 1
         range: 0,1
 
@@ -45817,7 +46001,8 @@ class init(object):
         -----
 
         IN:
-        description: Input sample data file. This must contain a set of 3D coordinates (eg X,Y,Z) and at least one other field.
+        description: Input sample data file. This must contain a set of 3D
+        coordinates (eg X,Y,Z) and at least one other field.
         default: nan
         range: nan
 
@@ -45826,17 +46011,21 @@ class init(object):
         ------
 
         OUT:
-        description: Output file containing declustered grid sizes and corresponding average grade values.
+        description: Output file containing declustered grid sizes and
+        corresponding average grade values.
         default: nan
         range: nan
 
         WTOUT:
-        description: Output file containing declustered weights. This will be a copy of the IN file for samples with a non-absent GRADE value, but will also include the field DCWEIGHT
+        description: Output file containing declustered weights. This will be a
+        copy of the IN file for samples with a non-absent GRADE value, but will
+        also include the field DCWEIGHT
         default: nan
         range: nan
 
         SUMMARY:
-        description: Output file containing a single record summarising the optimum results for each zone combination
+        description: Output file containing a single record summarising the
+        optimum results for each zone combination
         default: nan
         range: nan
 
@@ -45884,7 +46073,8 @@ class init(object):
         range: Undefined
 
         YFACTOR:
-        description: Grid size factor in Y, e.g. if this is set to 3 then the grid cell size in the Y direction will be 3 times the X grid cell size.
+        description: Grid size factor in Y, e.g. if this is set to 3 then the grid
+        cell size in the Y direction will be 3 times the X grid cell size.
         default: 1
         range: Undefined
 
@@ -45894,17 +46084,27 @@ class init(object):
         range: Undefined
 
         MAXMEAN:
-        description: Flag to identify whether minimum or maximum declustered mean grade is used to define the optimum. The declustered sample weights for the optimum grid size are output to the WTOUT file. The optimum declustered mean and corresponding grid size are reported to the Command Window for both values of GSLIB:  =0 : Use the grid with the minimum declustered mean to define the optimum.  =1 : Use the grid with the maximum declustered mean to define the optimum.
+        description: Flag to identify whether minimum or maximum declustered mean
+        grade is used to define the optimum. The declustered sample weights for
+        the optimum grid size are output to the WTOUT file. The optimum
+        declustered mean and corresponding grid size are reported to the Command
+        Window for both values of GSLIB:  =0 : Use the grid with the minimum
+        declustered mean to define the optimum.  =1 : Use the grid with the
+        maximum declustered mean to define the optimum.
         default: 0
         range: 0,1
 
         NORIG:
-        description: Number of origins. Each grid size is tested for NORIG origin locations. Between 1 and 10 origins can be used. The origins are spaced at regular intervals along the diagonal of the 3D rectangle with sides defined by XGRID, YFACTOR and ZFACTOR.
+        description: Number of origins. Each grid size is tested for NORIG origin
+        locations. Between 1 and 10 origins can be used. The origins are spaced at
+        regular intervals along the diagonal of the 3D rectangle with sides
+        defined by XGRID, YFACTOR and ZFACTOR.
         default: 1
         range: 1,10
 
         EXCEL:
-        description: Set to 1 to automatically display a graph in Excel of grid size against grade.  See "Excel Output", above
+        description: Set to 1 to automatically display a graph in Excel of grid
+        size against grade.  See "Excel Output", above
         default: 0
         range: 0,1
 
@@ -45974,32 +46174,63 @@ class init(object):
         -----
 
         SAMPLES:
-        description: A file containing sample positional information and supporting attributes.
+        description: A file containing sample positional information and
+        supporting attributes.
         default: nan
         range: nan
 
         TESTBLKS:
-        description: A file containing centre positions of test blocks to perform grade estimation on. It can optionally contain a numeric field to specify groups of blocks to calculate statistics per group which must be specified as the BLKGROUP field.
+        description: A file containing centre positions of test blocks to perform
+        grade estimation on. It can optionally contain a numeric field to specify
+        groups of blocks to calculate statistics per group which must be specified
+        as the BLKGROUP field.
         default: nan
         range: nan
 
         EPAR:
-        description: The input estimation parameter file used to specify parameters and for each estimation. This must contain the following fields: SREFNUM IMETHOD DISCX DISCY DISCZ BLKSZX BLKSZY BLKSZZ SREFNUM defines the reference of the search parameters found in the SPAR file.  IMETHOD is used to specify the Interpolation method 3=Ordinary Kriging (default) 4=Simple Kriging using sample means 10=Simple Kriging using means defined in FIELDS 11=Simple Kriging using local means defined in the prototype). DISCX, DISCY, DISCZ specify the number of discretization points. BLKSZX, BLKSZY, BLKSZZ specify the dimensions of the cells to be interpolated into.
+        description: The input estimation parameter file used to specify
+        parameters and for each estimation. This must contain the following
+        fields: SREFNUM IMETHOD DISCX DISCY DISCZ BLKSZX BLKSZY BLKSZZ SREFNUM
+        defines the reference of the search parameters found in the SPAR file.
+         IMETHOD is used to specify the Interpolation method 3=Ordinary Kriging
+        (default) 4=Simple Kriging using sample means 10=Simple Kriging using
+        means defined in FIELDS 11=Simple Kriging using local means defined in the
+        prototype). DISCX, DISCY, DISCZ specify the number of discretization
+        points. BLKSZX, BLKSZY, BLKSZZ specify the dimensions of the cells to be
+        interpolated into.
         default: nan
         range: nan
 
         FIELDS:
-        description: A file that contains field names of variables to be used in estimation. Input variables must be included under the mandatory column IN_VAR and each of these fields must be present in the SAMPLES and VGRAM file. If more than 1 variable is supplied Multivariate (Co)Kriging will be performed. If IMETHOD=10 is used, the column SKMEAN must be used to specify the mean per variable. If IMETHOD=11 is used the column LOC_MEAN must be used to specify the local mean fields in the prototype model.
+        description: A file that contains field names of variables to be used in
+        estimation. Input variables must be included under the mandatory column
+        IN_VAR and each of these fields must be present in the SAMPLES and VGRAM
+        file. If more than 1 variable is supplied Multivariate (Co)Kriging will be
+        performed. If IMETHOD=10 is used, the column SKMEAN must be used to
+        specify the mean per variable. If IMETHOD=11 is used the column LOC_MEAN
+        must be used to specify the local mean fields in the prototype model.
         default: nan
         range: nan
 
         VMODEL:
-        description: The input (cross-)variogram model parameter file. If more than 1 variable is suppled in the FIELDS file (i.e. multivariate estimation), this file must contain the columns GRADE and GRADE2.
+        description: The input (cross-)variogram model parameter file. If more
+        than 1 variable is suppled in the FIELDS file (i.e. multivariate
+        estimation), this file must contain the columns GRADE and GRADE2.
         default: nan
         range: nan
 
         SPAR:
-        description: The input search parameter file. This must contain the following 12 mandatory fields: SREFNUM which is used to store a reference number for each record which is then specified by the SREFNUM parameter in COKRIG. SDIST1, SDIST2, SDIST3 specifying the search distances in the X, Y and Z directions respectively. SAXIS1, SAXIS2, SAXIS3 specifying the first, second and third axes which the search volume is to be rotated around (1 = x, 2 = Y, 3 = Z). SANGLE1, SANGLE2, SANGLE3 which specify the clockwise angles which search volume is rotated around the axes specified by SAXIS1, SAXIS2, SAXIS3. MINNUM1 which is the minimum number of samples required per estimate MAXNUM1 which is the optimum number of samples to be used per estimate.
+        description: The input search parameter file. This must contain the
+        following 12 mandatory fields: SREFNUM which is used to store a reference
+        number for each record which is then specified by the SREFNUM parameter in
+        COKRIG. SDIST1, SDIST2, SDIST3 specifying the search distances in the X, Y
+        and Z directions respectively. SAXIS1, SAXIS2, SAXIS3 specifying the
+        first, second and third axes which the search volume is to be rotated
+        around (1 = x, 2 = Y, 3 = Z). SANGLE1, SANGLE2, SANGLE3 which specify the
+        clockwise angles which search volume is rotated around the axes specified
+        by SAXIS1, SAXIS2, SAXIS3. MINNUM1 which is the minimum number of samples
+        required per estimate MAXNUM1 which is the optimum number of samples to be
+        used per estimate.
         default: nan
         range: nan
 
@@ -46008,7 +46239,8 @@ class init(object):
         ------
 
         OUT:
-        description: The output file which will contain statistics for each estimation which has been performed.
+        description: The output file which will contain statistics for each
+        estimation which has been performed.
         default: nan
         range: nan
 
@@ -46022,12 +46254,15 @@ class init(object):
         range: nan
 
         KEY:
-        description: Key field used to specify the field limiting the number of samples for estimation using the optional OPTKEY and MAXKEY parameters in the SPAR file. The field must exist in the SAMPLES file.
+        description: Key field used to specify the field limiting the number of
+        samples for estimation using the optional OPTKEY and MAXKEY parameters in
+        the SPAR file. The field must exist in the SAMPLES file.
         default: Undefined
         range: nan
 
         BLKGROUP:
-        description: Numeric field in the PROTO file used to split test blocks into groups to calculate statistics from.
+        description: Numeric field in the PROTO file used to split test blocks
+        into groups to calculate statistics from.
         default: Undefined
         range: nan
 
@@ -46036,32 +46271,42 @@ class init(object):
         ----------
 
         VSETNUM:
-        description: The reference number of the variogram model set to be used from the VMODEL file
+        description: The reference number of the variogram model set to be used
+        from the VMODEL file
         default: 1
         range: Undefined
 
         PRNT:
-        description: The level of detail for text printed to the command window. A value of 0 only prints errors, a value of 1 additionally prints warnings and progress, a value of 2 additionally prints further information.
+        description: The level of detail for text printed to the command window. A
+        value of 0 only prints errors, a value of 1 additionally prints warnings
+        and progress, a value of 2 additionally prints further information.
         default: 0
         range: 0,1
 
         NOKSTATS:
-        description: Set this parameter to 1 to prevent output of Kriging statistics. Typically used with BLKCOV=1 when testing the number of discretization points to be used.
+        description: Set this parameter to 1 to prevent output of Kriging
+        statistics. Typically used with BLKCOV=1 when testing the number of
+        discretization points to be used.
         default: 0
         range: 0,1
 
         BLKCOV:
-        description: Set this parameter to 1 to calculate and output block covariance. Typically used for testing discretization.
+        description: Set this parameter to 1 to calculate and output block
+        covariance. Typically used for testing discretization.
         default: 0
         range: 0,1
 
         NBLKCOV:
-        description: The number of random samples to use for calculating block covariance per KNA run. A value of at least 20 is recommended to ensure reasonable precision.
+        description: The number of random samples to use for calculating block
+        covariance per KNA run. A value of at least 20 is recommended to ensure
+        reasonable precision.
         default: 20
         range: Undefined
 
         NTHREADS:
-        description: Number of threads to be used for the main calculation. Any value less than 1 will automatically select the values based on the number of virtual cores on the computer.
+        description: Number of threads to be used for the main calculation. Any
+        value less than 1 will automatically select the values based on the number
+        of virtual cores on the computer.
         default: -1
         range: Undefined
 
@@ -46135,12 +46380,16 @@ class init(object):
         -----
 
         PERIMIN:
-        description: Input perimeter file containing XP,YP,ZP,PTN, PVALUE fields. Closed strings will be used as boundaries to the triangulation, and may be included in the triangulation if @INCPERIM is 1.
+        description: Input perimeter file containing XP,YP,ZP,PTN, PVALUE fields.
+        Closed strings will be used as boundaries to the triangulation, and may be
+        included in the triangulation if @INCPERIM is 1.
         default: nan
         range: nan
 
         STRINGIN:
-        description: Input string file containing XP,YP,ZP,PTN and PVALUE fields. String segments are included in the triangulation as 3D edge constraints, breaklines. Strings may be open or closed.
+        description: Input string file containing XP,YP,ZP,PTN and PVALUE fields.
+        String segments are included in the triangulation as 3D edge constraints,
+        breaklines. Strings may be open or closed.
         default: nan
         range: nan
 
@@ -46187,42 +46436,52 @@ class init(object):
         ----------
 
         BOUNDARY:
-        description: Boundary specifier for perimeters:  0 - outermost strings are an external boundary. 1 - outermost strings are an internal boundary.
+        description: Boundary specifier for perimeters:  0 - outermost strings are
+        an external boundary. 1 - outermost strings are an internal boundary.
         default: 0
         range: 0,1
 
         INCPERIM:
-        description: Include perimeter strings in the triangulation :  0 - perimeter strings are NOT included within the triangulation. 1 - perimeter strings ARE included within the triangulation.
+        description: Include perimeter strings in the triangulation :  0 -
+        perimeter strings are NOT included within the triangulation. 1 - perimeter
+        strings ARE included within the triangulation.
         default: 1
         range: 0,1
 
         TOL:
-        description: Tolerance distance below which points can be moved to avoid sliver triangles around breaklines
+        description: Tolerance distance below which points can be moved to avoid
+        sliver triangles around breaklines
         default: 0.00001
         range: Undefined
 
         FLATTRI:
-        description: Avoid flat triangles:  0 - do not avoid flat triangles. 1 - flip connection to try to avoid flat triangles.
+        description: Avoid flat triangles:  0 - do not avoid flat triangles. 1 -
+        flip connection to try to avoid flat triangles.
         default: 0
         range: 0,1
 
         TRIM:
-        description: Trim edge triangles:  0 - do not trim edge triangles. 1 - iteratively remove triangles from the edge of the dtm until the constraints from @TRIMANG and @TRIMLEN are met.
+        description: Trim edge triangles:  0 - do not trim edge triangles. 1 -
+        iteratively remove triangles from the edge of the dtm until the
+        constraints from @TRIMANG and @TRIMLEN are met.
         default: 0
         range: 0,1
 
         TRIMANG:
-        description: Minimum (2D) angle allowed in an edge triangle to avoid trimming
+        description: Minimum (2D) angle allowed in an edge triangle to avoid
+        trimming
         default: 0
         range: 0,360
 
         TRIMLEN:
-        description: Maximum (2D) edge length allowed in an edge triangle to avoid trimming
+        description: Maximum (2D) edge length allowed in an edge triangle to avoid
+        trimming
         default: 0
         range: Undefined
 
         CREST:
-        description: Add automatic crest spurs to minimise upper plateaus:  0 - do not add crest spurs. 1 - add crest spurs.
+        description: Add automatic crest spurs to minimise upper plateaus:  0 - do
+        not add crest spurs. 1 - add crest spurs.
         default: 0
         range: 0,1
 
@@ -46232,7 +46491,8 @@ class init(object):
         range: Undefined
 
         VALLEY:
-        description: Add automatic valley spurs to minimise lower plateaus:  0 - do not add valley spurs. 1 - add valley spurs.
+        description: Add automatic valley spurs to minimise lower plateaus:  0 -
+        do not add valley spurs. 1 - add valley spurs.
         default: 0
         range: 0,1
 
@@ -46242,7 +46502,8 @@ class init(object):
         range: 0,1
 
         KEY:
-        description: Add automatic key spurs:  0 - do not add key spurs. 1 - add key spurs.
+        description: Add automatic key spurs:  0 - do not add key spurs. 1 - add
+        key spurs.
         default: 0
         range: 0,1
 
@@ -46336,32 +46597,82 @@ class init(object):
         -----
 
         PROTO:
-        description: Input model prototype  This is a standard block model file containing the 13 compulsory fields. It may also contain the rotated model fields. If it includes cells then it must be sorted on IJK.
+        description: Input model prototype  This is a standard block model file
+        containing the 13 compulsory fields. It may also contain the rotated model
+        fields. If it includes cells then it must be sorted on IJK.
         default: nan
         range: nan
 
         SAMPLES:
-        description: Input sample data  This must contain X,Y and Z fields and at least one grade field.
+        description: Input sample data  This must contain X,Y and Z fields and at
+        least one grade field.
         default: nan
         range: nan
 
         SPAR:
-        description: Search volume parameter file  The file contains 13 required fields as described below. For optional fields refer to the COKRIG online Help .  Required Fields:  SREFNUM: Search volume reference number.  SMETHOD: Search volume shape.  1 = 3D rectangle  2 = ellipsoid.  SDIST1: Max search distance in direction 1.  SDIST2: Max search distance in direction 2.  SDIST3: Max search distance in direction 3.  SANGLE1: First rotation angle for search vol.  SANGLE2: Second rotation angle.  SANGLE3: Third rotation angle.  SAXIS1: Axis for 1st rotation (1=X,2=Y,3=Z).  SAXIS2: Axis for 2nd rotation (1=X,2=Y,3=Z).  SAXIS3: Axis for 3rd rotation (1=X,2=Y,3=Z).  MINNUM1: Min number of samples, 1st search vol.  MAXNUM1: Max number of samples, 1st search vol.
+        description: Search volume parameter file  The file contains 13 required
+        fields as described below. For optional fields refer to the COKRIG online
+        Help .  Required Fields:  SREFNUM: Search volume reference number.
+        SMETHOD: Search volume shape.  1 = 3D rectangle  2 = ellipsoid.  SDIST1:
+        Max search distance in direction 1.  SDIST2: Max search distance in
+        direction 2.  SDIST3: Max search distance in direction 3.  SANGLE1: First
+        rotation angle for search vol.  SANGLE2: Second rotation angle.  SANGLE3:
+        Third rotation angle.  SAXIS1: Axis for 1st rotation (1=X,2=Y,3=Z).
+        SAXIS2: Axis for 2nd rotation (1=X,2=Y,3=Z).  SAXIS3: Axis for 3rd
+        rotation (1=X,2=Y,3=Z).  MINNUM1: Min number of samples, 1st search vol.
+        MAXNUM1: Max number of samples, 1st search vol.
         default: nan
         range: nan
 
         EPAR:
-        description: Estimation parameter file.  Each record in the file describes an estimation method and its associated numeric parameters. There are 9 required fields as described below. EREFNUM: Estimation reference number  CUTOFF: Cutoff grade for indicator calculation.  IMETHOD: Estimation method. This must be set to 3 for each record  3 = Ordinary kriging (OK).  SREFNUM: Search volume reference number  VSETNUM: Variogram model set number. This must be different for each cutoff.  DISCX: Number of discetisation points in X  DISCY: Number of discetisation points in Y  DISCZ: Number of discetisation points in Z  PARENT: =0 for estimating into subcells. =1 for estimating parent cell  Optional Fields – only used if @GRMETHOD=4  BINGRADE: This field contains the average grade in the bin below the cutoff.  ABVGRADE: This field contains the average grade in the bin above cutoff and is only used for the top bin.  For other optional fields refer to the EPAR section of the online help for COKRIG .
+        description: Estimation parameter file.  Each record in the file describes
+        an estimation method and its associated numeric parameters. There are 9
+        required fields as described below. EREFNUM: Estimation reference number
+        CUTOFF: Cutoff grade for indicator calculation.  IMETHOD: Estimation
+        method. This must be set to 3 for each record  3 = Ordinary kriging (OK).
+        SREFNUM: Search volume reference number  VSETNUM: Variogram model set
+        number. This must be different for each cutoff.  DISCX: Number of
+        discetisation points in X  DISCY: Number of discetisation points in Y
+        DISCZ: Number of discetisation points in Z  PARENT: =0 for estimating into
+        subcells. =1 for estimating parent cell  Optional Fields – only used if
+        @GRMETHOD=4  BINGRADE: This field contains the average grade in the bin
+        below the cutoff.  ABVGRADE: This field contains the average grade in the
+        bin above cutoff and is only used for the top bin.  For other optional
+        fields refer to the EPAR section of the online help for COKRIG .
         default: nan
         range: nan
 
         FIELDS:
-        description: Estimation Fields file. This file is used to define field names associated with each EREFNUM defined in the EPAR file. There are two required fields as described below:  EREFNUM: Estimation reference number. The EREFNUM values must match the EREFNUMs in the EPAR file.  IN_VAR: The input grade field for which indicators are estimated. The value of this field must be the same in all records.  Optional Fields  EST: The name of the output MIK estimate field. This is only required for record 1 of the FIELDS file. If the EST field is not specified the value will be set to the value of the IN_VAR field.  Other optional fields such as NUMSAMP can be defined in the FIELDS file. These fields will then be recorded in the OUTMODEL file. For information on these additional fields refer to the FIELDS section of the COKRIG online help .
+        description: Estimation Fields file. This file is used to define field
+        names associated with each EREFNUM defined in the EPAR file. There are two
+        required fields as described below:  EREFNUM: Estimation reference number.
+        The EREFNUM values must match the EREFNUMs in the EPAR file.  IN_VAR: The
+        input grade field for which indicators are estimated. The value of this
+        field must be the same in all records.  Optional Fields  EST: The name of
+        the output MIK estimate field. This is only required for record 1 of the
+        FIELDS file. If the EST field is not specified the value will be set to
+        the value of the IN_VAR field.  Other optional fields such as NUMSAMP can
+        be defined in the FIELDS file. These fields will then be recorded in the
+        OUTMODEL file. For information on these additional fields refer to the
+        FIELDS section of the COKRIG online help .
         default: nan
         range: nan
 
         VMODEL:
-        description: Variogram model parameter file. Each record in this file defines a variogram model type and its parameters. There are 13 required fields as described below. VSETNUM: Model variogram set number.  VANGLE1: Variogram anisotropy angle 1.  VANGLE2: Variogram anisotropy angle 2.  VANGLE3: Variogram anisotropy angle 3.  VAXIS1: Model variogram rotation axis 1.  VAXIS2: Model variogram rotation axis 2.  VAXIS3: Model variogram rotation axis 3.  NUGGET: Nugget variance.  ST1: Variogram model type for structure 1.  1 = Spherical.  2 = Not used.  3 = Exponential.  4 = Gaussian.  ST1PAR1: 1st parameter of structure 1 [Range 1 for spherical model].  ST1PAR2: 2nd parameter of structure 1 [Range 2 for spherical model].  ST1PAR3: 3rd parameter of structure 1 [Range 3 for spherical model].  ST1PAR4: 4th parameter of structure 1 [C variance for spherical model].  Optional fields:  STn: Variogram model type for structure n. STnPARp: pth parameter for structure n, where n<=9.
+        description: Variogram model parameter file. Each record in this file
+        defines a variogram model type and its parameters. There are 13 required
+        fields as described below. VSETNUM: Model variogram set number.  VANGLE1:
+        Variogram anisotropy angle 1.  VANGLE2: Variogram anisotropy angle 2.
+        VANGLE3: Variogram anisotropy angle 3.  VAXIS1: Model variogram rotation
+        axis 1.  VAXIS2: Model variogram rotation axis 2.  VAXIS3: Model variogram
+        rotation axis 3.  NUGGET: Nugget variance.  ST1: Variogram model type for
+        structure 1.  1 = Spherical.  2 = Not used.  3 = Exponential.  4 =
+        Gaussian.  ST1PAR1: 1st parameter of structure 1 [Range 1 for spherical
+        model].  ST1PAR2: 2nd parameter of structure 1 [Range 2 for spherical
+        model].  ST1PAR3: 3rd parameter of structure 1 [Range 3 for spherical
+        model].  ST1PAR4: 4th parameter of structure 1 [C variance for spherical
+        model].  Optional fields:  STn: Variogram model type for structure n.
+        STnPARp: pth parameter for structure n, where n<=9.
         default: nan
         range: nan
 
@@ -46375,17 +46686,25 @@ class init(object):
         range: nan
 
         AVGRADES:
-        description: Output file containing cutoff grade ranges and average grade used for each range. It will include zone field(s), if any, plus the following fields: BIN: bin or grade range number  LO_CUT: lower cutoff grade. UP_CUT: upper cutoff grade.  NSAMPLES: number of samples in SAMPLES file lying within the bin. BINGRADE: bin grade used for indicator kriging. This is dependent on the GRMETHOD parameter. SAMPMEAN: mean grade of samples in SAMPLES file lying within the bin.
+        description: Output file containing cutoff grade ranges and average grade
+        used for each range. It will include zone field(s), if any, plus the
+        following fields: BIN: bin or grade range number  LO_CUT: lower cutoff
+        grade. UP_CUT: upper cutoff grade.  NSAMPLES: number of samples in SAMPLES
+        file lying within the bin. BINGRADE: bin grade used for indicator kriging.
+        This is dependent on the GRMETHOD parameter. SAMPMEAN: mean grade of
+        samples in SAMPLES file lying within the bin.
         default: nan
         range: nan
 
         INDICATE:
-        description: Output indicator file. This is a copy of the sample input SAMPLES file, but also includes the 0/1 indicator values for each cutoff
+        description: Output indicator file. This is a copy of the sample input
+        SAMPLES file, but also includes the 0/1 indicator values for each cutoff
         default: nan
         range: nan
 
         SAMPOUT:
-        description: Output sample file containing details of weights for each sample for each cell estimated.
+        description: Output sample file containing details of weights for each
+        sample for each cell estimated.
         default: nan
         range: nan
 
@@ -46394,32 +46713,39 @@ class init(object):
         ------
 
         XPT:
-        description: X coordinate of sample data in SAMPLES file. If not specified, then XPT is assumed.
+        description: X coordinate of sample data in SAMPLES file. If not
+        specified, then XPT is assumed.
         default: Undefined
         range: nan
 
         YPT:
-        description: Y coordinate of sample data in SAMPLES file. If not specified, then YPT is assumed.
+        description: Y coordinate of sample data in SAMPLES file. If not
+        specified, then YPT is assumed.
         default: Undefined
         range: nan
 
         ZPT:
-        description: Z coordinate of sample data in SAMPLES file. If not specified, then ZPT is assumed.
+        description: Z coordinate of sample data in SAMPLES file. If not
+        specified, then ZPT is assumed.
         default: Undefined
         range: nan
 
         ZONE1_F:
-        description: First field for zonal control. If a field is specified it must be present in both the SAMPLES and PROTO files.
+        description: First field for zonal control. If a field is specified it
+        must be present in both the SAMPLES and PROTO files.
         default: Undefined
         range: nan
 
         ZONE2_F:
-        description: Second field for zonal control. If a field is specified it must be present in both the SAMPLES and PROTO files.
+        description: Second field for zonal control. If a field is specified it
+        must be present in both the SAMPLES and PROTO files.
         default: Undefined
         range: nan
 
         KEY:
-        description: Key field used to specify the field limiting the number of samples for estimation using the optional OPTKEY and MAXKEY parameters in the SPAR file. The field must exist in the SAMPLES file.
+        description: Key field used to specify the field limiting the number of
+        samples for estimation using the optional OPTKEY and MAXKEY parameters in
+        the SPAR file. The field must exist in the SAMPLES file.
         default: Undefined
         range: nan
 
@@ -46428,22 +46754,32 @@ class init(object):
         ----------
 
         ORDER:
-        description: Order relation correction method:  Downwards.  Upwards.  Average of methods 1 and 2.
+        description: Order relation correction method:  Downwards.  Upwards.
+        Average of methods 1 and 2.
         default: 3
         range: 1,3
 
         GRMETHOD:
-        description: Method for specifying average grade within each cutoff range:  Average of minimum and maximum cutoff values.  Average calculated from samples in SAMPLES file. Mean grade for top bin.  Average calculated from samples in SAMPLES file. Median grade for top bin.  Specify values using BINGRADE and ABVGRADE fields in EPAR file.
+        description: Method for specifying average grade within each cutoff range:
+        Average of minimum and maximum cutoff values.  Average calculated from
+        samples in SAMPLES file. Mean grade for top bin.  Average calculated from
+        samples in SAMPLES file. Median grade for top bin.  Specify values using
+        BINGRADE and ABVGRADE fields in EPAR file.
         default: 3
         range: 1,4
 
         PGFIELDS:
-        description: Flag to select whether the proportion above cutoff fields (PRABn) and the grade above cutoff fields (GRABn) should be included in the OUTMODEL file:  Do not include the PRABn and GRABn fields.  Include the PRABn and GRABn fields.
+        description: Flag to select whether the proportion above cutoff fields
+        (PRABn) and the grade above cutoff fields (GRABn) should be included in
+        the OUTMODEL file:  Do not include the PRABn and GRABn fields.  Include
+        the PRABn and GRABn fields.
         default: 0
         range: 0,1
 
         DA_AXIS1/2/3:
-        description: DA_AXIS1/2/3 Axis of first / second / third rotation angle used for both search volume and variogram model dynamic anisotropy. 1=X, 2=Y, 3=Z
+        description: DA_AXIS1/2/3 Axis of first / second / third rotation angle
+        used for both search volume and variogram model dynamic anisotropy. 1=X,
+        2=Y, 3=Z
         default: 3-1-3
         range: 1,3
 
@@ -46520,12 +46856,16 @@ class init(object):
         -----
 
         IN:
-        description: Input model variogram file. This should contain a GRADE field containing the name of the grade it relates to. If this contains the TRANS field, it will only convert variograms where TRANS=1.
+        description: Input model variogram file. This should contain a GRADE field
+        containing the name of the grade it relates to. If this contains the TRANS
+        field, it will only convert variograms where TRANS=1.
         default: nan
         range: nan
 
         SAMPLES:
-        description: Input sample data file. This should be the file which was transformed as part of the original variogram creation. It should contain grade fields matching the names in GRADE in the input model file IN
+        description: Input sample data file. This should be the file which was
+        transformed as part of the original variogram creation. It should contain
+        grade fields matching the names in GRADE in the input model file IN
         default: nan
         range: nan
 
@@ -46534,7 +46874,9 @@ class init(object):
         ------
 
         OUT:
-        description: Output model variogram file which will contain the back-transformed variogram models. Back-transformed variograms will have TRANS=-1
+        description: Output model variogram file which will contain the back-
+        transformed variogram models. Back-transformed variograms will have
+        TRANS=-1
         default: nan
         range: nan
 
@@ -46590,7 +46932,8 @@ class init(object):
         -----
 
         IN:
-        description: Input sample data file. This must include the grade field GRADE and may also include the declustering weight field DCWGT .
+        description: Input sample data file. This must include the grade field
+        GRADE and may also include the declustering weight field DCWGT .
         default: nan
         range: nan
 
@@ -46599,7 +46942,9 @@ class init(object):
         ------
 
         Out:
-        description: Output file containing transformed points.This contains the same data as the IN file, but with the added transformed data field NSGRADE.
+        description: Output file containing transformed points.This contains the
+        same data as the IN file, but with the added transformed data field
+        NSGRADE.
         default: nan
         range: nan
 
@@ -46608,7 +46953,8 @@ class init(object):
         ------
 
         GRADE:
-        description: Field in the input sample file IN defining the grade to be transformed.
+        description: Field in the input sample file IN defining the grade to be
+        transformed.
         default: Undefined
         range: nan
 
@@ -46618,7 +46964,9 @@ class init(object):
         range: nan
 
         NSGRADE:
-        description: Field in the output file OUT containing the transformed grade.(This may be the same as GRADE, in which case it overwrites the original value)
+        description: Field in the output file OUT containing the transformed
+        grade.(This may be the same as GRADE, in which case it overwrites the
+        original value)
         default: Undefined
         range: nan
 
@@ -46713,27 +47061,46 @@ class init(object):
         range: nan
 
         NGRID:
-        description: The size of the grid. A grid of width, height and length of NGRID is used to compute the triangles. It is the smallest axis aligned grid that completely encloses the points, and so it is directly proportional to the approximate length of an edge on a triangle. A higher value leads to a larger number of output vertices, and therefore a more refined mesh, at the expense of computation time.
+        description: The size of the grid. A grid of width, height and length of
+        NGRID is used to compute the triangles. It is the smallest axis aligned
+        grid that completely encloses the points, and so it is directly
+        proportional to the approximate length of an edge on a triangle. A higher
+        value leads to a larger number of output vertices, and therefore a more
+        refined mesh, at the expense of computation time.
         default: 50
         range: nan
 
         HOLEWID:
-        description: The width of the largest hole in the point cloud, measured in cube widths. In order for the computation to be efficient, only occupied grid cubes, and their neighbours, are considered when computing the triangles. The HOLEWID parameter specifies the number of adjacent neighbours to use. A larger value will close larger holes at the expense of computation time.
+        description: The width of the largest hole in the point cloud, measured in
+        cube widths. In order for the computation to be efficient, only occupied
+        grid cubes, and their neighbours, are considered when computing the
+        triangles. The HOLEWID parameter specifies the number of adjacent
+        neighbours to use. A larger value will close larger holes at the expense
+        of computation time.
         default: 4
         range: nan
 
         RFACT:
-        description: Smoothing parameter. A radius is used for regressing the exponential basis to the point cloud. In order to maintain control over the fitting, the radius is set to the RADIUSFACTOR multiplied by the average edge length. A smaller value of RFACT will lead to a closer fit to the data, whereas larger values will smooth the data more.
+        description: Smoothing parameter. A radius is used for regressing the
+        exponential basis to the point cloud. In order to maintain control over
+        the fitting, the radius is set to the RADIUSFACTOR multiplied by the
+        average edge length. A smaller value of RFACT will lead to a closer fit to
+        the data, whereas larger values will smooth the data more.
         default: 10
         range: nan
 
         KNE:
-        description: The number of neighbours to use when computing the point cloud normals. Larger values will create a smoother normals but will increase the computational overhead.
+        description: The number of neighbours to use when computing the point
+        cloud normals. Larger values will create a smoother normals but will
+        increase the computational overhead.
         default: 20
         range: nan
 
         KSR:
-        description: The number of neighbours to use in the surface reconstruction. Smaller values decrease the computational overhead. If there are not enough neighbours then the averaging induced by the parameter RFACT could lead to overfitting.
+        description: The number of neighbours to use in the surface
+        reconstruction. Smaller values decrease the computational overhead. If
+        there are not enough neighbours then the averaging induced by the
+        parameter RFACT could lead to overfitting.
         default: 50
         range: nan
 
@@ -46807,12 +47174,15 @@ class init(object):
         -----
 
         PROTO:
-        description: Input model prototype.  This is a standard block model file containing the 13 compulsory fields. It may also contain the rotated model fields. If it includes cells then it must be sorted on IJK.
+        description: Input model prototype.  This is a standard block model file
+        containing the 13 compulsory fields. It may also contain the rotated model
+        fields. If it includes cells then it must be sorted on IJK.
         default: nan
         range: nan
 
         IN:
-        description: Input sample data. This must contain X,Y and Z fields and at least one grade field.
+        description: Input sample data. This must contain X,Y and Z fields and at
+        least one grade field.
         default: nan
         range: nan
 
@@ -46830,17 +47200,23 @@ class init(object):
         ------
 
         X:
-        description: X coordinate of sample data in IN file. If not specified, then X is assumed. If the unfolding option is used, then the X coordinate must be set to the unfolded UCSA coordinate.
+        description: X coordinate of sample data in IN file. If not specified,
+        then X is assumed. If the unfolding option is used, then the X coordinate
+        must be set to the unfolded UCSA coordinate.
         default: X
         range: nan
 
         Y:
-        description: Y coordinate of sample data in IN file. If not specified, then Y is assumed. If the unfolding option is used, then the Y coordinate must be set to the unfolded UCSB coordinate.
+        description: Y coordinate of sample data in IN file. If not specified,
+        then Y is assumed. If the unfolding option is used, then the Y coordinate
+        must be set to the unfolded UCSB coordinate.
         default: Y
         range: nan
 
         Z:
-        description: Z coordinate of sample data in IN file. If not specified, then Z is assumed. If the unfolding option is used, then the Z coordinate must be set to the unfolded UCSC coordinate.
+        description: Z coordinate of sample data in IN file. If not specified,
+        then Z is assumed. If the unfolding option is used, then the Z coordinate
+        must be set to the unfolded UCSC coordinate.
         default: Z
         range: nan
 
@@ -46850,17 +47226,25 @@ class init(object):
         range: nan
 
         NUMSAM:
-        description: Name of the field to be created in the output MODEL file which is used to record the number of samples used for estimating each cell. If a field name is not specified the number of samples used will not be recorded.
+        description: Name of the field to be created in the output MODEL file
+        which is used to record the number of samples used for estimating each
+        cell. If a field name is not specified the number of samples used will not
+        be recorded.
         default: Undefined
         range: nan
 
         ZONE:
-        description: Name of the zonal interpolation field. The field may be numeric or up to 20 character alphanumeric. The field must exist in both the PROTO and IN files. If it is specified then cells in each ZONE will be interpolated using only samples with the same ZONE value.
+        description: Name of the zonal interpolation field. The field may be
+        numeric or up to 20 character alphanumeric. The field must exist in both
+        the PROTO and IN files. If it is specified then cells in each ZONE will be
+        interpolated using only samples with the same ZONE value.
         default: Undefined
         range: nan
 
         LENGTH:
-        description: Name of the field used for length weighting of samples. This is only used if the Inverse Power of Distance interpolation method is selected (IMETHOD=2).
+        description: Name of the field used for length weighting of samples. This
+        is only used if the Inverse Power of Distance interpolation method is
+        selected (IMETHOD=2).
         default: Undefined
         range: nan
 
@@ -46884,102 +47268,151 @@ class init(object):
         range: 0.00001,+
 
         SANGLE1:
-        description: First rotation angle (in degrees) for the search ellipsoid. The rotation is around the axis defined by SAXIS1.
+        description: First rotation angle (in degrees) for the search ellipsoid.
+        The rotation is around the axis defined by SAXIS1.
         default: 0
         range: -360,360
 
         SAXIS1:
-        description: Coordinate axis about which rotation SANGLE1 is applied. Specify 1 for the X axis, 2 for the Y axis, or 3 for the Z axis.
+        description: Coordinate axis about which rotation SANGLE1 is applied.
+        Specify 1 for the X axis, 2 for the Y axis, or 3 for the Z axis.
         default: 3
         range: 1,3
 
         SANGLE2:
-        description: Second rotation angle (in degrees) for the search ellipsoid. The rotation is around the axis defined by SAXIS2.
+        description: Second rotation angle (in degrees) for the search ellipsoid.
+        The rotation is around the axis defined by SAXIS2.
         default: 0
         range: -360,360
 
         SAXIS2:
-        description: Coordinate axis about which rotation SANGLE2 is applied. Specify 1 for the X axis, 2 for the Y axis, or 3 for the Z axis.
+        description: Coordinate axis about which rotation SANGLE2 is applied.
+        Specify 1 for the X axis, 2 for the Y axis, or 3 for the Z axis.
         default: 1
         range: 1,3
 
         SANGLE3:
-        description: Third rotation angle (in degrees) for the search ellipsoid. The rotation is around the axis defined by SAXIS3.
+        description: Third rotation angle (in degrees) for the search ellipsoid.
+        The rotation is around the axis defined by SAXIS3.
         default: 0
         range: -360,360
 
         SAXIS3:
-        description: Coordinate axis about which rotation SANGLE3 is applied. Specify 1 for the X axis, 2 for the Y axis, or 3 for the Z axis.
+        description: Coordinate axis about which rotation SANGLE3 is applied.
+        Specify 1 for the X axis, 2 for the Y axis, or 3 for the Z axis.
         default: 3
         range: 1,3
 
         MINNUM:
-        description: Minimum number of samples which must lie within the search ellipsoid in order for the model subcell to be estimated. If there are less than the minimum number and the input PROTOmodel contains cells, then an absent data value will be assigned to the grade field in the output model file MODEL If there are less than the minimum, but the input PROTOmodel does not contain any cells, then a cell will not be created in the output model file MODEL.
+        description: Minimum number of samples which must lie within the search
+        ellipsoid in order for the model subcell to be estimated. If there are
+        less than the minimum number and the input PROTOmodel contains cells, then
+        an absent data value will be assigned to the grade field in the output
+        model file MODEL If there are less than the minimum, but the input
+        PROTOmodel does not contain any cells, then a cell will not be created in
+        the output model file MODEL.
         default: 3
         range: 1,1400
 
         MAXNUM:
-        description: Maximum number of samples to be used for estimating the grade of a model cell. If more than the maximum number lie within the search ellipsoid, then the search ellipsoid is shrunk concentrically until just MAXNUMsamples remain. The maximum number cannot exceed 1400.
+        description: Maximum number of samples to be used for estimating the grade
+        of a model cell. If more than the maximum number lie within the search
+        ellipsoid, then the search ellipsoid is shrunk concentrically until just
+        MAXNUMsamples remain. The maximum number cannot exceed 1400.
         default: 20
         range: 1,1400
 
         MINOCT:
-        description: The minimum number of octants to be filled before a subcell will be interpolated. If it is set to zero then octant search will not be used.
+        description: The minimum number of octants to be filled before a subcell
+        will be interpolated. If it is set to zero then octant search will not be
+        used.
         default: 0
         range: 0,8
 
         MINPEROC:
-        description: The minimum number of samples in an octant before it is considered to be filled.
+        description: The minimum number of samples in an octant before it is
+        considered to be filled.
         default: 1
         range: 0,1400
 
         MAXPEROC:
-        description: The maximum number of samples in an octant, to be used for interpolation. If there are more than the maximum number in any octant, then the samples closest to subcell centre are selected. If set to zero there is no limit on the number of samples.
+        description: The maximum number of samples in an octant, to be used for
+        interpolation. If there are more than the maximum number in any octant,
+        then the samples closest to subcell centre are selected. If set to zero
+        there is no limit on the number of samples.
         default: 0
         range: 0,1400
 
         IMETHOD:
-        description: Interpolation method: 1: Nearest Neighbour 2: Inverse Power of Distance
+        description: Interpolation method: 1: Nearest Neighbour 2: Inverse Power
+        of Distance
         default: 2
         range: 1,2
 
         POWER:
-        description: Weighting power if Inverse Power of Distance is selected (IMETHOD=2).
+        description: Weighting power if Inverse Power of Distance is selected
+        (IMETHOD=2).
         default: 2
         range: Undefined
 
         XPOINTS:
-        description: Number of discretisation points in the X direction. Discretisation points are used to simulate each cell or subcell for the purpose of grade estimation. They are only used for the Inverse Power of Distance (IMETHOD=2) estimation methods If Inverse Power of Distance is used then XPOINTS, YPOINTS and ZPOINTS may all be 1, and so the subcell is represented by a single point at its centre.
+        description: Number of discretisation points in the X
+        direction. Discretisation points are used to simulate each cell or subcell
+        for the purpose of grade estimation. They are only used for the Inverse
+        Power of Distance (IMETHOD=2) estimation methods If Inverse Power of
+        Distance is used then XPOINTS, YPOINTS and ZPOINTS may all be 1, and so
+        the subcell is represented by a single point at its centre.
         default: 3
         range: 1,6
 
         YPOINTS:
-        description: Number of discretisation points in the Y direction. Discretisation points are used to simulate each cell or subcell for the purpose of grade estimation. They are only used for the Inverse Power of Distance (IMETHOD=2) estimation methods If Inverse Power of Distance is used then XPOINTS, YPOINTS and ZPOINTS may all be 1, and so the subcell is represented by a single point at its centre.
+        description: Number of discretisation points in the Y
+        direction. Discretisation points are used to simulate each cell or subcell
+        for the purpose of grade estimation. They are only used for the Inverse
+        Power of Distance (IMETHOD=2) estimation methods If Inverse Power of
+        Distance is used then XPOINTS, YPOINTS and ZPOINTS may all be 1, and so
+        the subcell is represented by a single point at its centre.
         default: 3
         range: 1,6
 
         ZPOINTS:
-        description: Number of discretisation points in the Z direction. Discretisation points are used to simulate each cell or subcell for the purpose of grade estimation. They are only used for the Inverse Power of Distance (IMETHOD=2) estimation methods If Inverse Power of Distance is used then XPOINTS, YPOINTS and ZPOINTS may all be 1, and so the subcell is represented by a single point at its centre.
+        description: Number of discretisation points in the Z
+        direction. Discretisation points are used to simulate each cell or subcell
+        for the purpose of grade estimation. They are only used for the Inverse
+        Power of Distance (IMETHOD=2) estimation methods If Inverse Power of
+        Distance is used then XPOINTS, YPOINTS and ZPOINTS may all be 1, and so
+        the subcell is represented by a single point at its centre.
         default: 3
         range: 1,6
 
         XSUBCELL:
-        description: Number of subcells per parent cell to be created in the X direction. This only applies if there are no cells in the input prototype model PROTO, and therefore cells (and subcells) are created by the GRADEprocess.
+        description: Number of subcells per parent cell to be created in the X
+        direction. This only applies if there are no cells in the input prototype
+        model PROTO, and therefore cells (and subcells) are created by the
+        GRADEprocess.
         default: 1
         range: 1,20
 
         YSUBCELL:
-        description: Number of subcells per parent cell to be created in the Y direction. This only applies if there are no cells in the input prototype model PROTO, and therefore cells (and subcells) are created by the GRADEprocess.
+        description: Number of subcells per parent cell to be created in the Y
+        direction. This only applies if there are no cells in the input prototype
+        model PROTO, and therefore cells (and subcells) are created by the
+        GRADEprocess.
         default: 1
         range: 1,20
 
         ZSUBCELL:
-        description: Number of subcells per parent cell to be created in the Z direction. This only applies if there are no cells in the input prototype model PROTO, and therefore cells (and subcells) are created by the GRADEprocess.
+        description: Number of subcells per parent cell to be created in the Z
+        direction. This only applies if there are no cells in the input prototype
+        model PROTO, and therefore cells (and subcells) are created by the
+        GRADEprocess.
         default: 1
         range: 1,20
 
         PRINT:
-        description: Display control: 0: minimum output including progress message. 1: as 0 plus details of input parameters. 2: as 1 plus display of each cell value.
+        description: Display control: 0: minimum output including progress
+        message. 1: as 0 plus details of input parameters. 2: as 1 plus display of
+        each cell value.
         default: 0
         range: 0,2
 
@@ -47108,7 +47541,8 @@ class init(object):
         ------
 
         OUT:
-        description: Output file. If this is set to the same file as IN then the input file fields will be modified.
+        description: Output file. If this is set to the same file as IN then the
+        input file fields will be modified.
         default: nan
         range: nan
 
@@ -47151,17 +47585,26 @@ class init(object):
         ----------
 
         OUTAXIS1:
-        description: First rotation axis. 1=X, 2=Y, 3=Z. The first rotation is by ANGLE1 degrees clockwise around axis AXIS1 , when viewed along the axis from positive values towards the origin. An axis value of 0 means no rotation. (3).
+        description: First rotation axis. 1=X, 2=Y, 3=Z. The first rotation is by
+        ANGLE1 degrees clockwise around axis AXIS1 , when viewed along the axis
+        from positive values towards the origin. An axis value of 0 means no
+        rotation. (3).
         default: 3
         range: nan
 
         OUTAXIS2:
-        description: Second rotation axis. 1=X, 2=Y, 3=Z. The second rotation is by ANGLE2 degrees clockwise around axis AXIS2 , when viewed along the axis from positive values towards the origin. An axis value of 0 means no rotation. (1).
+        description: Second rotation axis. 1=X, 2=Y, 3=Z. The second rotation is
+        by ANGLE2 degrees clockwise around axis AXIS2 , when viewed along the axis
+        from positive values towards the origin. An axis value of 0 means no
+        rotation. (1).
         default: 1
         range: nan
 
         OUTAXIS3:
-        description: Third rotation axis. 1=X, 2=Y, 3=Z. The first rotation is by ANGLE3 degrees clockwise around axis AXIS3 , when viewed along the axis from positive values towards the origin. An axis value of 0 means no rotation. (3).
+        description: Third rotation axis. 1=X, 2=Y, 3=Z. The first rotation is by
+        ANGLE3 degrees clockwise around axis AXIS3 , when viewed along the axis
+        from positive values towards the origin. An axis value of 0 means no
+        rotation. (3).
         default: 3
         range: nan
 
@@ -47219,7 +47662,45 @@ class init(object):
         ------
 
         OUT:
-        description: Output file. This will contain the fields:  SGRADE: selected grade name (Sample). Can be different to MGRADE  [DOMAIN]: the selected domain, which must exist in both sample and model files.  MGRADE: selected grade name (Model). Can be different to SGRADE.  SNRECS: number of records (Sample)  SNSAMPS: number of non-absent records (Sample)  SMINIMUM:min grade (Sample)  SMAXIMUM: max grade (Sample)  SMEAN: mean grade (Sample)  SVARIANC: variance (Sample)  SSTDDEV: standard deviation (Sample)  SCOVRTN%: coefficient of variation (Sample) : Standard Deviation / Mean  SPCTL25: the 25th percentile of unweighted samples.  SMEDIAN: the median value of unweighted samples.  SPCTL75: the 75th percentile value of unweighted samples.  SMAD: the Mean Absolute Difference of unweighted samples.  WNRECS: number of records (weighted samples)  WNSAMPS: number of included weighted samples (Sample). Sample excluded if absent data grade, absent data weight or Weight field is not specified.  WMINIMUM: minimum grade of weighted samples.  WMAXIMUM: maximum grade of weighted samples.  WMEAN: weighted mean grade (Sample)  WVARIANC: weighted variance grade (Sample)  WSTDDEV: weighted standard deviation grade (Sample)  WCOVRTN%: weighted coefficient of variation (Sample)  WPCTL25: the 25th percentile of weighted samples.  WMEDIAN: the median value of weighted samples.  WPCTL75: the 75th percentile value of weighted samples.  WMAD: the Mean Absolute Difference of weighted samples.  MNRECS: number of records (Model)  MNSAMPS: number of non-absent records (Model)  MMINIMUM: min grade (Model)  MMAXIMUM: max grade (Model)  MMEAN: mean grade (Model)  MVARIANC: variance (Model)  MSTDDEV: standard deviation (Model)  MCOVRTN%: coefficient of variation (Model)  MPCTL25: the 25th percentile of model values.  WMEDIAN: the median value of model values.  MPCTL75: the 75th percentile value of model values.  MMAD: the Mean Absolute Difference of model values.  MTONNES: model tonnes for each domain.  SMEAN%D: % difference between sample and model means.  SMMEAND: numeric difference between samples and model means.  WMEAN%D: % difference between weighted sample mean and model mean.  WMMEAND: numeric difference between weighted sample mean and model mean.  WGTFIELD: the weighting field used to calculated weighted sample values. Can be empty or containing absent values.  MFILE: the model file used to calculate statistics.  SFILE: the sample file used to calculate statistics.  DOMFIELD: the domain field (if specified) used to classify statistics.  DENSITY: the field (if specified) used to generate weighted grade statistics for the model by the cell volume*density. Also used in the calculation of the total tonnage for each domain.
+        description: Output file. This will contain the fields:  SGRADE: selected
+        grade name (Sample). Can be different to MGRADE  [DOMAIN]: the selected
+        domain, which must exist in both sample and model files.  MGRADE: selected
+        grade name (Model). Can be different to SGRADE.  SNRECS: number of records
+        (Sample)  SNSAMPS: number of non-absent records (Sample)  SMINIMUM:min
+        grade (Sample)  SMAXIMUM: max grade (Sample)  SMEAN: mean grade (Sample)
+        SVARIANC: variance (Sample)  SSTDDEV: standard deviation (Sample)
+        SCOVRTN%: coefficient of variation (Sample) : Standard Deviation / Mean
+        SPCTL25: the 25th percentile of unweighted samples.  SMEDIAN: the median
+        value of unweighted samples.  SPCTL75: the 75th percentile value of
+        unweighted samples.  SMAD: the Mean Absolute Difference of unweighted
+        samples.  WNRECS: number of records (weighted samples)  WNSAMPS: number of
+        included weighted samples (Sample). Sample excluded if absent data grade,
+        absent data weight or Weight field is not specified.  WMINIMUM: minimum
+        grade of weighted samples.  WMAXIMUM: maximum grade of weighted samples.
+        WMEAN: weighted mean grade (Sample)  WVARIANC: weighted variance grade
+        (Sample)  WSTDDEV: weighted standard deviation grade (Sample)  WCOVRTN%:
+        weighted coefficient of variation (Sample)  WPCTL25: the 25th percentile
+        of weighted samples.  WMEDIAN: the median value of weighted samples.
+        WPCTL75: the 75th percentile value of weighted samples.  WMAD: the Mean
+        Absolute Difference of weighted samples.  MNRECS: number of records
+        (Model)  MNSAMPS: number of non-absent records (Model)  MMINIMUM: min
+        grade (Model)  MMAXIMUM: max grade (Model)  MMEAN: mean grade (Model)
+        MVARIANC: variance (Model)  MSTDDEV: standard deviation (Model)  MCOVRTN%:
+        coefficient of variation (Model)  MPCTL25: the 25th percentile of model
+        values.  WMEDIAN: the median value of model values.  MPCTL75: the 75th
+        percentile value of model values.  MMAD: the Mean Absolute Difference of
+        model values.  MTONNES: model tonnes for each domain.  SMEAN%D: %
+        difference between sample and model means.  SMMEAND: numeric difference
+        between samples and model means.  WMEAN%D: % difference between weighted
+        sample mean and model mean.  WMMEAND: numeric difference between weighted
+        sample mean and model mean.  WGTFIELD: the weighting field used to
+        calculated weighted sample values. Can be empty or containing absent
+        values.  MFILE: the model file used to calculate statistics.  SFILE: the
+        sample file used to calculate statistics.  DOMFIELD: the domain field (if
+        specified) used to classify statistics.  DENSITY: the field (if specified)
+        used to generate weighted grade statistics for the model by the cell
+        volume*density. Also used in the calculation of the total tonnage for each
+        domain.
         default: nan
         range: nan
 
@@ -47238,17 +47719,22 @@ class init(object):
         range: nan
 
         DOMAIN:
-        description: Domain keyfield for statistics. Typically this would define an estimation domain.
+        description: Domain keyfield for statistics. Typically this would define
+        an estimation domain.
         default: Undefined
         range: nan
 
         DCWEIGHT:
-        description: Weighting field. Field used for weighting the samples. Typically this would be a declustered weight field derived from the GRIDDC or DECLUST processes
+        description: Weighting field. Field used for weighting the samples.
+        Typically this would be a declustered weight field derived from the GRIDDC
+        or DECLUST processes
         default: Undefined
         range: nan
 
         DENSITY:
-        description: Density field to enable calculation of tonnage weighted grade statistics for the model. If not selected a global density will be defined by the @DENSITY parameter.
+        description: Density field to enable calculation of tonnage weighted grade
+        statistics for the model. If not selected a global density will be defined
+        by the @DENSITY parameter.
         default: Undefined
         range: nan
 
@@ -47257,7 +47743,9 @@ class init(object):
         ----------
 
         Excel:
-        description: Set to 1 to automatically load the domain statistics data file into Excel and display a graph of the sample to model variances and mean grade comparisons.
+        description: Set to 1 to automatically load the domain statistics data
+        file into Excel and display a graph of the sample to model variances and
+        mean grade comparisons.
         default: Undefined
         range: 0,1
 
@@ -47317,7 +47805,8 @@ class init(object):
         -----
 
         SAMPLES:
-        description: A Datamine table (.dm) that contains sample positional information and supporting attributes.
+        description: A Datamine table (.dm) that contains sample positional
+        information and supporting attributes.
         default: nan
         range: nan
 
@@ -47326,12 +47815,14 @@ class init(object):
         ------
 
         3DMAP:
-        description: The output block model file containing the interpolated variogram value for each grade.
+        description: The output block model file containing the interpolated
+        variogram value for each grade.
         default: nan
         range: nan
 
         VGRAM:
-        description: Optional output experimental variograms used to create the 3D interpolated variogram. Requires GRIDMODE = 0.
+        description: Optional output experimental variograms used to create the 3D
+        interpolated variogram. Requires GRIDMODE = 0.
         default: nan
         range: nan
 
@@ -47349,67 +47840,88 @@ class init(object):
         range: Undefined
 
         NBLOCKS:
-        description: The number of blocks along each axis for the output variogram block model. A greater number of blocks will result in a finer grid but will require longer calculation times.
+        description: The number of blocks along each axis for the output variogram
+        block model. A greater number of blocks will result in a finer grid but
+        will require longer calculation times.
         default: 40
         range: Undefined
 
         MAXLAG:
-        description: The maximum distance between pairs of samples to be considered for variogram calculation.
+        description: The maximum distance between pairs of samples to be
+        considered for variogram calculation.
         default: Undefined
         range: Undefined
 
         NLAGS:
-        description: The number of lags used to calculate experimental variograms. It is recommended that this value is less than NBLOCKS.  The incremental lag distance is then calculated as MAXLAG / NLAGS.
+        description: The number of lags used to calculate experimental variograms.
+        It is recommended that this value is less than NBLOCKS.  The incremental
+        lag distance is then calculated as MAXLAG / NLAGS.
         default: 25
         range: 1,200
 
         GRIDMODE:
-        description: If set to 1 a regular grid will be used to calculate experimental variogram values to be interpolated into the output variogram map. If set to 0 standard directional variograms will be used.
+        description: If set to 1 a regular grid will be used to calculate
+        experimental variogram values to be interpolated into the output variogram
+        map. If set to 0 standard directional variograms will be used.
         default: 0
         range: 0,1
 
         DISC:
-        description: The number of discretization points in X, Y and Z used for inverse distance interpolation of the variogram map.
+        description: The number of discretization points in X, Y and Z used for
+        inverse distance interpolation of the variogram map.
         default: 3
         range: 1,10
 
         MINSAMP:
-        description: The minimum number of experimental variogram points to be found within the search radius when performing inverse distance interpolation of the variogram block model.
+        description: The minimum number of experimental variogram points to be
+        found within the search radius when performing inverse distance
+        interpolation of the variogram block model.
         default: 1
         range: 1,10
 
         OPTSAMP:
-        description: The optimum number of experimental variogram points to be found within the search radius when performing inverse distance interpolation of the variogram map.
+        description: The optimum number of experimental variogram points to be
+        found within the search radius when performing inverse distance
+        interpolation of the variogram map.
         default: 50
         range: 1,100
 
         SEARCHLF:
-        description: The radius of the initial search sphere for each interpolated variogram map point as a factor of the lag distance.
+        description: The radius of the initial search sphere for each interpolated
+        variogram map point as a factor of the lag distance.
         default: 2
         range: 0,100
 
         SEARCH2F:
-        description: The factor of the search sphere relative to the second search sphere.
+        description: The factor of the search sphere relative to the second search
+        sphere.
         default: 1
         range: 0,100
 
         SEARCH3F:
-        description: The factor of the search sphere relative to the second search sphere.
+        description: The factor of the search sphere relative to the second search
+        sphere.
         default: 1
         range: 0,100
 
         INVDISTP:
-        description: The inverse distance power used when performing inverse distance interpolation of the variogram map.
+        description: The inverse distance power used when performing inverse
+        distance interpolation of the variogram map.
         default: 1
         range: 0,100
 
         G1-20:
-        description: Grade fields for variogram calculation. At least G1 must be specified.
+        description: Grade fields for variogram calculation. At least G1 must be
+        specified.
         default: Undefined
         range: Undefined
 
         NANGLES:
-        description: The number of angles (directions) for experimental variogram calculation.  The increment between directions for both azimuth and dip is then calculated as 180 / NANGLES degrees.  A greater number may allow more structure to be revealed in the resulting variogram map. This is not used for GRIDMODE=1.
+        description: The number of angles (directions) for experimental variogram
+        calculation.  The increment between directions for both azimuth and dip is
+        then calculated as 180 / NANGLES degrees.  A greater number may allow more
+        structure to be revealed in the resulting variogram map. This is not used
+        for GRIDMODE=1.
         default: 9
         range: 1,180
 
