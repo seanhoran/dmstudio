@@ -34,7 +34,7 @@ def studio(version):
     Parameters:
     -----------
 
-    version: str
+    version: str    
         Datamine studio version
 
     Tries to connect to studio RM first.
@@ -47,6 +47,8 @@ def studio(version):
 
     if version == 'StudioRM':
         oScript = _scriptinit("Datamine.StudioRM.Application")
+    elif version == 'StudioRMPro':
+        oScript = _scriptinit("Datamine.StudioRMPro.Application")
     elif version == 'Studio3':
         oScript = _scriptinit("Datamine.Studio.Application")
     elif version == 'StudioEM':
@@ -57,14 +59,17 @@ def studio(version):
             oScript = _scriptinit("Datamine.StudioRM.Application")
         except:
             try:
-                oScript = _scriptinit("Datamine.Studio.Application")
+                oScript = _scriptinit("Datamine.StudioRMPro.Application")
             except:
                 try:
-                    oScript = _scriptinit("Datamine.StudioEM.Application")
+                    oScript = _scriptinit("Datamine.Studio.Application")
                 except:
-                    assert False, "No valid Studio version is active"
+                    try:
+                        oScript = _scriptinit("Datamine.StudioEM.Application")
+                    except:
+                        assert False, "No valid Studio version is active"
 
-    # print 'Connected to Datamine:', oScript
+    print('Connected to Datamine: {}'.format(oScript))
 
     return oScript;
 
