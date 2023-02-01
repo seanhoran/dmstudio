@@ -44,7 +44,7 @@ class init(object):
             Datamine command string to be parsed
         """
 
-        self.oScript.Parsecommand(command)
+        self.oScript.ParseCommand(command)
 
         # update the dmdir.py file containing list of .dm files in current directory
 
