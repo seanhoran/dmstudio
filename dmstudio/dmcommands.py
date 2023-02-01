@@ -45593,7 +45593,7 @@ class init(object):
                  procost_p,
                  model_i='optional',
                  vmodparm_i='optional',
-                 in_i='optional',
+                 # in_i='optional',
                  outmodel_p='optional',
                  outsamps_p='optional',
                  plots_p='optional',
@@ -45602,8 +45602,8 @@ class init(object):
                  origmeth_p='optional',
                  origsel_p='optional',
                  nsim_p='optional',
-                 modx(y_OR_z)min_p='optional',
-                 modx(y_OR_z)max_p='optional',
+                 modx_popen_y_OR_z_pclose_min_p='optional',
+                 modx_popen_y_OR_z_pclose_max_p='optional',
                  x_OR_y_OR_zpoints_p='optional',
                  recovery_p='optional',
                  sampcost_p='optional',
@@ -45916,8 +45916,9 @@ class init(object):
         if vmodparm_i != 'optional':
             command += ' &VMODPARM=' + str(vmodparm_i)
 
-        if in_i != 'optional':
-            command += ' &IN=' + str(in_i)
+        # Duplicate Argument
+        # if in_i != 'optional':
+            # command += ' &IN=' + str(in_i)
 
         if outmodel_p != 'optional':
             command += ' @OUTMODEL=' + str(outmodel_p)
@@ -45943,11 +45944,11 @@ class init(object):
         if nsim_p != 'optional':
             command += ' @NSIM=' + str(nsim_p)
 
-        if modx(y_OR_z)min_p != 'optional':
-            command += ' @MODX(Y/Z)MIN=' + str(modx(y_OR_z)min_p)
+        if modx_popen_y_OR_z_pclose_min_p != 'optional':
+            command += ' @MODX(Y/Z)MIN=' + str(modx_popen_y_OR_z_pclose_min_p)
 
-        if modx(y_OR_z)max_p != 'optional':
-            command += ' @MODX(Y/Z)MAX=' + str(modx(y_OR_z)max_p)
+        if modx_popen_y_OR_z_pclose_max_p != 'optional':
+            command += ' @MODX(Y/Z)MAX=' + str(modx_popen_y_OR_z_pclose_max_p)
 
         if x_OR_y_OR_zpoints_p != 'optional':
             command += ' @X/Y/ZPOINTS=' + str(x_OR_y_OR_zpoints_p)
